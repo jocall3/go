@@ -1,16 +1,16 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package jamesburvelocallaghaniiicitibankdemobusinessinc
+package jocall3
 
 import (
 	"context"
 	"net/http"
 	"slices"
 
-	"github.com/jocall3/1231-go/internal/apijson"
-	"github.com/jocall3/1231-go/internal/param"
-	"github.com/jocall3/1231-go/internal/requestconfig"
-	"github.com/jocall3/1231-go/option"
+	"github.com/jocall3/cli/internal/apijson"
+	"github.com/jocall3/cli/internal/param"
+	"github.com/jocall3/cli/internal/requestconfig"
+	"github.com/jocall3/cli/option"
 )
 
 // AIAdGenerateService contains methods and other services that help with

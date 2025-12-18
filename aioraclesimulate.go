@@ -1,16 +1,16 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package jamesburvelocallaghaniiicitibankdemobusinessinc
+package jocall3
 
 import (
 	"context"
 	"net/http"
 	"slices"
 
-	"github.com/jocall3/1231-go/internal/apijson"
-	"github.com/jocall3/1231-go/internal/param"
-	"github.com/jocall3/1231-go/internal/requestconfig"
-	"github.com/jocall3/1231-go/option"
+	"github.com/jocall3/cli/internal/apijson"
+	"github.com/jocall3/cli/internal/param"
+	"github.com/jocall3/cli/internal/requestconfig"
+	"github.com/jocall3/cli/option"
 )
 
 // AIOracleSimulateService contains methods and other services that help with
@@ -82,6 +82,8 @@ func (r *AdvancedSimulationResponse) UnmarshalJSON(data []byte) (err error) {
 func (r advancedSimulationResponseJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r AdvancedSimulationResponse) implementsAIOracleSimulationGetResponse() {}
 
 type AdvancedSimulationResponseScenarioResult struct {
 	// Summary of results for this specific scenario.
@@ -230,6 +232,8 @@ func (r *SimulationResponse) UnmarshalJSON(data []byte) (err error) {
 func (r simulationResponseJSON) RawJSON() string {
 	return r.raw
 }
+
+func (r SimulationResponse) implementsAIOracleSimulationGetResponse() {}
 
 type SimulationResponseKeyImpact struct {
 	Metric   interface{}                          `json:"metric"`
