@@ -24,6 +24,7 @@ func TestAccountOverdraftSettingGetOverdraftSettings(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Accounts.OverdraftSettings.GetOverdraftSettings(context.TODO(), "acc_chase_checking_4567")
 	if err != nil {
@@ -46,6 +47,7 @@ func TestAccountOverdraftSettingUpdateOverdraftSettingsWithOptionalParams(t *tes
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Accounts.OverdraftSettings.UpdateOverdraftSettings(
 		context.TODO(),

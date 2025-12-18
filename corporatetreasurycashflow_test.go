@@ -24,6 +24,7 @@ func TestCorporateTreasuryCashFlowGetForecastWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Treasury.CashFlow.GetForecast(context.TODO(), jocall3.CorporateTreasuryCashFlowGetForecastParams{
 		ForecastHorizonDays:     jocall3.F[any](map[string]interface{}{}),

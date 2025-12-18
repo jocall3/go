@@ -24,6 +24,7 @@ func TestAIAdvisorChatGetHistoryWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Advisor.Chat.GetHistory(context.TODO(), jocall3.AIAdvisorChatGetHistoryParams{
 		Limit:     jocall3.F[any](map[string]interface{}{}),
@@ -50,6 +51,7 @@ func TestAIAdvisorChatSendMessageWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Advisor.Chat.SendMessage(context.TODO(), jocall3.AIAdvisorChatSendMessageParams{
 		FunctionResponse: jocall3.F(jocall3.AIAdvisorChatSendMessageParamsFunctionResponse{

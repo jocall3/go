@@ -24,6 +24,7 @@ func TestBudgetNewWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Budgets.New(context.TODO(), jocall3.BudgetNewParams{
 		EndDate:        jocall3.F[any]("2024-09-30"),
@@ -61,6 +62,7 @@ func TestBudgetGet(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Budgets.Get(context.TODO(), "budget_monthly_aug")
 	if err != nil {
@@ -83,6 +85,7 @@ func TestBudgetUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Budgets.Update(
 		context.TODO(),
@@ -120,6 +123,7 @@ func TestBudgetListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Budgets.List(context.TODO(), jocall3.BudgetListParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -145,6 +149,7 @@ func TestBudgetDelete(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	err := client.Budgets.Delete(context.TODO(), "budget_monthly_aug")
 	if err != nil {

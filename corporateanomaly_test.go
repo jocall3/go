@@ -24,6 +24,7 @@ func TestCorporateAnomalyListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Anomalies.List(context.TODO(), jocall3.CorporateAnomalyListParams{
 		EndDate:    jocall3.F[any]("2024-12-31"),
@@ -54,6 +55,7 @@ func TestCorporateAnomalyUpdateStatusWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Anomalies.UpdateStatus(
 		context.TODO(),

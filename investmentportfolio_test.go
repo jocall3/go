@@ -24,6 +24,7 @@ func TestInvestmentPortfolioNewWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Investments.Portfolios.New(context.TODO(), jocall3.InvestmentPortfolioNewParams{
 		Currency:          jocall3.F[any]("USD"),
@@ -54,6 +55,7 @@ func TestInvestmentPortfolioGet(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Investments.Portfolios.Get(context.TODO(), "portfolio_equity_growth")
 	if err != nil {
@@ -76,6 +78,7 @@ func TestInvestmentPortfolioUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Investments.Portfolios.Update(
 		context.TODO(),
@@ -106,6 +109,7 @@ func TestInvestmentPortfolioListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Investments.Portfolios.List(context.TODO(), jocall3.InvestmentPortfolioListParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -131,6 +135,7 @@ func TestInvestmentPortfolioRebalanceWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Investments.Portfolios.Rebalance(
 		context.TODO(),

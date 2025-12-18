@@ -24,6 +24,7 @@ func TestInvestmentAssetSearchWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Investments.Assets.Search(context.TODO(), jocall3.InvestmentAssetSearchParams{
 		Query:       jocall3.F[any]("Tesla"),

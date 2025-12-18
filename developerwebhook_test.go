@@ -24,6 +24,7 @@ func TestDeveloperWebhookNewWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Developers.Webhooks.New(context.TODO(), jocall3.DeveloperWebhookNewParams{
 		CallbackURL: jocall3.F[any]("https://my-analytics-app.com/webhooks/transactions"),
@@ -50,6 +51,7 @@ func TestDeveloperWebhookUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Developers.Webhooks.Update(
 		context.TODO(),
@@ -80,6 +82,7 @@ func TestDeveloperWebhookListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Developers.Webhooks.List(context.TODO(), jocall3.DeveloperWebhookListParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -105,6 +108,7 @@ func TestDeveloperWebhookDelete(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	err := client.Developers.Webhooks.Delete(context.TODO(), "whsub_devtool_finance_events")
 	if err != nil {

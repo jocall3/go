@@ -24,6 +24,7 @@ func TestAccountTransactionGetPendingWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Accounts.Transactions.GetPending(
 		context.TODO(),

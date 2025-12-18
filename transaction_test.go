@@ -24,6 +24,7 @@ func TestTransactionGet(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Transactions.Get(context.TODO(), "txn_quantum-2024-07-21-A7B8C9")
 	if err != nil {
@@ -46,6 +47,7 @@ func TestTransactionListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Transactions.List(context.TODO(), jocall3.TransactionListParams{
 		Category:    jocall3.F[any]("Groceries"),
@@ -78,6 +80,7 @@ func TestTransactionCategorizeWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Transactions.Categorize(
 		context.TODO(),
@@ -108,6 +111,7 @@ func TestTransactionDisputeWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Transactions.Dispute(
 		context.TODO(),
@@ -138,6 +142,7 @@ func TestTransactionUpdateNotes(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Transactions.UpdateNotes(
 		context.TODO(),

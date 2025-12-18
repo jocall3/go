@@ -24,6 +24,7 @@ func TestCorporatePerformSanctionScreeningWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.PerformSanctionScreening(context.TODO(), jocall3.CorporatePerformSanctionScreeningParams{
 		Country:    jocall3.F[any]("US"),

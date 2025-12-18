@@ -24,6 +24,7 @@ func TestSustainabilityPurchaseCarbonOffsets(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Sustainability.PurchaseCarbonOffsets(context.TODO(), jocall3.SustainabilityPurchaseCarbonOffsetsParams{
 		AmountKgCo2e:     jocall3.F[any](500),
@@ -50,6 +51,7 @@ func TestSustainabilityGetCarbonFootprint(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Sustainability.GetCarbonFootprint(context.TODO())
 	if err != nil {

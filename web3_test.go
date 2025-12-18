@@ -24,6 +24,7 @@ func TestWeb3GetNFTsWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Web3.GetNFTs(context.TODO(), jocall3.Web3GetNFTsParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),

@@ -24,6 +24,7 @@ func TestAIAdListGeneratedWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Ads.ListGenerated(context.TODO(), jocall3.AIAdListGeneratedParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -50,6 +51,7 @@ func TestAIAdGetStatus(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Ads.GetStatus(context.TODO(), "op-video-gen-12345-abcde")
 	if err != nil {
