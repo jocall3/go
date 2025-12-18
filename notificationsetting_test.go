@@ -24,7 +24,6 @@ func TestNotificationSettingGet(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Notifications.Settings.Get(context.TODO())
 	if err != nil {
@@ -47,7 +46,6 @@ func TestNotificationSettingUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Notifications.Settings.Update(context.TODO(), jocall3.NotificationSettingUpdateParams{
 		ChannelPreferences: jocall3.F(jocall3.NotificationSettingUpdateParamsChannelPreferences{

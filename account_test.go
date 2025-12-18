@@ -24,7 +24,6 @@ func TestAccountLinkWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Accounts.Link(context.TODO(), jocall3.AccountLinkParams{
 		CountryCode:        jocall3.F[any]("US"),
@@ -52,7 +51,6 @@ func TestAccountGetDetails(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Accounts.GetDetails(context.TODO(), "acc_chase_checking_4567")
 	if err != nil {
@@ -75,7 +73,6 @@ func TestAccountGetMeWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Accounts.GetMe(context.TODO(), jocall3.AccountGetMeParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -101,7 +98,6 @@ func TestAccountGetStatementsWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Accounts.GetStatements(
 		context.TODO(),

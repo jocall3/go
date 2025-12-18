@@ -24,7 +24,6 @@ func TestPaymentFxConvertWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Payments.Fx.Convert(context.TODO(), jocall3.PaymentFxConvertParams{
 		SourceAccountID: jocall3.F[any]("acc_chase_checking_4567"),
@@ -54,7 +53,6 @@ func TestPaymentFxGetRatesWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Payments.Fx.GetRates(context.TODO(), jocall3.PaymentFxGetRatesParams{
 		BaseCurrency:   jocall3.F[any]("USD"),

@@ -24,7 +24,6 @@ func TestLendingOfferListPreApprovedWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Lending.Offers.ListPreApproved(context.TODO(), jocall3.LendingOfferListPreApprovedParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
