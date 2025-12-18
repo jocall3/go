@@ -109,6 +109,34 @@ func (r UserPreferencesAIInteractionMode) IsKnown() bool {
 	return false
 }
 
+// Preferred channels for receiving notifications.
+type UserPreferencesNotificationChannels struct {
+	Email interface{}                             `json:"email"`
+	InApp interface{}                             `json:"inApp"`
+	Push  interface{}                             `json:"push"`
+	SMS   interface{}                             `json:"sms"`
+	JSON  userPreferencesNotificationChannelsJSON `json:"-"`
+}
+
+// userPreferencesNotificationChannelsJSON contains the JSON metadata for the
+// struct [UserPreferencesNotificationChannels]
+type userPreferencesNotificationChannelsJSON struct {
+	Email       apijson.Field
+	InApp       apijson.Field
+	Push        apijson.Field
+	SMS         apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *UserPreferencesNotificationChannels) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r userPreferencesNotificationChannelsJSON) RawJSON() string {
+	return r.raw
+}
+
 // Default grouping preference for transaction lists.
 type UserPreferencesTransactionGrouping string
 
@@ -147,34 +175,6 @@ type UserPreferencesParam struct {
 
 func (r UserPreferencesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
-}
-
-// Preferred channels for receiving notifications.
-type UserPreferencesNotificationChannels struct {
-	Email interface{}                             `json:"email"`
-	InApp interface{}                             `json:"inApp"`
-	Push  interface{}                             `json:"push"`
-	SMS   interface{}                             `json:"sms"`
-	JSON  userPreferencesNotificationChannelsJSON `json:"-"`
-}
-
-// userPreferencesNotificationChannelsJSON contains the JSON metadata for the
-// struct [UserPreferencesNotificationChannels]
-type userPreferencesNotificationChannelsJSON struct {
-	Email       apijson.Field
-	InApp       apijson.Field
-	Push        apijson.Field
-	SMS         apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *UserPreferencesNotificationChannels) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r userPreferencesNotificationChannelsJSON) RawJSON() string {
-	return r.raw
 }
 
 // Preferred channels for receiving notifications.
