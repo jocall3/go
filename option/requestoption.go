@@ -266,10 +266,10 @@ func WithEnvironmentProduction() RequestOption {
 	return requestconfig.WithDefaultBaseURL("https://ce47fe80-dabc-4ad0-b0e7-cf285695b8b8.mock.pstmn.io/")
 }
 
-// WithApikey returns a RequestOption that sets the client setting "apikey".
-func WithApikey(value string) RequestOption {
+// WithAPIKey returns a RequestOption that sets the client setting "api_key".
+func WithAPIKey(value string) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
-		r.Apikey = value
+		r.APIKey = value
 		return nil
 	})
 }
@@ -278,6 +278,6 @@ func WithApikey(value string) RequestOption {
 func WithBiometricToken(value string) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
 		r.BiometricToken = value
-		return nil
+		return r.Apply(WithHeader("authorization", fmt.Sprintf("Bearer %s", r.BiometricToken)))
 	})
 }

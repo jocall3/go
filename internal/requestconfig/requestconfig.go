@@ -216,7 +216,7 @@ type RequestConfig struct {
 	CustomHTTPDoer HTTPDoer
 	HTTPClient     *http.Client
 	Middlewares    []middleware
-	Apikey         string
+	APIKey         string
 	BiometricToken string
 	// If ResponseBodyInto not nil, then we will attempt to deserialize into
 	// ResponseBodyInto. If Destination is a []byte, then it will return the body as
@@ -589,7 +589,7 @@ func (cfg *RequestConfig) Clone(ctx context.Context) *RequestConfig {
 		BaseURL:        cfg.BaseURL,
 		HTTPClient:     cfg.HTTPClient,
 		Middlewares:    cfg.Middlewares,
-		Apikey:         cfg.Apikey,
+		APIKey:         cfg.APIKey,
 		BiometricToken: cfg.BiometricToken,
 	}
 
