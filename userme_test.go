@@ -24,6 +24,7 @@ func TestUserMeGet(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Users.Me.Get(context.TODO())
 	if err != nil {
@@ -46,6 +47,7 @@ func TestUserMeUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Users.Me.Update(context.TODO(), jocall3.UserMeUpdateParams{
 		Address: jocall3.F(jocall3.AddressParam{

@@ -24,6 +24,7 @@ func TestPaymentInternationalInitiateWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Payments.International.Initiate(context.TODO(), jocall3.PaymentInternationalInitiateParams{
 		Amount: jocall3.F[any](5000),
@@ -64,6 +65,7 @@ func TestPaymentInternationalGetStatus(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Payments.International.GetStatus(context.TODO(), "int_pmt_xyz7890")
 	if err != nil {

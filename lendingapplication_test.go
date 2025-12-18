@@ -24,6 +24,7 @@ func TestLendingApplicationGet(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Lending.Applications.Get(context.TODO(), "loan_app_creditflow-123")
 	if err != nil {
@@ -46,6 +47,7 @@ func TestLendingApplicationSubmitWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Lending.Applications.Submit(context.TODO(), jocall3.LendingApplicationSubmitParams{
 		LoanAmount:          jocall3.F[any](10000),

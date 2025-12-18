@@ -24,6 +24,7 @@ func TestNotificationListUserNotificationsWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Notifications.ListUserNotifications(context.TODO(), jocall3.NotificationListUserNotificationsParams{
 		Limit:    jocall3.F[any](map[string]interface{}{}),
@@ -51,6 +52,7 @@ func TestNotificationMarkAsRead(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Notifications.MarkAsRead(context.TODO(), "notif_budget_alert_002")
 	if err != nil {

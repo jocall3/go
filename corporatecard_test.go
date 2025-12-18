@@ -24,6 +24,7 @@ func TestCorporateCardListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Cards.List(context.TODO(), jocall3.CorporateCardListParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -49,6 +50,7 @@ func TestCorporateCardNewVirtualWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Cards.NewVirtual(context.TODO(), jocall3.CorporateCardNewVirtualParams{
 		Controls: jocall3.F(jocall3.CorporateCardControlsParam{
@@ -88,6 +90,7 @@ func TestCorporateCardFreeze(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Cards.Freeze(
 		context.TODO(),
@@ -116,6 +119,7 @@ func TestCorporateCardListTransactionsWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Cards.ListTransactions(
 		context.TODO(),
@@ -147,6 +151,7 @@ func TestCorporateCardUpdateControlsWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Cards.UpdateControls(
 		context.TODO(),

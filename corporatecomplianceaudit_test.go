@@ -24,6 +24,7 @@ func TestCorporateComplianceAuditRequestWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Compliance.Audits.Request(context.TODO(), jocall3.CorporateComplianceAuditRequestParams{
 		AuditScope:           jocall3.F(jocall3.CorporateComplianceAuditRequestParamsAuditScopeAllTransactions),
@@ -52,6 +53,7 @@ func TestCorporateComplianceAuditGetReport(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Compliance.Audits.GetReport(context.TODO(), "audit_corp_xyz789")
 	if err != nil {

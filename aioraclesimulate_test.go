@@ -24,6 +24,7 @@ func TestAIOracleSimulateRunAdvancedWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Oracle.Simulate.RunAdvanced(context.TODO(), jocall3.AIOracleSimulateRunAdvancedParams{
 		Prompt: jocall3.F[any]("Evaluate the long-term impact of a sudden job loss combined with a variable market downturn, analyzing worst-case and best-case recovery scenarios over a decade."),
@@ -80,6 +81,7 @@ func TestAIOracleSimulateRunStandardWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Oracle.Simulate.RunStandard(context.TODO(), jocall3.AIOracleSimulateRunStandardParams{
 		Prompt: jocall3.F[any]("What if I invest an additional $1,000 per month into my aggressive growth portfolio for the next 5 years?"),

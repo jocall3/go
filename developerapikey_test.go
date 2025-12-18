@@ -24,6 +24,7 @@ func TestDeveloperAPIKeyNewWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Developers.APIKeys.New(context.TODO(), jocall3.DeveloperAPIKeyNewParams{
 		Name:          jocall3.F[any]("My Analytics Service Key"),
@@ -50,6 +51,7 @@ func TestDeveloperAPIKeyListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Developers.APIKeys.List(context.TODO(), jocall3.DeveloperAPIKeyListParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -75,6 +77,7 @@ func TestDeveloperAPIKeyRevoke(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	err := client.Developers.APIKeys.Revoke(context.TODO(), "api_key_dev_app_01")
 	if err != nil {

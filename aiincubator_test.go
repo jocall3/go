@@ -24,6 +24,7 @@ func TestAIIncubatorListPitchesWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Incubator.ListPitches(context.TODO(), jocall3.AIIncubatorListPitchesParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),

@@ -24,6 +24,7 @@ func TestUserMeBiometricDeregister(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	err := client.Users.Me.Biometrics.Deregister(context.TODO())
 	if err != nil {
@@ -46,6 +47,7 @@ func TestUserMeBiometricEnrollWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Users.Me.Biometrics.Enroll(context.TODO(), jocall3.UserMeBiometricEnrollParams{
 		BiometricSignature: jocall3.F[any]("base64encoded_facial_template_for_enrollment"),
@@ -73,6 +75,7 @@ func TestUserMeBiometricStatus(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Users.Me.Biometrics.Status(context.TODO())
 	if err != nil {
@@ -95,6 +98,7 @@ func TestUserMeBiometricVerify(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Users.Me.Biometrics.Verify(context.TODO(), jocall3.UserMeBiometricVerifyParams{
 		BiometricSignature: jocall3.F[any]("base64encoded_one_time_fingerprint_proof"),

@@ -24,6 +24,7 @@ func TestAIAdvisorListToolsWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Advisor.ListTools(context.TODO(), jocall3.AIAdvisorListToolsParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),

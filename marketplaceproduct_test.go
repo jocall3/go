@@ -24,6 +24,7 @@ func TestMarketplaceProductListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Marketplace.Products.List(context.TODO(), jocall3.MarketplaceProductListParams{
 		AIPersonalizationLevel: jocall3.F(jocall3.MarketplaceProductListParamsAIPersonalizationLevelHigh),
@@ -52,6 +53,7 @@ func TestMarketplaceProductSimulateImpactWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
+		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Marketplace.Products.SimulateImpact(
 		context.TODO(),
