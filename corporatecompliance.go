@@ -3,7 +3,7 @@
 package jocall3
 
 import (
-	"github.com/jocall3/cli/option"
+	"github.com/jocall3/1231-go/option"
 )
 
 // CorporateComplianceService contains methods and other services that help with

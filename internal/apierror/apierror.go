@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/jocall3/cli/internal/apijson"
+	"github.com/jocall3/1231-go/internal/apijson"
 )
 
 // Error represents an error that originates from the API, i.e. when a request is

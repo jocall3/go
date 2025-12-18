@@ -8,8 +8,8 @@ import (
 	"os"
 	"slices"
 
-	"github.com/jocall3/cli/internal/requestconfig"
-	"github.com/jocall3/cli/option"
+	"github.com/jocall3/1231-go/internal/requestconfig"
+	"github.com/jocall3/1231-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with

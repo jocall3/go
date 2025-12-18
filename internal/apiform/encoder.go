@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jocall3/cli/internal/param"
+	"github.com/jocall3/1231-go/internal/param"
 )
 
 var encoders sync.Map // map[encoderEntry]encoderFunc
