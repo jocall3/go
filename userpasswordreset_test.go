@@ -26,9 +26,9 @@ func TestUserPasswordResetConfirm(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Users.PasswordReset.Confirm(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserPasswordResetConfirmParams{
-		Identifier:       jamesburvelocallaghaniiicitibankdemobusinessinc.F("reset.user@example.com"),
-		NewPassword:      jamesburvelocallaghaniiicitibankdemobusinessinc.F("MyNewStrongPassword@789"),
-		VerificationCode: jamesburvelocallaghaniiicitibankdemobusinessinc.F("654321"),
+		Identifier:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("reset.user@example.com"),
+		NewPassword:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("MyNewStrongPassword@789"),
+		VerificationCode: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("654321"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -52,7 +52,7 @@ func TestUserPasswordResetInitiate(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Users.PasswordReset.Initiate(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserPasswordResetInitiateParams{
-		Identifier: jamesburvelocallaghaniiicitibankdemobusinessinc.F("reset.user@example.com"),
+		Identifier: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("reset.user@example.com"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

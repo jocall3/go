@@ -71,36 +71,48 @@ func (r web3GetNFTsResponseJSON) RawJSON() string {
 }
 
 type Web3GetNFTsResponseData struct {
-	ID                string                             `json:"id"`
-	Attributes        []Web3GetNFTsResponseDataAttribute `json:"attributes"`
-	BlockchainNetwork string                             `json:"blockchainNetwork"`
-	CollectionName    string                             `json:"collectionName"`
-	ContractAddress   string                             `json:"contractAddress"`
-	Description       string                             `json:"description"`
-	EstimatedValueUsd float64                            `json:"estimatedValueUSD"`
-	ImageURL          string                             `json:"imageUrl" format:"uri"`
-	LastSalePriceUsd  float64                            `json:"lastSalePriceUSD"`
-	Name              string                             `json:"name"`
-	OwnerAddress      string                             `json:"ownerAddress"`
-	TokenID           string                             `json:"tokenId"`
-	JSON              web3GetNFTsResponseDataJSON        `json:"-"`
+	// Unique identifier for the NFT within the system.
+	ID interface{} `json:"id,required"`
+	// Blockchain network on which the NFT exists.
+	BlockchainNetwork interface{} `json:"blockchainNetwork,required"`
+	// Name of the NFT collection.
+	CollectionName interface{} `json:"collectionName,required"`
+	// Blockchain contract address of the NFT collection.
+	ContractAddress interface{} `json:"contractAddress,required"`
+	// URL to the NFT's image.
+	ImageURL interface{} `json:"imageUrl,required"`
+	// Name of the specific NFT.
+	Name interface{} `json:"name,required"`
+	// Blockchain address of the current owner.
+	OwnerAddress interface{} `json:"ownerAddress,required"`
+	// Unique ID of the token within its contract.
+	TokenID interface{} `json:"tokenId,required"`
+	// Key-value attributes of the NFT (e.g., rarity traits).
+	Attributes []Web3GetNFTsResponseDataAttribute `json:"attributes,nullable"`
+	// Description of the NFT.
+	Description interface{} `json:"description"`
+	// AI-estimated current market value in USD.
+	EstimatedValueUsd interface{} `json:"estimatedValueUSD"`
+	// Last known sale price in USD.
+	LastSalePriceUsd interface{}                 `json:"lastSalePriceUSD"`
+	JSON             web3GetNFTsResponseDataJSON `json:"-"`
 }
 
 // web3GetNFTsResponseDataJSON contains the JSON metadata for the struct
 // [Web3GetNFTsResponseData]
 type web3GetNFTsResponseDataJSON struct {
 	ID                apijson.Field
-	Attributes        apijson.Field
 	BlockchainNetwork apijson.Field
 	CollectionName    apijson.Field
 	ContractAddress   apijson.Field
-	Description       apijson.Field
-	EstimatedValueUsd apijson.Field
 	ImageURL          apijson.Field
-	LastSalePriceUsd  apijson.Field
 	Name              apijson.Field
 	OwnerAddress      apijson.Field
 	TokenID           apijson.Field
+	Attributes        apijson.Field
+	Description       apijson.Field
+	EstimatedValueUsd apijson.Field
+	LastSalePriceUsd  apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -114,8 +126,8 @@ func (r web3GetNFTsResponseDataJSON) RawJSON() string {
 }
 
 type Web3GetNFTsResponseDataAttribute struct {
-	TraitType string                               `json:"trait_type"`
-	Value     string                               `json:"value"`
+	TraitType interface{}                          `json:"trait_type"`
+	Value     interface{}                          `json:"value"`
 	JSON      web3GetNFTsResponseDataAttributeJSON `json:"-"`
 }
 
@@ -137,10 +149,10 @@ func (r web3GetNFTsResponseDataAttributeJSON) RawJSON() string {
 }
 
 type Web3GetNFTsParams struct {
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 }
 
 // URLQuery serializes [Web3GetNFTsParams]'s query parameters as `url.Values`.

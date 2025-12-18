@@ -4,7 +4,6 @@ package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -38,13 +37,9 @@ func NewAccountTransactionService(opts ...option.RequestOption) (r *AccountTrans
 
 // Retrieves a list of pending transactions that have not yet cleared for a
 // specific financial account.
-func (r *AccountTransactionService) GetPending(ctx context.Context, accountID string, query AccountTransactionGetPendingParams, opts ...option.RequestOption) (res *AccountTransactionGetPendingResponse, err error) {
+func (r *AccountTransactionService) GetPending(ctx context.Context, accountID interface{}, query AccountTransactionGetPendingParams, opts ...option.RequestOption) (res *AccountTransactionGetPendingResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if accountID == "" {
-		err = errors.New("missing required accountId parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/transactions/pending", accountID)
+	path := fmt.Sprintf("accounts/%v/transactions/pending", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
@@ -72,10 +67,10 @@ func (r accountTransactionGetPendingResponseJSON) RawJSON() string {
 }
 
 type AccountTransactionGetPendingParams struct {
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 }
 
 // URLQuery serializes [AccountTransactionGetPendingParams]'s query parameters as

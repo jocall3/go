@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
-	"time"
 
 	"github.com/stainless-sdks/1231-go/internal/apijson"
 	"github.com/stainless-sdks/1231-go/internal/apiquery"
@@ -45,32 +44,46 @@ func (r *LendingOfferService) ListPreApproved(ctx context.Context, query Lending
 }
 
 type LoanOffer struct {
-	AIPersonalizationScore float64       `json:"aiPersonalizationScore"`
-	Amount                 float64       `json:"amount"`
-	ExpirationDate         time.Time     `json:"expirationDate" format:"date"`
-	InterestRate           float64       `json:"interestRate"`
-	IsPreApproved          bool          `json:"isPreApproved"`
-	MonthlyPayment         float64       `json:"monthlyPayment"`
-	OfferID                string        `json:"offerId"`
-	OfferType              string        `json:"offerType"`
-	OriginationFee         float64       `json:"originationFee"`
-	RepaymentTermMonths    int64         `json:"repaymentTermMonths"`
-	TotalRepayable         float64       `json:"totalRepayable"`
-	JSON                   loanOfferJSON `json:"-"`
+	// The offered loan amount.
+	Amount interface{} `json:"amount,required"`
+	// Date the offer expires.
+	ExpirationDate interface{} `json:"expirationDate,required"`
+	// Annual interest rate offered (as a percentage).
+	InterestRate interface{} `json:"interestRate,required"`
+	// Indicates if this is a pre-approved offer.
+	IsPreApproved interface{} `json:"isPreApproved,required"`
+	// Unique identifier for the loan offer.
+	OfferID interface{} `json:"offerId,required"`
+	// Type of loan being offered.
+	OfferType LoanOfferOfferType `json:"offerType,required"`
+	// AI's score for how well this offer is personalized to the user (0-1).
+	AIPersonalizationScore interface{} `json:"aiPersonalizationScore"`
+	// Estimated monthly payment (if applicable).
+	MonthlyPayment interface{} `json:"monthlyPayment"`
+	// Any origination fees for the loan.
+	OriginationFee interface{} `json:"originationFee"`
+	// Repayment term in months (if applicable).
+	RepaymentTermMonths interface{} `json:"repaymentTermMonths"`
+	// URL to the full terms and conditions of the loan offer.
+	TermsAndConditionsURL interface{} `json:"termsAndConditionsUrl"`
+	// Total amount repayable over the loan term.
+	TotalRepayable interface{}   `json:"totalRepayable"`
+	JSON           loanOfferJSON `json:"-"`
 }
 
 // loanOfferJSON contains the JSON metadata for the struct [LoanOffer]
 type loanOfferJSON struct {
-	AIPersonalizationScore apijson.Field
 	Amount                 apijson.Field
 	ExpirationDate         apijson.Field
 	InterestRate           apijson.Field
 	IsPreApproved          apijson.Field
-	MonthlyPayment         apijson.Field
 	OfferID                apijson.Field
 	OfferType              apijson.Field
+	AIPersonalizationScore apijson.Field
+	MonthlyPayment         apijson.Field
 	OriginationFee         apijson.Field
 	RepaymentTermMonths    apijson.Field
+	TermsAndConditionsURL  apijson.Field
 	TotalRepayable         apijson.Field
 	raw                    string
 	ExtraFields            map[string]apijson.Field
@@ -82,6 +95,25 @@ func (r *LoanOffer) UnmarshalJSON(data []byte) (err error) {
 
 func (r loanOfferJSON) RawJSON() string {
 	return r.raw
+}
+
+// Type of loan being offered.
+type LoanOfferOfferType string
+
+const (
+	LoanOfferOfferTypePersonalLoan LoanOfferOfferType = "personal_loan"
+	LoanOfferOfferTypeAutoLoan     LoanOfferOfferType = "auto_loan"
+	LoanOfferOfferTypeMortgage     LoanOfferOfferType = "mortgage"
+	LoanOfferOfferTypeCreditLine   LoanOfferOfferType = "credit_line"
+	LoanOfferOfferTypeMicroloan    LoanOfferOfferType = "microloan"
+)
+
+func (r LoanOfferOfferType) IsKnown() bool {
+	switch r {
+	case LoanOfferOfferTypePersonalLoan, LoanOfferOfferTypeAutoLoan, LoanOfferOfferTypeMortgage, LoanOfferOfferTypeCreditLine, LoanOfferOfferTypeMicroloan:
+		return true
+	}
+	return false
 }
 
 type LendingOfferListPreApprovedResponse struct {
@@ -107,10 +139,10 @@ func (r lendingOfferListPreApprovedResponseJSON) RawJSON() string {
 }
 
 type LendingOfferListPreApprovedParams struct {
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 }
 
 // URLQuery serializes [LendingOfferListPreApprovedParams]'s query parameters as

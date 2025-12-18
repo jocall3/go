@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-sdks/1231-go/option"
 )
 
-func TestAccountTransactionGetPendingWithOptionalParams(t *testing.T) {
+func TestMarketplaceOfferRedeemWithOptionalParams(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -25,12 +25,11 @@ func TestAccountTransactionGetPendingWithOptionalParams(t *testing.T) {
 	client := jamesburvelocallaghaniiicitibankdemobusinessinc.NewClient(
 		option.WithBaseURL(baseURL),
 	)
-	_, err := client.Accounts.Transactions.GetPending(
+	_, err := client.Marketplace.Offers.Redeem(
 		context.TODO(),
-		"acc_chase_checking_4567",
-		jamesburvelocallaghaniiicitibankdemobusinessinc.AccountTransactionGetPendingParams{
-			Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-			Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		"offer_home_ins_promo_1",
+		jamesburvelocallaghaniiicitibankdemobusinessinc.MarketplaceOfferRedeemParams{
+			PaymentAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("acc_chase_checking_4567"),
 		},
 	)
 	if err != nil {

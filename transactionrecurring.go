@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
-	"time"
 
 	"github.com/stainless-sdks/1231-go/internal/apijson"
 	"github.com/stainless-sdks/1231-go/internal/apiquery"
@@ -52,35 +51,47 @@ func (r *TransactionRecurringService) List(ctx context.Context, query Transactio
 	return
 }
 
+// Details of a detected or user-defined recurring transaction.
 type RecurringTransaction struct {
-	ID                string                        `json:"id"`
-	AIConfidenceScore float64                       `json:"aiConfidenceScore"`
-	Amount            float64                       `json:"amount"`
-	Category          string                        `json:"category"`
-	Currency          string                        `json:"currency"`
-	Description       string                        `json:"description"`
-	Frequency         RecurringTransactionFrequency `json:"frequency"`
-	LastPaidDate      time.Time                     `json:"lastPaidDate" format:"date"`
-	LinkedAccountID   string                        `json:"linkedAccountId"`
-	NextDueDate       time.Time                     `json:"nextDueDate" format:"date"`
-	Status            RecurringTransactionStatus    `json:"status"`
-	JSON              recurringTransactionJSON      `json:"-"`
+	// Unique identifier for the recurring transaction.
+	ID interface{} `json:"id,required"`
+	// Amount of the recurring transaction.
+	Amount interface{} `json:"amount,required"`
+	// Category of the recurring transaction.
+	Category interface{} `json:"category,required"`
+	// ISO 4217 currency code.
+	Currency interface{} `json:"currency,required"`
+	// Description of the recurring transaction.
+	Description interface{} `json:"description,required"`
+	// Frequency of the recurring transaction.
+	Frequency RecurringTransactionFrequency `json:"frequency,required"`
+	// Current status of the recurring transaction.
+	Status RecurringTransactionStatus `json:"status,required"`
+	// AI confidence score that this is a recurring transaction (0-1).
+	AIConfidenceScore interface{} `json:"aiConfidenceScore"`
+	// Date of the last payment for this recurring transaction.
+	LastPaidDate interface{} `json:"lastPaidDate"`
+	// ID of the account typically used for this recurring transaction.
+	LinkedAccountID interface{} `json:"linkedAccountId"`
+	// Next scheduled due date for the transaction.
+	NextDueDate interface{}              `json:"nextDueDate"`
+	JSON        recurringTransactionJSON `json:"-"`
 }
 
 // recurringTransactionJSON contains the JSON metadata for the struct
 // [RecurringTransaction]
 type recurringTransactionJSON struct {
 	ID                apijson.Field
-	AIConfidenceScore apijson.Field
 	Amount            apijson.Field
 	Category          apijson.Field
 	Currency          apijson.Field
 	Description       apijson.Field
 	Frequency         apijson.Field
+	Status            apijson.Field
+	AIConfidenceScore apijson.Field
 	LastPaidDate      apijson.Field
 	LinkedAccountID   apijson.Field
 	NextDueDate       apijson.Field
-	Status            apijson.Field
 	raw               string
 	ExtraFields       map[string]apijson.Field
 }
@@ -93,35 +104,40 @@ func (r recurringTransactionJSON) RawJSON() string {
 	return r.raw
 }
 
+// Frequency of the recurring transaction.
 type RecurringTransactionFrequency string
 
 const (
-	RecurringTransactionFrequencyWeekly    RecurringTransactionFrequency = "weekly"
-	RecurringTransactionFrequencyBiWeekly  RecurringTransactionFrequency = "bi-weekly"
-	RecurringTransactionFrequencyMonthly   RecurringTransactionFrequency = "monthly"
-	RecurringTransactionFrequencyQuarterly RecurringTransactionFrequency = "quarterly"
-	RecurringTransactionFrequencyYearly    RecurringTransactionFrequency = "yearly"
+	RecurringTransactionFrequencyDaily        RecurringTransactionFrequency = "daily"
+	RecurringTransactionFrequencyWeekly       RecurringTransactionFrequency = "weekly"
+	RecurringTransactionFrequencyBiWeekly     RecurringTransactionFrequency = "bi_weekly"
+	RecurringTransactionFrequencyMonthly      RecurringTransactionFrequency = "monthly"
+	RecurringTransactionFrequencyQuarterly    RecurringTransactionFrequency = "quarterly"
+	RecurringTransactionFrequencySemiAnnually RecurringTransactionFrequency = "semi_annually"
+	RecurringTransactionFrequencyAnnually     RecurringTransactionFrequency = "annually"
 )
 
 func (r RecurringTransactionFrequency) IsKnown() bool {
 	switch r {
-	case RecurringTransactionFrequencyWeekly, RecurringTransactionFrequencyBiWeekly, RecurringTransactionFrequencyMonthly, RecurringTransactionFrequencyQuarterly, RecurringTransactionFrequencyYearly:
+	case RecurringTransactionFrequencyDaily, RecurringTransactionFrequencyWeekly, RecurringTransactionFrequencyBiWeekly, RecurringTransactionFrequencyMonthly, RecurringTransactionFrequencyQuarterly, RecurringTransactionFrequencySemiAnnually, RecurringTransactionFrequencyAnnually:
 		return true
 	}
 	return false
 }
 
+// Current status of the recurring transaction.
 type RecurringTransactionStatus string
 
 const (
 	RecurringTransactionStatusActive    RecurringTransactionStatus = "active"
-	RecurringTransactionStatusPaused    RecurringTransactionStatus = "paused"
+	RecurringTransactionStatusInactive  RecurringTransactionStatus = "inactive"
 	RecurringTransactionStatusCancelled RecurringTransactionStatus = "cancelled"
+	RecurringTransactionStatusPaused    RecurringTransactionStatus = "paused"
 )
 
 func (r RecurringTransactionStatus) IsKnown() bool {
 	switch r {
-	case RecurringTransactionStatusActive, RecurringTransactionStatusPaused, RecurringTransactionStatusCancelled:
+	case RecurringTransactionStatusActive, RecurringTransactionStatusInactive, RecurringTransactionStatusCancelled, RecurringTransactionStatusPaused:
 		return true
 	}
 	return false
@@ -150,42 +166,52 @@ func (r transactionRecurringListResponseJSON) RawJSON() string {
 }
 
 type TransactionRecurringNewParams struct {
-	Amount          param.Field[float64]                                `json:"amount,required"`
-	Category        param.Field[string]                                 `json:"category,required"`
-	Currency        param.Field[string]                                 `json:"currency,required"`
-	Description     param.Field[string]                                 `json:"description,required"`
-	Frequency       param.Field[TransactionRecurringNewParamsFrequency] `json:"frequency,required"`
-	StartDate       param.Field[time.Time]                              `json:"startDate,required" format:"date"`
-	LinkedAccountID param.Field[string]                                 `json:"linkedAccountId"`
+	// Amount of the recurring transaction.
+	Amount param.Field[interface{}] `json:"amount,required"`
+	// Category of the recurring transaction.
+	Category param.Field[interface{}] `json:"category,required"`
+	// ISO 4217 currency code.
+	Currency param.Field[interface{}] `json:"currency,required"`
+	// Description of the recurring transaction.
+	Description param.Field[interface{}] `json:"description,required"`
+	// Frequency of the recurring transaction.
+	Frequency param.Field[TransactionRecurringNewParamsFrequency] `json:"frequency,required"`
+	// ID of the account to associate with this recurring transaction.
+	LinkedAccountID param.Field[interface{}] `json:"linkedAccountId,required"`
+	// The date when this recurring transaction is expected to start.
+	StartDate param.Field[interface{}] `json:"startDate,required"`
 }
 
 func (r TransactionRecurringNewParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Frequency of the recurring transaction.
 type TransactionRecurringNewParamsFrequency string
 
 const (
-	TransactionRecurringNewParamsFrequencyWeekly    TransactionRecurringNewParamsFrequency = "weekly"
-	TransactionRecurringNewParamsFrequencyBiWeekly  TransactionRecurringNewParamsFrequency = "bi-weekly"
-	TransactionRecurringNewParamsFrequencyMonthly   TransactionRecurringNewParamsFrequency = "monthly"
-	TransactionRecurringNewParamsFrequencyQuarterly TransactionRecurringNewParamsFrequency = "quarterly"
-	TransactionRecurringNewParamsFrequencyYearly    TransactionRecurringNewParamsFrequency = "yearly"
+	TransactionRecurringNewParamsFrequencyDaily        TransactionRecurringNewParamsFrequency = "daily"
+	TransactionRecurringNewParamsFrequencyWeekly       TransactionRecurringNewParamsFrequency = "weekly"
+	TransactionRecurringNewParamsFrequencyBiWeekly     TransactionRecurringNewParamsFrequency = "bi_weekly"
+	TransactionRecurringNewParamsFrequencyMonthly      TransactionRecurringNewParamsFrequency = "monthly"
+	TransactionRecurringNewParamsFrequencyQuarterly    TransactionRecurringNewParamsFrequency = "quarterly"
+	TransactionRecurringNewParamsFrequencySemiAnnually TransactionRecurringNewParamsFrequency = "semi_annually"
+	TransactionRecurringNewParamsFrequencyAnnually     TransactionRecurringNewParamsFrequency = "annually"
 )
 
 func (r TransactionRecurringNewParamsFrequency) IsKnown() bool {
 	switch r {
-	case TransactionRecurringNewParamsFrequencyWeekly, TransactionRecurringNewParamsFrequencyBiWeekly, TransactionRecurringNewParamsFrequencyMonthly, TransactionRecurringNewParamsFrequencyQuarterly, TransactionRecurringNewParamsFrequencyYearly:
+	case TransactionRecurringNewParamsFrequencyDaily, TransactionRecurringNewParamsFrequencyWeekly, TransactionRecurringNewParamsFrequencyBiWeekly, TransactionRecurringNewParamsFrequencyMonthly, TransactionRecurringNewParamsFrequencyQuarterly, TransactionRecurringNewParamsFrequencySemiAnnually, TransactionRecurringNewParamsFrequencyAnnually:
 		return true
 	}
 	return false
 }
 
 type TransactionRecurringListParams struct {
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 }
 
 // URLQuery serializes [TransactionRecurringListParams]'s query parameters as

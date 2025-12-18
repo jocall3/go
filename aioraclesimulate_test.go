@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-sdks/1231-go/option"
 )
 
-func TestAIOracleSimulateRunAdvanced(t *testing.T) {
+func TestAIOracleSimulateRunAdvancedWithOptionalParams(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,9 +26,9 @@ func TestAIOracleSimulateRunAdvanced(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.AI.Oracle.Simulate.RunAdvanced(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AIOracleSimulateRunAdvancedParams{
-		Prompt: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Evaluate the long-term impact of a sudden job loss combined with a variable market downturn, analyzing worst-case and best-case recovery scenarios over a decade."),
+		Prompt: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Evaluate the long-term impact of a sudden job loss combined with a variable market downturn, analyzing worst-case and best-case recovery scenarios over a decade."),
 		Scenarios: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]jamesburvelocallaghaniiicitibankdemobusinessinc.AIOracleSimulateRunAdvancedParamsScenario{{
-			DurationYears: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(10)),
+			DurationYears: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](10),
 			Events: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]jamesburvelocallaghaniiicitibankdemobusinessinc.AIOracleSimulateRunAdvancedParamsScenariosEvent{{
 				Details: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{
 					"durationMonths":       6,
@@ -43,14 +43,22 @@ func TestAIOracleSimulateRunAdvanced(t *testing.T) {
 				}),
 				Type: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIOracleSimulateRunAdvancedParamsScenariosEventsTypeMarketDownturn),
 			}}),
-			Name: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Job Loss & Mild Market Recovery"),
+			Name: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Job Loss & Mild Market Recovery"),
 			SensitivityAnalysisParams: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]jamesburvelocallaghaniiicitibankdemobusinessinc.AIOracleSimulateRunAdvancedParamsScenariosSensitivityAnalysisParam{{
-				Max:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(0.070000),
-				Min:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(0.030000),
-				ParamName: jamesburvelocallaghaniiicitibankdemobusinessinc.F("marketRecoveryRate"),
-				Step:      jamesburvelocallaghaniiicitibankdemobusinessinc.F(0.010000),
+				Max:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](0.07),
+				Min:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](0.03),
+				ParamName: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("marketRecoveryRate"),
+				Step:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](0.01),
 			}}),
 		}}),
+		GlobalEconomicFactors: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIOracleSimulateRunAdvancedParamsGlobalEconomicFactors{
+			InflationRate:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](0.03),
+			InterestRateBaseline: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](0.05),
+		}),
+		PersonalAssumptions: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIOracleSimulateRunAdvancedParamsPersonalAssumptions{
+			AnnualSavingsRate: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](0.15),
+			RiskTolerance:     jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskToleranceAggressive),
+		}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -74,7 +82,7 @@ func TestAIOracleSimulateRunStandardWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.AI.Oracle.Simulate.RunStandard(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AIOracleSimulateRunStandardParams{
-		Prompt: jamesburvelocallaghaniiicitibankdemobusinessinc.F("What if I invest an additional $1,000 per month into my aggressive growth portfolio for the next 5 years?"),
+		Prompt: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("What if I invest an additional $1,000 per month into my aggressive growth portfolio for the next 5 years?"),
 		Parameters: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{
 			"durationYears":           5,
 			"monthlyInvestmentAmount": 1000,

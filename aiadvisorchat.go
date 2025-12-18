@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
-	"time"
 
 	"github.com/stainless-sdks/1231-go/internal/apijson"
 	"github.com/stainless-sdks/1231-go/internal/apiquery"
@@ -78,20 +77,29 @@ func (r aiAdvisorChatGetHistoryResponseJSON) RawJSON() string {
 }
 
 type AIAdvisorChatGetHistoryResponseData struct {
-	Content   string                                  `json:"content"`
-	Role      AIAdvisorChatGetHistoryResponseDataRole `json:"role"`
-	Timestamp time.Time                               `json:"timestamp" format:"date-time"`
-	JSON      aiAdvisorChatGetHistoryResponseDataJSON `json:"-"`
+	// The textual content of the message.
+	Content interface{} `json:"content,required"`
+	// Role of the speaker (user, assistant, or tool interaction).
+	Role AIAdvisorChatGetHistoryResponseDataRole `json:"role,required"`
+	// Timestamp of the message.
+	Timestamp interface{} `json:"timestamp,required"`
+	// If role is 'tool_call', details of the tool function called by the AI.
+	FunctionCall AIAdvisorChatGetHistoryResponseDataFunctionCall `json:"functionCall"`
+	// If role is 'tool_response', the output from the tool function.
+	FunctionResponse AIAdvisorChatGetHistoryResponseDataFunctionResponse `json:"functionResponse"`
+	JSON             aiAdvisorChatGetHistoryResponseDataJSON             `json:"-"`
 }
 
 // aiAdvisorChatGetHistoryResponseDataJSON contains the JSON metadata for the
 // struct [AIAdvisorChatGetHistoryResponseData]
 type aiAdvisorChatGetHistoryResponseDataJSON struct {
-	Content     apijson.Field
-	Role        apijson.Field
-	Timestamp   apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Content          apijson.Field
+	Role             apijson.Field
+	Timestamp        apijson.Field
+	FunctionCall     apijson.Field
+	FunctionResponse apijson.Field
+	raw              string
+	ExtraFields      map[string]apijson.Field
 }
 
 func (r *AIAdvisorChatGetHistoryResponseData) UnmarshalJSON(data []byte) (err error) {
@@ -102,39 +110,97 @@ func (r aiAdvisorChatGetHistoryResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Role of the speaker (user, assistant, or tool interaction).
 type AIAdvisorChatGetHistoryResponseDataRole string
 
 const (
-	AIAdvisorChatGetHistoryResponseDataRoleUser      AIAdvisorChatGetHistoryResponseDataRole = "user"
-	AIAdvisorChatGetHistoryResponseDataRoleAssistant AIAdvisorChatGetHistoryResponseDataRole = "assistant"
+	AIAdvisorChatGetHistoryResponseDataRoleUser         AIAdvisorChatGetHistoryResponseDataRole = "user"
+	AIAdvisorChatGetHistoryResponseDataRoleAssistant    AIAdvisorChatGetHistoryResponseDataRole = "assistant"
+	AIAdvisorChatGetHistoryResponseDataRoleToolCall     AIAdvisorChatGetHistoryResponseDataRole = "tool_call"
+	AIAdvisorChatGetHistoryResponseDataRoleToolResponse AIAdvisorChatGetHistoryResponseDataRole = "tool_response"
 )
 
 func (r AIAdvisorChatGetHistoryResponseDataRole) IsKnown() bool {
 	switch r {
-	case AIAdvisorChatGetHistoryResponseDataRoleUser, AIAdvisorChatGetHistoryResponseDataRoleAssistant:
+	case AIAdvisorChatGetHistoryResponseDataRoleUser, AIAdvisorChatGetHistoryResponseDataRoleAssistant, AIAdvisorChatGetHistoryResponseDataRoleToolCall, AIAdvisorChatGetHistoryResponseDataRoleToolResponse:
 		return true
 	}
 	return false
 }
 
+// If role is 'tool_call', details of the tool function called by the AI.
+type AIAdvisorChatGetHistoryResponseDataFunctionCall struct {
+	Args interface{}                                         `json:"args"`
+	Name interface{}                                         `json:"name"`
+	JSON aiAdvisorChatGetHistoryResponseDataFunctionCallJSON `json:"-"`
+}
+
+// aiAdvisorChatGetHistoryResponseDataFunctionCallJSON contains the JSON metadata
+// for the struct [AIAdvisorChatGetHistoryResponseDataFunctionCall]
+type aiAdvisorChatGetHistoryResponseDataFunctionCallJSON struct {
+	Args        apijson.Field
+	Name        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIAdvisorChatGetHistoryResponseDataFunctionCall) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiAdvisorChatGetHistoryResponseDataFunctionCallJSON) RawJSON() string {
+	return r.raw
+}
+
+// If role is 'tool_response', the output from the tool function.
+type AIAdvisorChatGetHistoryResponseDataFunctionResponse struct {
+	Name     interface{}                                             `json:"name"`
+	Response interface{}                                             `json:"response"`
+	JSON     aiAdvisorChatGetHistoryResponseDataFunctionResponseJSON `json:"-"`
+}
+
+// aiAdvisorChatGetHistoryResponseDataFunctionResponseJSON contains the JSON
+// metadata for the struct [AIAdvisorChatGetHistoryResponseDataFunctionResponse]
+type aiAdvisorChatGetHistoryResponseDataFunctionResponseJSON struct {
+	Name        apijson.Field
+	Response    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIAdvisorChatGetHistoryResponseDataFunctionResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiAdvisorChatGetHistoryResponseDataFunctionResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIAdvisorChatSendMessageResponse struct {
-	FunctionCalls     []AIAdvisorChatSendMessageResponseFunctionCall `json:"functionCalls"`
-	ProactiveInsights []AIInsight                                    `json:"proactiveInsights"`
-	SessionID         string                                         `json:"sessionId"`
-	// The AI's text response.
-	Text string                               `json:"text"`
+	// The active conversation session ID.
+	SessionID interface{} `json:"sessionId,required"`
+	// A list of tool functions the AI wants the system to execute.
+	FunctionCalls []AIAdvisorChatSendMessageResponseFunctionCall `json:"functionCalls,nullable"`
+	// A list of proactive AI insights or recommendations generated by Quantum.
+	ProactiveInsights []AIInsight `json:"proactiveInsights,nullable"`
+	// Indicates if the AI's response implies that the user needs to take a specific
+	// action (e.g., provide more input, confirm a tool call).
+	RequiresUserAction interface{} `json:"requiresUserAction"`
+	// The AI Advisor's textual response.
+	Text interface{}                          `json:"text"`
 	JSON aiAdvisorChatSendMessageResponseJSON `json:"-"`
 }
 
 // aiAdvisorChatSendMessageResponseJSON contains the JSON metadata for the struct
 // [AIAdvisorChatSendMessageResponse]
 type aiAdvisorChatSendMessageResponseJSON struct {
-	FunctionCalls     apijson.Field
-	ProactiveInsights apijson.Field
-	SessionID         apijson.Field
-	Text              apijson.Field
-	raw               string
-	ExtraFields       map[string]apijson.Field
+	SessionID          apijson.Field
+	FunctionCalls      apijson.Field
+	ProactiveInsights  apijson.Field
+	RequiresUserAction apijson.Field
+	Text               apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
 }
 
 func (r *AIAdvisorChatSendMessageResponse) UnmarshalJSON(data []byte) (err error) {
@@ -146,12 +212,12 @@ func (r aiAdvisorChatSendMessageResponseJSON) RawJSON() string {
 }
 
 type AIAdvisorChatSendMessageResponseFunctionCall struct {
-	// A unique ID for this function call.
-	ID string `json:"id"`
-	// The arguments for the function, as a JSON object.
+	// Unique ID for this tool call, used to link with `functionResponse`.
+	ID interface{} `json:"id"`
+	// Key-value pairs representing the arguments to pass to the tool function.
 	Args interface{} `json:"args"`
-	// The name of the function to call.
-	Name string                                           `json:"name"`
+	// The name of the tool function to call.
+	Name interface{}                                      `json:"name"`
 	JSON aiAdvisorChatSendMessageResponseFunctionCallJSON `json:"-"`
 }
 
@@ -174,10 +240,10 @@ func (r aiAdvisorChatSendMessageResponseFunctionCallJSON) RawJSON() string {
 }
 
 type AIAdvisorChatGetHistoryParams struct {
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 	// Optional: Filter history by a specific session ID. If omitted, recent
 	// conversations will be returned.
 	SessionID param.Field[interface{}] `query:"sessionId"`
@@ -193,21 +259,26 @@ func (r AIAdvisorChatGetHistoryParams) URLQuery() (v url.Values) {
 }
 
 type AIAdvisorChatSendMessageParams struct {
+	// Optional: The output from a tool function that the AI previously requested to be
+	// executed.
 	FunctionResponse param.Field[AIAdvisorChatSendMessageParamsFunctionResponse] `json:"functionResponse"`
-	// The user's text message to the AI.
-	Message param.Field[string] `json:"message"`
-	// The ID of the ongoing chat session.
-	SessionID param.Field[string] `json:"sessionId"`
+	// The user's textual input to the AI Advisor.
+	Message param.Field[interface{}] `json:"message"`
+	// Optional: Session ID to continue a conversation. If omitted, a new session is
+	// started.
+	SessionID param.Field[interface{}] `json:"sessionId"`
 }
 
 func (r AIAdvisorChatSendMessageParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Optional: The output from a tool function that the AI previously requested to be
+// executed.
 type AIAdvisorChatSendMessageParamsFunctionResponse struct {
-	// The name of the function that was called.
-	Name param.Field[string] `json:"name"`
-	// The JSON response from the function call.
+	// The name of the tool function for which this is a response.
+	Name param.Field[interface{}] `json:"name"`
+	// The JSON output from the execution of the tool function.
 	Response param.Field[interface{}] `json:"response"`
 }
 

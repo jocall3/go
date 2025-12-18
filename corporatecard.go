@@ -4,12 +4,10 @@ package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"slices"
-	"time"
 
 	"github.com/stainless-sdks/1231-go/internal/apijson"
 	"github.com/stainless-sdks/1231-go/internal/apiquery"
@@ -60,26 +58,18 @@ func (r *CorporateCardService) NewVirtual(ctx context.Context, body CorporateCar
 // Immediately changes the frozen status of a corporate card, preventing or
 // allowing transactions in real-time, critical for security and expense
 // management.
-func (r *CorporateCardService) Freeze(ctx context.Context, cardID string, body CorporateCardFreezeParams, opts ...option.RequestOption) (res *CorporateCard, err error) {
+func (r *CorporateCardService) Freeze(ctx context.Context, cardID interface{}, body CorporateCardFreezeParams, opts ...option.RequestOption) (res *CorporateCard, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if cardID == "" {
-		err = errors.New("missing required cardId parameter")
-		return
-	}
-	path := fmt.Sprintf("corporate/cards/%s/freeze", cardID)
+	path := fmt.Sprintf("corporate/cards/%v/freeze", cardID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
 // Retrieves a paginated list of transactions made with a specific corporate card,
 // including AI categorization and compliance flags.
-func (r *CorporateCardService) ListTransactions(ctx context.Context, cardID string, query CorporateCardListTransactionsParams, opts ...option.RequestOption) (res *PaginatedTransactions, err error) {
+func (r *CorporateCardService) ListTransactions(ctx context.Context, cardID interface{}, query CorporateCardListTransactionsParams, opts ...option.RequestOption) (res *PaginatedTransactions, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if cardID == "" {
-		err = errors.New("missing required cardId parameter")
-		return
-	}
-	path := fmt.Sprintf("corporate/cards/%s/transactions", cardID)
+	path := fmt.Sprintf("corporate/cards/%v/transactions", cardID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
@@ -87,37 +77,44 @@ func (r *CorporateCardService) ListTransactions(ctx context.Context, cardID stri
 // Updates the sophisticated spending controls, limits, and policy overrides for a
 // specific corporate card, enabling real-time adjustments for security and budget
 // adherence.
-func (r *CorporateCardService) UpdateControls(ctx context.Context, cardID string, body CorporateCardUpdateControlsParams, opts ...option.RequestOption) (res *CorporateCard, err error) {
+func (r *CorporateCardService) UpdateControls(ctx context.Context, cardID interface{}, body CorporateCardUpdateControlsParams, opts ...option.RequestOption) (res *CorporateCard, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if cardID == "" {
-		err = errors.New("missing required cardId parameter")
-		return
-	}
-	path := fmt.Sprintf("corporate/cards/%s/controls", cardID)
+	path := fmt.Sprintf("corporate/cards/%v/controls", cardID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
 type CorporateCard struct {
-	ID                   string                `json:"id"`
-	AssociatedEmployeeID string                `json:"associatedEmployeeId"`
-	CardNumberMask       string                `json:"cardNumberMask"`
-	CardType             CorporateCardCardType `json:"cardType"`
-	Controls             CorporateCardControls `json:"controls"`
-	CreatedDate          time.Time             `json:"createdDate" format:"date-time"`
-	Currency             string                `json:"currency"`
-	ExpirationDate       time.Time             `json:"expirationDate" format:"date"`
-	Frozen               bool                  `json:"frozen"`
-	HolderName           string                `json:"holderName"`
-	SpendingPolicyID     string                `json:"spendingPolicyId"`
-	Status               CorporateCardStatus   `json:"status"`
-	JSON                 corporateCardJSON     `json:"-"`
+	// Unique identifier for the corporate card.
+	ID interface{} `json:"id,required"`
+	// Masked card number for display purposes.
+	CardNumberMask interface{} `json:"cardNumberMask,required"`
+	// Type of the card (physical or virtual).
+	CardType CorporateCardCardType `json:"cardType,required"`
+	// Granular spending controls for a corporate card.
+	Controls CorporateCardControls `json:"controls,required"`
+	// Timestamp when the card was created.
+	CreatedDate interface{} `json:"createdDate,required"`
+	// Currency of the card's limits and transactions.
+	Currency interface{} `json:"currency,required"`
+	// Expiration date of the card (YYYY-MM-DD).
+	ExpirationDate interface{} `json:"expirationDate,required"`
+	// If true, the card is temporarily frozen and cannot be used.
+	Frozen interface{} `json:"frozen,required"`
+	// Name of the card holder.
+	HolderName interface{} `json:"holderName,required"`
+	// Current status of the card.
+	Status CorporateCardStatus `json:"status,required"`
+	// Optional: ID of the employee associated with this card.
+	AssociatedEmployeeID interface{} `json:"associatedEmployeeId"`
+	// Optional: ID of the overarching spending policy applied to this card.
+	SpendingPolicyID interface{}       `json:"spendingPolicyId"`
+	JSON             corporateCardJSON `json:"-"`
 }
 
 // corporateCardJSON contains the JSON metadata for the struct [CorporateCard]
 type corporateCardJSON struct {
 	ID                   apijson.Field
-	AssociatedEmployeeID apijson.Field
 	CardNumberMask       apijson.Field
 	CardType             apijson.Field
 	Controls             apijson.Field
@@ -126,8 +123,9 @@ type corporateCardJSON struct {
 	ExpirationDate       apijson.Field
 	Frozen               apijson.Field
 	HolderName           apijson.Field
-	SpendingPolicyID     apijson.Field
 	Status               apijson.Field
+	AssociatedEmployeeID apijson.Field
+	SpendingPolicyID     apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -140,6 +138,7 @@ func (r corporateCardJSON) RawJSON() string {
 	return r.raw
 }
 
+// Type of the card (physical or virtual).
 type CorporateCardCardType string
 
 const (
@@ -155,34 +154,46 @@ func (r CorporateCardCardType) IsKnown() bool {
 	return false
 }
 
+// Current status of the card.
 type CorporateCardStatus string
 
 const (
-	CorporateCardStatusActive    CorporateCardStatus = "Active"
-	CorporateCardStatusInactive  CorporateCardStatus = "Inactive"
-	CorporateCardStatusSuspended CorporateCardStatus = "Suspended"
-	CorporateCardStatusClosed    CorporateCardStatus = "Closed"
+	CorporateCardStatusActive            CorporateCardStatus = "Active"
+	CorporateCardStatusSuspended         CorporateCardStatus = "Suspended"
+	CorporateCardStatusDeactivated       CorporateCardStatus = "Deactivated"
+	CorporateCardStatusPendingActivation CorporateCardStatus = "Pending Activation"
 )
 
 func (r CorporateCardStatus) IsKnown() bool {
 	switch r {
-	case CorporateCardStatusActive, CorporateCardStatusInactive, CorporateCardStatusSuspended, CorporateCardStatusClosed:
+	case CorporateCardStatusActive, CorporateCardStatusSuspended, CorporateCardStatusDeactivated, CorporateCardStatusPendingActivation:
 		return true
 	}
 	return false
 }
 
+// Granular spending controls for a corporate card.
 type CorporateCardControls struct {
-	AtmWithdrawals               bool                      `json:"atmWithdrawals"`
-	ContactlessPayments          bool                      `json:"contactlessPayments"`
-	DailyLimit                   float64                   `json:"dailyLimit"`
-	InternationalTransactions    bool                      `json:"internationalTransactions"`
-	MerchantCategoryRestrictions []string                  `json:"merchantCategoryRestrictions"`
-	MonthlyLimit                 float64                   `json:"monthlyLimit"`
-	OnlineTransactions           bool                      `json:"onlineTransactions"`
-	SingleTransactionLimit       float64                   `json:"singleTransactionLimit"`
-	VendorRestrictions           []string                  `json:"vendorRestrictions"`
-	JSON                         corporateCardControlsJSON `json:"-"`
+	// If true, ATM cash withdrawals are allowed.
+	AtmWithdrawals interface{} `json:"atmWithdrawals"`
+	// If true, contactless payments are allowed.
+	ContactlessPayments interface{} `json:"contactlessPayments"`
+	// Maximum spending limit per day (null for no limit).
+	DailyLimit interface{} `json:"dailyLimit"`
+	// If true, international transactions are allowed.
+	InternationalTransactions interface{} `json:"internationalTransactions"`
+	// List of allowed merchant categories. If empty, all are allowed unless explicitly
+	// denied.
+	MerchantCategoryRestrictions []interface{} `json:"merchantCategoryRestrictions,nullable"`
+	// Maximum spending limit per month (null for no limit).
+	MonthlyLimit interface{} `json:"monthlyLimit"`
+	// If true, online transactions are allowed.
+	OnlineTransactions interface{} `json:"onlineTransactions"`
+	// Maximum amount for a single transaction (null for no limit).
+	SingleTransactionLimit interface{} `json:"singleTransactionLimit"`
+	// List of allowed vendors/merchants by name.
+	VendorRestrictions []interface{}             `json:"vendorRestrictions,nullable"`
+	JSON               corporateCardControlsJSON `json:"-"`
 }
 
 // corporateCardControlsJSON contains the JSON metadata for the struct
@@ -209,16 +220,27 @@ func (r corporateCardControlsJSON) RawJSON() string {
 	return r.raw
 }
 
+// Granular spending controls for a corporate card.
 type CorporateCardControlsParam struct {
-	AtmWithdrawals               param.Field[bool]     `json:"atmWithdrawals"`
-	ContactlessPayments          param.Field[bool]     `json:"contactlessPayments"`
-	DailyLimit                   param.Field[float64]  `json:"dailyLimit"`
-	InternationalTransactions    param.Field[bool]     `json:"internationalTransactions"`
-	MerchantCategoryRestrictions param.Field[[]string] `json:"merchantCategoryRestrictions"`
-	MonthlyLimit                 param.Field[float64]  `json:"monthlyLimit"`
-	OnlineTransactions           param.Field[bool]     `json:"onlineTransactions"`
-	SingleTransactionLimit       param.Field[float64]  `json:"singleTransactionLimit"`
-	VendorRestrictions           param.Field[[]string] `json:"vendorRestrictions"`
+	// If true, ATM cash withdrawals are allowed.
+	AtmWithdrawals param.Field[interface{}] `json:"atmWithdrawals"`
+	// If true, contactless payments are allowed.
+	ContactlessPayments param.Field[interface{}] `json:"contactlessPayments"`
+	// Maximum spending limit per day (null for no limit).
+	DailyLimit param.Field[interface{}] `json:"dailyLimit"`
+	// If true, international transactions are allowed.
+	InternationalTransactions param.Field[interface{}] `json:"internationalTransactions"`
+	// List of allowed merchant categories. If empty, all are allowed unless explicitly
+	// denied.
+	MerchantCategoryRestrictions param.Field[[]interface{}] `json:"merchantCategoryRestrictions"`
+	// Maximum spending limit per month (null for no limit).
+	MonthlyLimit param.Field[interface{}] `json:"monthlyLimit"`
+	// If true, online transactions are allowed.
+	OnlineTransactions param.Field[interface{}] `json:"onlineTransactions"`
+	// Maximum amount for a single transaction (null for no limit).
+	SingleTransactionLimit param.Field[interface{}] `json:"singleTransactionLimit"`
+	// List of allowed vendors/merchants by name.
+	VendorRestrictions param.Field[[]interface{}] `json:"vendorRestrictions"`
 }
 
 func (r CorporateCardControlsParam) MarshalJSON() (data []byte, err error) {
@@ -248,10 +270,10 @@ func (r corporateCardListResponseJSON) RawJSON() string {
 }
 
 type CorporateCardListParams struct {
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 }
 
 // URLQuery serializes [CorporateCardListParams]'s query parameters as
@@ -264,11 +286,18 @@ func (r CorporateCardListParams) URLQuery() (v url.Values) {
 }
 
 type CorporateCardNewVirtualParams struct {
-	Controls             param.Field[CorporateCardControlsParam] `json:"controls,required"`
-	HolderName           param.Field[string]                     `json:"holderName,required"`
-	AssociatedEmployeeID param.Field[string]                     `json:"associatedEmployeeId"`
-	ExpirationDate       param.Field[time.Time]                  `json:"expirationDate" format:"date"`
-	Purpose              param.Field[string]                     `json:"purpose"`
+	// Granular spending controls for a corporate card.
+	Controls param.Field[CorporateCardControlsParam] `json:"controls,required"`
+	// Expiration date for the virtual card (YYYY-MM-DD).
+	ExpirationDate param.Field[interface{}] `json:"expirationDate,required"`
+	// Name to appear on the virtual card.
+	HolderName param.Field[interface{}] `json:"holderName,required"`
+	// Brief description of the virtual card's purpose.
+	Purpose param.Field[interface{}] `json:"purpose,required"`
+	// Optional: ID of the employee or department this card is for.
+	AssociatedEmployeeID param.Field[interface{}] `json:"associatedEmployeeId"`
+	// Optional: ID of a spending policy to link with this virtual card.
+	SpendingPolicyID param.Field[interface{}] `json:"spendingPolicyId"`
 }
 
 func (r CorporateCardNewVirtualParams) MarshalJSON() (data []byte, err error) {
@@ -276,7 +305,8 @@ func (r CorporateCardNewVirtualParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CorporateCardFreezeParams struct {
-	Freeze param.Field[bool] `json:"freeze,required"`
+	// Set to `true` to freeze the card, `false` to unfreeze.
+	Freeze param.Field[interface{}] `json:"freeze,required"`
 }
 
 func (r CorporateCardFreezeParams) MarshalJSON() (data []byte, err error) {
@@ -284,14 +314,14 @@ func (r CorporateCardFreezeParams) MarshalJSON() (data []byte, err error) {
 }
 
 type CorporateCardListTransactionsParams struct {
-	// The end date for the query range (inclusive).
-	EndDate param.Field[time.Time] `query:"endDate" format:"date"`
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
-	// The start date for the query range (inclusive).
-	StartDate param.Field[time.Time] `query:"startDate" format:"date"`
+	// End date for filtering results (inclusive, YYYY-MM-DD).
+	EndDate param.Field[interface{}] `query:"endDate"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
+	// Start date for filtering results (inclusive, YYYY-MM-DD).
+	StartDate param.Field[interface{}] `query:"startDate"`
 }
 
 // URLQuery serializes [CorporateCardListTransactionsParams]'s query parameters as
@@ -304,6 +334,7 @@ func (r CorporateCardListTransactionsParams) URLQuery() (v url.Values) {
 }
 
 type CorporateCardUpdateControlsParams struct {
+	// Granular spending controls for a corporate card.
 	CorporateCardControls CorporateCardControlsParam `json:"corporate_card_controls,required"`
 }
 

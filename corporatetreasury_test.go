@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-sdks/1231-go/option"
 )
 
-func TestAccountTransactionGetPendingWithOptionalParams(t *testing.T) {
+func TestCorporateTreasuryGetLiquidityPositions(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -25,14 +25,7 @@ func TestAccountTransactionGetPendingWithOptionalParams(t *testing.T) {
 	client := jamesburvelocallaghaniiicitibankdemobusinessinc.NewClient(
 		option.WithBaseURL(baseURL),
 	)
-	_, err := client.Accounts.Transactions.GetPending(
-		context.TODO(),
-		"acc_chase_checking_4567",
-		jamesburvelocallaghaniiicitibankdemobusinessinc.AccountTransactionGetPendingParams{
-			Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-			Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-		},
-	)
+	_, err := client.Corporate.Treasury.GetLiquidityPositions(context.TODO())
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
 		if errors.As(err, &apierr) {

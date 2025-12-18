@@ -26,13 +26,13 @@ func TestWeb3TransactionInitiateTransferWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Web3.Transactions.InitiateTransfer(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.Web3TransactionInitiateTransferParams{
-		Amount:            jamesburvelocallaghaniiicitibankdemobusinessinc.F(0.100000),
-		AssetSymbol:       jamesburvelocallaghaniiicitibankdemobusinessinc.F("ETH"),
-		BlockchainNetwork: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Ethereum"),
-		RecipientAddress:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("0xdef4567890abcdef1234567890abcdef1234567890"),
-		SourceWalletID:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("wallet_conn_eth_0xabc123"),
-		GasPriceGwei:      jamesburvelocallaghaniiicitibankdemobusinessinc.F(50.000000),
-		Memo:              jamesburvelocallaghaniiicitibankdemobusinessinc.F("Payment for services"),
+		Amount:            jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](0.1),
+		AssetSymbol:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("ETH"),
+		BlockchainNetwork: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Ethereum"),
+		RecipientAddress:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("0xdef4567890abcdef1234567890abcdef1234567890"),
+		SourceWalletID:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("wallet_conn_eth_0xabc123"),
+		GasPriceGwei:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](50),
+		Memo:              jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Payment for services"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

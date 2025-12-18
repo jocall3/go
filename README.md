@@ -42,9 +42,9 @@ import (
 func main() {
 	client := jamesburvelocallaghaniiicitibankdemobusinessinc.NewClient()
 	user, err := client.Users.Register(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
-		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
-		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
+		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
+		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
+		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
 	})
 	if err != nil {
 		panic(err.Error())
@@ -168,9 +168,9 @@ To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
 _, err := client.Users.Register(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-	Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
-	Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
-	Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
+	Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
+	Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
+	Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
 })
 if err != nil {
 	var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -199,9 +199,9 @@ defer cancel()
 client.Users.Register(
 	ctx,
 	jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
-		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
-		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
+		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
+		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
+		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
 	},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
@@ -239,9 +239,9 @@ client := jamesburvelocallaghaniiicitibankdemobusinessinc.NewClient(
 client.Users.Register(
 	context.TODO(),
 	jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
-		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
-		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
+		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
+		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
+		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
 	},
 	option.WithMaxRetries(5),
 )
@@ -258,9 +258,9 @@ var response *http.Response
 user, err := client.Users.Register(
 	context.TODO(),
 	jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
-		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
-		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
+		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
+		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
+		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
 	},
 	option.WithResponseInto(&response),
 )

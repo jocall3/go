@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-sdks/1231-go/option"
 )
 
-func TestSustainabilityPurchaseCarbonOffsetsWithOptionalParams(t *testing.T) {
+func TestSustainabilityPurchaseCarbonOffsets(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,9 +26,9 @@ func TestSustainabilityPurchaseCarbonOffsetsWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Sustainability.PurchaseCarbonOffsets(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.SustainabilityPurchaseCarbonOffsetsParams{
-		AmountKgCo2e:     jamesburvelocallaghaniiicitibankdemobusinessinc.F(500.000000),
-		PaymentAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F("acc_chase_checking_4567"),
-		OffsetProject:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("Verified Carbon Standard Project X"),
+		AmountKgCo2e:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](500),
+		OffsetProject:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Verified Carbon Standard Project X"),
+		PaymentAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("acc_chase_checking_4567"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

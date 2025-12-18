@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-sdks/1231-go/option"
 )
 
-func TestAccountLink(t *testing.T) {
+func TestAccountLinkWithOptionalParams(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,8 +26,10 @@ func TestAccountLink(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Accounts.Link(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AccountLinkParams{
-		CountryCode:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("US"),
-		InstitutionName: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Bank of America"),
+		CountryCode:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("US"),
+		InstitutionName:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Bank of America"),
+		ProviderIdentifier: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		RedirectUri:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -73,8 +75,8 @@ func TestAccountGetMeWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Accounts.GetMe(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AccountGetMeParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(1)),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

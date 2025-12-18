@@ -26,8 +26,8 @@ func TestWeb3GetNFTsWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Web3.GetNFTs(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.Web3GetNFTsParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(1)),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

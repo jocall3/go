@@ -26,20 +26,23 @@ func TestPaymentInternationalInitiateWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Payments.International.Initiate(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.PaymentInternationalInitiateParams{
-		Amount: jamesburvelocallaghaniiicitibankdemobusinessinc.F(5000.000000),
+		Amount: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](5000),
 		Beneficiary: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.PaymentInternationalInitiateParamsBeneficiary{
-			Address:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("Hauptstrasse 1, 10115 Berlin, Germany"),
-			BankName: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Deutsche Bank"),
-			Iban:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("DE89370400440532013000"),
-			Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Maria Schmidt"),
-			SwiftBic: jamesburvelocallaghaniiicitibankdemobusinessinc.F("DEUTDEFF"),
+			Address:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Hauptstrasse 1, 10115 Berlin, Germany"),
+			BankName:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Deutsche Bank"),
+			Name:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Maria Schmidt"),
+			AccountNumber: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+			Iban:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("DE89370400440532013000"),
+			RoutingNumber: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+			SwiftBic:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("DEUTDEFF"),
 		}),
-		SourceAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F("acc_chase_checking_4567"),
-		SourceCurrency:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("USD"),
-		TargetCurrency:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("EUR"),
-		FxRateLock:      jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
-		FxRateProvider:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("proprietary_ai"),
-		Purpose:         jamesburvelocallaghaniiicitibankdemobusinessinc.F("Vendor payment for Q2 services."),
+		Purpose:         jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Vendor payment for Q2 services."),
+		SourceAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("acc_chase_checking_4567"),
+		SourceCurrency:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("USD"),
+		TargetCurrency:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("EUR"),
+		FxRateLock:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+		FxRateProvider:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.PaymentInternationalInitiateParamsFxRateProviderProprietaryAI),
+		Reference:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

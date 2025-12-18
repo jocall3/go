@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-sdks/1231-go/option"
 )
 
-func TestAccountOverdraftSettingGetOverdraftSettings(t *testing.T) {
+func TestNotificationListUserNotificationsWithOptionalParams(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -25,7 +25,12 @@ func TestAccountOverdraftSettingGetOverdraftSettings(t *testing.T) {
 	client := jamesburvelocallaghaniiicitibankdemobusinessinc.NewClient(
 		option.WithBaseURL(baseURL),
 	)
-	_, err := client.Accounts.OverdraftSettings.GetOverdraftSettings(context.TODO(), "acc_chase_checking_4567")
+	_, err := client.Notifications.ListUserNotifications(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.NotificationListUserNotificationsParams{
+		Limit:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Offset:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Severity: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.NotificationListUserNotificationsParamsSeverityHigh),
+		Status:   jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.NotificationListUserNotificationsParamsStatusUnread),
+	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
 		if errors.As(err, &apierr) {
@@ -35,7 +40,7 @@ func TestAccountOverdraftSettingGetOverdraftSettings(t *testing.T) {
 	}
 }
 
-func TestAccountOverdraftSettingUpdateOverdraftSettingsWithOptionalParams(t *testing.T) {
+func TestNotificationMarkAsRead(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -47,17 +52,7 @@ func TestAccountOverdraftSettingUpdateOverdraftSettingsWithOptionalParams(t *tes
 	client := jamesburvelocallaghaniiicitibankdemobusinessinc.NewClient(
 		option.WithBaseURL(baseURL),
 	)
-	_, err := client.Accounts.OverdraftSettings.UpdateOverdraftSettings(
-		context.TODO(),
-		"acc_chase_checking_4567",
-		jamesburvelocallaghaniiicitibankdemobusinessinc.AccountOverdraftSettingUpdateOverdraftSettingsParams{
-			Enabled:                jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](false),
-			FeePreference:          jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceDeclineIfOverLimit),
-			LinkedSavingsAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("acc_new_savings_5678"),
-			LinkToSavings:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](false),
-			ProtectionLimit:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](750),
-		},
-	)
+	_, err := client.Notifications.MarkAsRead(context.TODO(), "notif_budget_alert_002")
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
 		if errors.As(err, &apierr) {

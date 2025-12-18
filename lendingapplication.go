@@ -4,11 +4,9 @@ package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"slices"
-	"time"
 
 	"github.com/stainless-sdks/1231-go/internal/apijson"
 	"github.com/stainless-sdks/1231-go/internal/param"
@@ -37,13 +35,9 @@ func NewLendingApplicationService(opts ...option.RequestOption) (r *LendingAppli
 
 // Retrieves the current status and detailed information for a submitted loan
 // application, including AI underwriting outcomes, approved terms, and next steps.
-func (r *LendingApplicationService) Get(ctx context.Context, applicationID string, opts ...option.RequestOption) (res *LoanApplicationStatus, err error) {
+func (r *LendingApplicationService) Get(ctx context.Context, applicationID interface{}, opts ...option.RequestOption) (res *LoanApplicationStatus, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if applicationID == "" {
-		err = errors.New("missing required applicationId parameter")
-		return
-	}
-	path := fmt.Sprintf("lending/applications/%s", applicationID)
+	path := fmt.Sprintf("lending/applications/%v", applicationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -59,28 +53,34 @@ func (r *LendingApplicationService) Submit(ctx context.Context, body LendingAppl
 }
 
 type LoanApplicationStatus struct {
+	// Timestamp when the application was submitted.
+	ApplicationDate interface{} `json:"applicationDate,required"`
+	// Unique identifier for the loan application.
+	ApplicationID interface{} `json:"applicationId,required"`
+	// The amount originally requested in the application.
+	LoanAmountRequested interface{} `json:"loanAmountRequested,required"`
+	// The purpose of the loan.
+	LoanPurpose LoanApplicationStatusLoanPurpose `json:"loanPurpose,required"`
+	// Guidance on the next actions for the user.
+	NextSteps interface{} `json:"nextSteps,required"`
+	// Current status of the loan application.
+	Status               LoanApplicationStatusStatus               `json:"status,required"`
 	AIUnderwritingResult LoanApplicationStatusAIUnderwritingResult `json:"aiUnderwritingResult"`
-	ApplicationDate      time.Time                                 `json:"applicationDate" format:"date-time"`
-	ApplicationID        string                                    `json:"applicationId"`
-	LoanAmountRequested  float64                                   `json:"loanAmountRequested"`
-	LoanPurpose          string                                    `json:"loanPurpose"`
-	NextSteps            string                                    `json:"nextSteps"`
 	OfferDetails         LoanOffer                                 `json:"offerDetails"`
-	Status               LoanApplicationStatusStatus               `json:"status"`
 	JSON                 loanApplicationStatusJSON                 `json:"-"`
 }
 
 // loanApplicationStatusJSON contains the JSON metadata for the struct
 // [LoanApplicationStatus]
 type loanApplicationStatusJSON struct {
-	AIUnderwritingResult apijson.Field
 	ApplicationDate      apijson.Field
 	ApplicationID        apijson.Field
 	LoanAmountRequested  apijson.Field
 	LoanPurpose          apijson.Field
 	NextSteps            apijson.Field
-	OfferDetails         apijson.Field
 	Status               apijson.Field
+	AIUnderwritingResult apijson.Field
+	OfferDetails         apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -93,13 +93,59 @@ func (r loanApplicationStatusJSON) RawJSON() string {
 	return r.raw
 }
 
+// The purpose of the loan.
+type LoanApplicationStatusLoanPurpose string
+
+const (
+	LoanApplicationStatusLoanPurposeHomeImprovement   LoanApplicationStatusLoanPurpose = "home_improvement"
+	LoanApplicationStatusLoanPurposeDebtConsolidation LoanApplicationStatusLoanPurpose = "debt_consolidation"
+	LoanApplicationStatusLoanPurposeMedicalExpense    LoanApplicationStatusLoanPurpose = "medical_expense"
+	LoanApplicationStatusLoanPurposeEducation         LoanApplicationStatusLoanPurpose = "education"
+	LoanApplicationStatusLoanPurposeAutoPurchase      LoanApplicationStatusLoanPurpose = "auto_purchase"
+	LoanApplicationStatusLoanPurposeOther             LoanApplicationStatusLoanPurpose = "other"
+)
+
+func (r LoanApplicationStatusLoanPurpose) IsKnown() bool {
+	switch r {
+	case LoanApplicationStatusLoanPurposeHomeImprovement, LoanApplicationStatusLoanPurposeDebtConsolidation, LoanApplicationStatusLoanPurposeMedicalExpense, LoanApplicationStatusLoanPurposeEducation, LoanApplicationStatusLoanPurposeAutoPurchase, LoanApplicationStatusLoanPurposeOther:
+		return true
+	}
+	return false
+}
+
+// Current status of the loan application.
+type LoanApplicationStatusStatus string
+
+const (
+	LoanApplicationStatusStatusSubmitted         LoanApplicationStatusStatus = "submitted"
+	LoanApplicationStatusStatusUnderwriting      LoanApplicationStatusStatus = "underwriting"
+	LoanApplicationStatusStatusApproved          LoanApplicationStatusStatus = "approved"
+	LoanApplicationStatusStatusDeclined          LoanApplicationStatusStatus = "declined"
+	LoanApplicationStatusStatusPendingAcceptance LoanApplicationStatusStatus = "pending_acceptance"
+	LoanApplicationStatusStatusFunded            LoanApplicationStatusStatus = "funded"
+	LoanApplicationStatusStatusCancelled         LoanApplicationStatusStatus = "cancelled"
+)
+
+func (r LoanApplicationStatusStatus) IsKnown() bool {
+	switch r {
+	case LoanApplicationStatusStatusSubmitted, LoanApplicationStatusStatusUnderwriting, LoanApplicationStatusStatusApproved, LoanApplicationStatusStatusDeclined, LoanApplicationStatusStatusPendingAcceptance, LoanApplicationStatusStatusFunded, LoanApplicationStatusStatusCancelled:
+		return true
+	}
+	return false
+}
+
 type LoanApplicationStatusAIUnderwritingResult struct {
-	AIConfidence            float64                                           `json:"aiConfidence"`
-	Decision                LoanApplicationStatusAIUnderwritingResultDecision `json:"decision"`
-	MaxApprovedAmount       float64                                           `json:"maxApprovedAmount"`
-	Reason                  string                                            `json:"reason"`
-	RecommendedInterestRate float64                                           `json:"recommendedInterestRate"`
-	JSON                    loanApplicationStatusAIUnderwritingResultJSON     `json:"-"`
+	// AI's confidence in its underwriting decision (0-1).
+	AIConfidence interface{} `json:"aiConfidence,required"`
+	// The AI's underwriting decision.
+	Decision LoanApplicationStatusAIUnderwritingResultDecision `json:"decision,required"`
+	// Reasoning for the AI's decision.
+	Reason interface{} `json:"reason,required"`
+	// The maximum amount the AI is willing to approve.
+	MaxApprovedAmount interface{} `json:"maxApprovedAmount"`
+	// The interest rate recommended by the AI.
+	RecommendedInterestRate interface{}                                   `json:"recommendedInterestRate"`
+	JSON                    loanApplicationStatusAIUnderwritingResultJSON `json:"-"`
 }
 
 // loanApplicationStatusAIUnderwritingResultJSON contains the JSON metadata for the
@@ -107,8 +153,8 @@ type LoanApplicationStatusAIUnderwritingResult struct {
 type loanApplicationStatusAIUnderwritingResultJSON struct {
 	AIConfidence            apijson.Field
 	Decision                apijson.Field
-	MaxApprovedAmount       apijson.Field
 	Reason                  apijson.Field
+	MaxApprovedAmount       apijson.Field
 	RecommendedInterestRate apijson.Field
 	raw                     string
 	ExtraFields             map[string]apijson.Field
@@ -122,57 +168,65 @@ func (r loanApplicationStatusAIUnderwritingResultJSON) RawJSON() string {
 	return r.raw
 }
 
+// The AI's underwriting decision.
 type LoanApplicationStatusAIUnderwritingResultDecision string
 
 const (
-	LoanApplicationStatusAIUnderwritingResultDecisionApproved            LoanApplicationStatusAIUnderwritingResultDecision = "approved"
-	LoanApplicationStatusAIUnderwritingResultDecisionDeclined            LoanApplicationStatusAIUnderwritingResultDecision = "declined"
-	LoanApplicationStatusAIUnderwritingResultDecisionPendingManualReview LoanApplicationStatusAIUnderwritingResultDecision = "pending_manual_review"
+	LoanApplicationStatusAIUnderwritingResultDecisionApproved        LoanApplicationStatusAIUnderwritingResultDecision = "approved"
+	LoanApplicationStatusAIUnderwritingResultDecisionDeclined        LoanApplicationStatusAIUnderwritingResultDecision = "declined"
+	LoanApplicationStatusAIUnderwritingResultDecisionReferredToHuman LoanApplicationStatusAIUnderwritingResultDecision = "referred_to_human"
 )
 
 func (r LoanApplicationStatusAIUnderwritingResultDecision) IsKnown() bool {
 	switch r {
-	case LoanApplicationStatusAIUnderwritingResultDecisionApproved, LoanApplicationStatusAIUnderwritingResultDecisionDeclined, LoanApplicationStatusAIUnderwritingResultDecisionPendingManualReview:
-		return true
-	}
-	return false
-}
-
-type LoanApplicationStatusStatus string
-
-const (
-	LoanApplicationStatusStatusUnderwriting      LoanApplicationStatusStatus = "underwriting"
-	LoanApplicationStatusStatusApproved          LoanApplicationStatusStatus = "approved"
-	LoanApplicationStatusStatusDeclined          LoanApplicationStatusStatus = "declined"
-	LoanApplicationStatusStatusPendingDocuments  LoanApplicationStatusStatus = "pending_documents"
-	LoanApplicationStatusStatusFundingInProgress LoanApplicationStatusStatus = "funding_in_progress"
-	LoanApplicationStatusStatusFunded            LoanApplicationStatusStatus = "funded"
-)
-
-func (r LoanApplicationStatusStatus) IsKnown() bool {
-	switch r {
-	case LoanApplicationStatusStatusUnderwriting, LoanApplicationStatusStatusApproved, LoanApplicationStatusStatusDeclined, LoanApplicationStatusStatusPendingDocuments, LoanApplicationStatusStatusFundingInProgress, LoanApplicationStatusStatusFunded:
+	case LoanApplicationStatusAIUnderwritingResultDecisionApproved, LoanApplicationStatusAIUnderwritingResultDecisionDeclined, LoanApplicationStatusAIUnderwritingResultDecisionReferredToHuman:
 		return true
 	}
 	return false
 }
 
 type LendingApplicationSubmitParams struct {
-	LoanAmount          param.Field[float64]                                   `json:"loanAmount,required"`
-	LoanPurpose         param.Field[string]                                    `json:"loanPurpose,required"`
-	RepaymentTermMonths param.Field[int64]                                     `json:"repaymentTermMonths,required"`
-	AdditionalNotes     param.Field[string]                                    `json:"additionalNotes"`
-	CoApplicant         param.Field[LendingApplicationSubmitParamsCoApplicant] `json:"coApplicant"`
+	// The desired loan amount.
+	LoanAmount param.Field[interface{}] `json:"loanAmount,required"`
+	// The purpose of the loan.
+	LoanPurpose param.Field[LendingApplicationSubmitParamsLoanPurpose] `json:"loanPurpose,required"`
+	// The desired repayment term in months.
+	RepaymentTermMonths param.Field[interface{}] `json:"repaymentTermMonths,required"`
+	// Optional notes or details for the application.
+	AdditionalNotes param.Field[interface{}] `json:"additionalNotes"`
+	// Optional: Details of a co-applicant for the loan.
+	CoApplicant param.Field[LendingApplicationSubmitParamsCoApplicant] `json:"coApplicant"`
 }
 
 func (r LendingApplicationSubmitParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The purpose of the loan.
+type LendingApplicationSubmitParamsLoanPurpose string
+
+const (
+	LendingApplicationSubmitParamsLoanPurposeHomeImprovement   LendingApplicationSubmitParamsLoanPurpose = "home_improvement"
+	LendingApplicationSubmitParamsLoanPurposeDebtConsolidation LendingApplicationSubmitParamsLoanPurpose = "debt_consolidation"
+	LendingApplicationSubmitParamsLoanPurposeMedicalExpense    LendingApplicationSubmitParamsLoanPurpose = "medical_expense"
+	LendingApplicationSubmitParamsLoanPurposeEducation         LendingApplicationSubmitParamsLoanPurpose = "education"
+	LendingApplicationSubmitParamsLoanPurposeAutoPurchase      LendingApplicationSubmitParamsLoanPurpose = "auto_purchase"
+	LendingApplicationSubmitParamsLoanPurposeOther             LendingApplicationSubmitParamsLoanPurpose = "other"
+)
+
+func (r LendingApplicationSubmitParamsLoanPurpose) IsKnown() bool {
+	switch r {
+	case LendingApplicationSubmitParamsLoanPurposeHomeImprovement, LendingApplicationSubmitParamsLoanPurposeDebtConsolidation, LendingApplicationSubmitParamsLoanPurposeMedicalExpense, LendingApplicationSubmitParamsLoanPurposeEducation, LendingApplicationSubmitParamsLoanPurposeAutoPurchase, LendingApplicationSubmitParamsLoanPurposeOther:
+		return true
+	}
+	return false
+}
+
+// Optional: Details of a co-applicant for the loan.
 type LendingApplicationSubmitParamsCoApplicant struct {
-	Email  param.Field[string]  `json:"email" format:"email"`
-	Income param.Field[float64] `json:"income"`
-	Name   param.Field[string]  `json:"name"`
+	Email  param.Field[interface{}] `json:"email"`
+	Income param.Field[interface{}] `json:"income"`
+	Name   param.Field[interface{}] `json:"name"`
 }
 
 func (r LendingApplicationSubmitParamsCoApplicant) MarshalJSON() (data []byte, err error) {

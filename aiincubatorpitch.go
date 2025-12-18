@@ -4,11 +4,9 @@ package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"slices"
-	"time"
 
 	"github.com/stainless-sdks/1231-go/internal/apijson"
 	"github.com/stainless-sdks/1231-go/internal/param"
@@ -38,13 +36,9 @@ func NewAIIncubatorPitchService(opts ...option.RequestOption) (r *AIIncubatorPit
 // Retrieves the granular AI-driven analysis, strategic feedback, market validation
 // results, and any outstanding questions from Quantum Weaver for a specific
 // business pitch.
-func (r *AIIncubatorPitchService) GetDetails(ctx context.Context, pitchID string, opts ...option.RequestOption) (res *AIIncubatorPitchGetDetailsResponse, err error) {
+func (r *AIIncubatorPitchService) GetDetails(ctx context.Context, pitchID interface{}, opts ...option.RequestOption) (res *AIIncubatorPitchGetDetailsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if pitchID == "" {
-		err = errors.New("missing required pitchId parameter")
-		return
-	}
-	path := fmt.Sprintf("ai/incubator/pitch/%s/details", pitchID)
+	path := fmt.Sprintf("ai/incubator/pitch/%v/details", pitchID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -63,40 +57,44 @@ func (r *AIIncubatorPitchService) Submit(ctx context.Context, body AIIncubatorPi
 // Allows the entrepreneur to respond to specific questions or provide additional
 // details requested by Quantum Weaver, moving the pitch forward in the incubation
 // process.
-func (r *AIIncubatorPitchService) SubmitFeedback(ctx context.Context, pitchID string, body AIIncubatorPitchSubmitFeedbackParams, opts ...option.RequestOption) (res *QuantumWeaverState, err error) {
+func (r *AIIncubatorPitchService) SubmitFeedback(ctx context.Context, pitchID interface{}, body AIIncubatorPitchSubmitFeedbackParams, opts ...option.RequestOption) (res *QuantumWeaverState, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if pitchID == "" {
-		err = errors.New("missing required pitchId parameter")
-		return
-	}
-	path := fmt.Sprintf("ai/incubator/pitch/%s/feedback", pitchID)
+	path := fmt.Sprintf("ai/incubator/pitch/%v/feedback", pitchID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
 type QuantumWeaverState struct {
-	EstimatedFundingOffer float64                      `json:"estimatedFundingOffer"`
-	FeedbackSummary       string                       `json:"feedbackSummary"`
-	LastUpdated           time.Time                    `json:"lastUpdated" format:"date-time"`
-	NextSteps             string                       `json:"nextSteps"`
-	PitchID               string                       `json:"pitchId"`
-	Questions             []QuantumWeaverStateQuestion `json:"questions"`
-	Stage                 QuantumWeaverStateStage      `json:"stage"`
-	StatusMessage         string                       `json:"statusMessage"`
-	JSON                  quantumWeaverStateJSON       `json:"-"`
+	// Timestamp of the last status update.
+	LastUpdated interface{} `json:"lastUpdated,required"`
+	// Guidance on the next actions for the user.
+	NextSteps interface{} `json:"nextSteps,required"`
+	// Unique identifier for the business pitch.
+	PitchID interface{} `json:"pitchId,required"`
+	// Current stage of the business pitch in the incubation process.
+	Stage QuantumWeaverStateStage `json:"stage,required"`
+	// A human-readable status message.
+	StatusMessage interface{} `json:"statusMessage,required"`
+	// AI's estimated funding offer, if the pitch progresses.
+	EstimatedFundingOffer interface{} `json:"estimatedFundingOffer"`
+	// A summary of AI-generated feedback, if applicable.
+	FeedbackSummary interface{} `json:"feedbackSummary"`
+	// List of questions from Quantum Weaver requiring the user's input.
+	Questions []QuantumWeaverStateQuestion `json:"questions,nullable"`
+	JSON      quantumWeaverStateJSON       `json:"-"`
 }
 
 // quantumWeaverStateJSON contains the JSON metadata for the struct
 // [QuantumWeaverState]
 type quantumWeaverStateJSON struct {
-	EstimatedFundingOffer apijson.Field
-	FeedbackSummary       apijson.Field
 	LastUpdated           apijson.Field
 	NextSteps             apijson.Field
 	PitchID               apijson.Field
-	Questions             apijson.Field
 	Stage                 apijson.Field
 	StatusMessage         apijson.Field
+	EstimatedFundingOffer apijson.Field
+	FeedbackSummary       apijson.Field
+	Questions             apijson.Field
 	raw                   string
 	ExtraFields           map[string]apijson.Field
 }
@@ -109,33 +107,7 @@ func (r quantumWeaverStateJSON) RawJSON() string {
 	return r.raw
 }
 
-type QuantumWeaverStateQuestion struct {
-	ID         string                         `json:"id"`
-	Category   string                         `json:"category"`
-	IsRequired bool                           `json:"isRequired"`
-	Question   string                         `json:"question"`
-	JSON       quantumWeaverStateQuestionJSON `json:"-"`
-}
-
-// quantumWeaverStateQuestionJSON contains the JSON metadata for the struct
-// [QuantumWeaverStateQuestion]
-type quantumWeaverStateQuestionJSON struct {
-	ID          apijson.Field
-	Category    apijson.Field
-	IsRequired  apijson.Field
-	Question    apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
-}
-
-func (r *QuantumWeaverStateQuestion) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r quantumWeaverStateQuestionJSON) RawJSON() string {
-	return r.raw
-}
-
+// Current stage of the business pitch in the incubation process.
 type QuantumWeaverStateStage string
 
 const (
@@ -158,13 +130,46 @@ func (r QuantumWeaverStateStage) IsKnown() bool {
 	return false
 }
 
+type QuantumWeaverStateQuestion struct {
+	ID         interface{}                    `json:"id"`
+	Category   interface{}                    `json:"category"`
+	IsRequired interface{}                    `json:"isRequired"`
+	Question   interface{}                    `json:"question"`
+	JSON       quantumWeaverStateQuestionJSON `json:"-"`
+}
+
+// quantumWeaverStateQuestionJSON contains the JSON metadata for the struct
+// [QuantumWeaverStateQuestion]
+type quantumWeaverStateQuestionJSON struct {
+	ID          apijson.Field
+	Category    apijson.Field
+	IsRequired  apijson.Field
+	Question    apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *QuantumWeaverStateQuestion) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r quantumWeaverStateQuestionJSON) RawJSON() string {
+	return r.raw
+}
+
 type AIIncubatorPitchGetDetailsResponse struct {
-	AICoachingPlan     AIIncubatorPitchGetDetailsResponseAICoachingPlan   `json:"aiCoachingPlan"`
-	AIFinancialModel   AIIncubatorPitchGetDetailsResponseAIFinancialModel `json:"aiFinancialModel"`
-	AIMarketAnalysis   AIIncubatorPitchGetDetailsResponseAIMarketAnalysis `json:"aiMarketAnalysis"`
-	AIRiskAssessment   AIIncubatorPitchGetDetailsResponseAIRiskAssessment `json:"aiRiskAssessment"`
-	InvestorMatchScore float64                                            `json:"investorMatchScore"`
-	JSON               aiIncubatorPitchGetDetailsResponseJSON             `json:"-"`
+	// AI-generated coaching plan for the entrepreneur.
+	AICoachingPlan AIIncubatorPitchGetDetailsResponseAICoachingPlan `json:"aiCoachingPlan,nullable"`
+	// AI's detailed financial model analysis.
+	AIFinancialModel AIIncubatorPitchGetDetailsResponseAIFinancialModel `json:"aiFinancialModel,nullable"`
+	// AI's detailed market analysis.
+	AIMarketAnalysis AIIncubatorPitchGetDetailsResponseAIMarketAnalysis `json:"aiMarketAnalysis,nullable"`
+	// AI's assessment of risks associated with the venture.
+	AIRiskAssessment AIIncubatorPitchGetDetailsResponseAIRiskAssessment `json:"aiRiskAssessment,nullable"`
+	// AI's score for how well the pitch matches potential investors in the network
+	// (0-1).
+	InvestorMatchScore interface{}                            `json:"investorMatchScore"`
+	JSON               aiIncubatorPitchGetDetailsResponseJSON `json:"-"`
 	QuantumWeaverState
 }
 
@@ -188,10 +193,11 @@ func (r aiIncubatorPitchGetDetailsResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// AI-generated coaching plan for the entrepreneur.
 type AIIncubatorPitchGetDetailsResponseAICoachingPlan struct {
 	Steps   []AIIncubatorPitchGetDetailsResponseAICoachingPlanStep `json:"steps"`
-	Summary string                                                 `json:"summary"`
-	Title   string                                                 `json:"title"`
+	Summary interface{}                                            `json:"summary"`
+	Title   interface{}                                            `json:"title"`
 	JSON    aiIncubatorPitchGetDetailsResponseAICoachingPlanJSON   `json:"-"`
 }
 
@@ -214,11 +220,11 @@ func (r aiIncubatorPitchGetDetailsResponseAICoachingPlanJSON) RawJSON() string {
 }
 
 type AIIncubatorPitchGetDetailsResponseAICoachingPlanStep struct {
-	Description string                                                          `json:"description"`
+	Description interface{}                                                     `json:"description"`
 	Resources   []AIIncubatorPitchGetDetailsResponseAICoachingPlanStepsResource `json:"resources"`
 	Status      AIIncubatorPitchGetDetailsResponseAICoachingPlanStepsStatus     `json:"status"`
-	Timeline    string                                                          `json:"timeline"`
-	Title       string                                                          `json:"title"`
+	Timeline    interface{}                                                     `json:"timeline"`
+	Title       interface{}                                                     `json:"title"`
 	JSON        aiIncubatorPitchGetDetailsResponseAICoachingPlanStepJSON        `json:"-"`
 }
 
@@ -243,8 +249,8 @@ func (r aiIncubatorPitchGetDetailsResponseAICoachingPlanStepJSON) RawJSON() stri
 }
 
 type AIIncubatorPitchGetDetailsResponseAICoachingPlanStepsResource struct {
-	Name string                                                            `json:"name"`
-	URL  string                                                            `json:"url" format:"uri"`
+	Name interface{}                                                       `json:"name"`
+	URL  interface{}                                                       `json:"url"`
 	JSON aiIncubatorPitchGetDetailsResponseAICoachingPlanStepsResourceJSON `json:"-"`
 }
 
@@ -282,13 +288,14 @@ func (r AIIncubatorPitchGetDetailsResponseAICoachingPlanStepsStatus) IsKnown() b
 	return false
 }
 
+// AI's detailed financial model analysis.
 type AIIncubatorPitchGetDetailsResponseAIFinancialModel struct {
-	BreakevenPoint        string                                                 `json:"breakevenPoint"`
-	CapitalRequirements   float64                                                `json:"capitalRequirements"`
-	CostStructureAnalysis interface{}                                            `json:"costStructureAnalysis"`
-	RevenueBreakdown      interface{}                                            `json:"revenueBreakdown"`
-	SensitivityAnalysis   []interface{}                                          `json:"sensitivityAnalysis"`
-	JSON                  aiIncubatorPitchGetDetailsResponseAIFinancialModelJSON `json:"-"`
+	BreakevenPoint        interface{}                                                             `json:"breakevenPoint"`
+	CapitalRequirements   interface{}                                                             `json:"capitalRequirements"`
+	CostStructureAnalysis interface{}                                                             `json:"costStructureAnalysis"`
+	RevenueBreakdown      interface{}                                                             `json:"revenueBreakdown"`
+	SensitivityAnalysis   []AIIncubatorPitchGetDetailsResponseAIFinancialModelSensitivityAnalysis `json:"sensitivityAnalysis"`
+	JSON                  aiIncubatorPitchGetDetailsResponseAIFinancialModelJSON                  `json:"-"`
 }
 
 // aiIncubatorPitchGetDetailsResponseAIFinancialModelJSON contains the JSON
@@ -311,11 +318,38 @@ func (r aiIncubatorPitchGetDetailsResponseAIFinancialModelJSON) RawJSON() string
 	return r.raw
 }
 
+type AIIncubatorPitchGetDetailsResponseAIFinancialModelSensitivityAnalysis struct {
+	ProjectedIrr  interface{}                                                               `json:"projectedIRR"`
+	Scenario      interface{}                                                               `json:"scenario"`
+	TerminalValue interface{}                                                               `json:"terminalValue"`
+	JSON          aiIncubatorPitchGetDetailsResponseAIFinancialModelSensitivityAnalysisJSON `json:"-"`
+}
+
+// aiIncubatorPitchGetDetailsResponseAIFinancialModelSensitivityAnalysisJSON
+// contains the JSON metadata for the struct
+// [AIIncubatorPitchGetDetailsResponseAIFinancialModelSensitivityAnalysis]
+type aiIncubatorPitchGetDetailsResponseAIFinancialModelSensitivityAnalysisJSON struct {
+	ProjectedIrr  apijson.Field
+	Scenario      apijson.Field
+	TerminalValue apijson.Field
+	raw           string
+	ExtraFields   map[string]apijson.Field
+}
+
+func (r *AIIncubatorPitchGetDetailsResponseAIFinancialModelSensitivityAnalysis) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiIncubatorPitchGetDetailsResponseAIFinancialModelSensitivityAnalysisJSON) RawJSON() string {
+	return r.raw
+}
+
+// AI's detailed market analysis.
 type AIIncubatorPitchGetDetailsResponseAIMarketAnalysis struct {
-	CompetitiveAdvantages []string                                               `json:"competitiveAdvantages"`
-	GrowthOpportunities   string                                                 `json:"growthOpportunities"`
-	RiskFactors           string                                                 `json:"riskFactors"`
-	TargetMarketSize      string                                                 `json:"targetMarketSize"`
+	CompetitiveAdvantages []interface{}                                          `json:"competitiveAdvantages"`
+	GrowthOpportunities   interface{}                                            `json:"growthOpportunities"`
+	RiskFactors           interface{}                                            `json:"riskFactors"`
+	TargetMarketSize      interface{}                                            `json:"targetMarketSize"`
 	JSON                  aiIncubatorPitchGetDetailsResponseAIMarketAnalysisJSON `json:"-"`
 }
 
@@ -338,10 +372,11 @@ func (r aiIncubatorPitchGetDetailsResponseAIMarketAnalysisJSON) RawJSON() string
 	return r.raw
 }
 
+// AI's assessment of risks associated with the venture.
 type AIIncubatorPitchGetDetailsResponseAIRiskAssessment struct {
-	MarketRisk    string                                                 `json:"marketRisk"`
-	TeamRisk      string                                                 `json:"teamRisk"`
-	TechnicalRisk string                                                 `json:"technicalRisk"`
+	MarketRisk    interface{}                                            `json:"marketRisk"`
+	TeamRisk      interface{}                                            `json:"teamRisk"`
+	TechnicalRisk interface{}                                            `json:"technicalRisk"`
 	JSON          aiIncubatorPitchGetDetailsResponseAIRiskAssessmentJSON `json:"-"`
 }
 
@@ -364,22 +399,33 @@ func (r aiIncubatorPitchGetDetailsResponseAIRiskAssessmentJSON) RawJSON() string
 }
 
 type AIIncubatorPitchSubmitParams struct {
-	BusinessPlan         param.Field[string]                                           `json:"businessPlan,required"`
+	// The user's detailed narrative business plan (e.g., executive summary, vision,
+	// strategy).
+	BusinessPlan param.Field[interface{}] `json:"businessPlan,required"`
+	// Key financial metrics and projections for the next 3-5 years.
 	FinancialProjections param.Field[AIIncubatorPitchSubmitParamsFinancialProjections] `json:"financialProjections,required"`
-	FoundingTeam         param.Field[[]AIIncubatorPitchSubmitParamsFoundingTeam]       `json:"foundingTeam,required"`
-	MarketOpportunity    param.Field[string]                                           `json:"marketOpportunity,required"`
+	// Key profiles and expertise of the founding team members.
+	FoundingTeam param.Field[[]AIIncubatorPitchSubmitParamsFoundingTeam] `json:"foundingTeam,required"`
+	// Detailed analysis of the target market, problem statement, and proposed
+	// solution's unique value proposition.
+	MarketOpportunity param.Field[interface{}] `json:"marketOpportunity,required"`
 }
 
 func (r AIIncubatorPitchSubmitParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Key financial metrics and projections for the next 3-5 years.
 type AIIncubatorPitchSubmitParamsFinancialProjections struct {
-	ProfitabilityEstimate param.Field[string]    `json:"profitabilityEstimate"`
-	ProjectionYears       param.Field[int64]     `json:"projectionYears"`
-	RevenueForecast       param.Field[[]float64] `json:"revenueForecast"`
-	SeedRoundAmount       param.Field[float64]   `json:"seedRoundAmount"`
-	ValuationPreMoney     param.Field[float64]   `json:"valuationPreMoney"`
+	// Estimated time to profitability.
+	ProfitabilityEstimate param.Field[interface{}] `json:"profitabilityEstimate"`
+	// Number of years for financial projections.
+	ProjectionYears param.Field[interface{}]   `json:"projectionYears"`
+	RevenueForecast param.Field[[]interface{}] `json:"revenueForecast"`
+	// Requested seed funding in USD.
+	SeedRoundAmount param.Field[interface{}] `json:"seedRoundAmount"`
+	// Pre-money valuation in USD.
+	ValuationPreMoney param.Field[interface{}] `json:"valuationPreMoney"`
 }
 
 func (r AIIncubatorPitchSubmitParamsFinancialProjections) MarshalJSON() (data []byte, err error) {
@@ -387,9 +433,12 @@ func (r AIIncubatorPitchSubmitParamsFinancialProjections) MarshalJSON() (data []
 }
 
 type AIIncubatorPitchSubmitParamsFoundingTeam struct {
-	Experience param.Field[string] `json:"experience"`
-	Name       param.Field[string] `json:"name"`
-	Role       param.Field[string] `json:"role"`
+	// Relevant experience.
+	Experience param.Field[interface{}] `json:"experience"`
+	// Name of the team member.
+	Name param.Field[interface{}] `json:"name"`
+	// Role of the team member.
+	Role param.Field[interface{}] `json:"role"`
 }
 
 func (r AIIncubatorPitchSubmitParamsFoundingTeam) MarshalJSON() (data []byte, err error) {
@@ -397,8 +446,9 @@ func (r AIIncubatorPitchSubmitParamsFoundingTeam) MarshalJSON() (data []byte, er
 }
 
 type AIIncubatorPitchSubmitFeedbackParams struct {
-	Answers  param.Field[[]AIIncubatorPitchSubmitFeedbackParamsAnswer] `json:"answers"`
-	Feedback param.Field[string]                                       `json:"feedback"`
+	Answers param.Field[[]AIIncubatorPitchSubmitFeedbackParamsAnswer] `json:"answers"`
+	// General textual feedback or additional details for Quantum Weaver.
+	Feedback param.Field[interface{}] `json:"feedback"`
 }
 
 func (r AIIncubatorPitchSubmitFeedbackParams) MarshalJSON() (data []byte, err error) {
@@ -406,8 +456,10 @@ func (r AIIncubatorPitchSubmitFeedbackParams) MarshalJSON() (data []byte, err er
 }
 
 type AIIncubatorPitchSubmitFeedbackParamsAnswer struct {
-	Answer     param.Field[string] `json:"answer,required"`
-	QuestionID param.Field[string] `json:"questionId,required"`
+	// The answer to the specific question.
+	Answer param.Field[interface{}] `json:"answer,required"`
+	// The ID of the question being answered.
+	QuestionID param.Field[interface{}] `json:"questionId,required"`
 }
 
 func (r AIIncubatorPitchSubmitFeedbackParamsAnswer) MarshalJSON() (data []byte, err error) {

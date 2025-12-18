@@ -13,7 +13,7 @@ import (
 	"github.com/stainless-sdks/1231-go/option"
 )
 
-func TestAccountOverdraftSettingGetOverdraftSettings(t *testing.T) {
+func TestMarketplaceProductListWithOptionalParams(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -25,7 +25,13 @@ func TestAccountOverdraftSettingGetOverdraftSettings(t *testing.T) {
 	client := jamesburvelocallaghaniiicitibankdemobusinessinc.NewClient(
 		option.WithBaseURL(baseURL),
 	)
-	_, err := client.Accounts.OverdraftSettings.GetOverdraftSettings(context.TODO(), "acc_chase_checking_4567")
+	_, err := client.Marketplace.Products.List(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.MarketplaceProductListParams{
+		AIPersonalizationLevel: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.MarketplaceProductListParamsAIPersonalizationLevelHigh),
+		Category:               jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.MarketplaceProductListParamsCategoryInsurance),
+		Limit:                  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		MinRating:              jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](4),
+		Offset:                 jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
 		if errors.As(err, &apierr) {
@@ -35,7 +41,7 @@ func TestAccountOverdraftSettingGetOverdraftSettings(t *testing.T) {
 	}
 }
 
-func TestAccountOverdraftSettingUpdateOverdraftSettingsWithOptionalParams(t *testing.T) {
+func TestMarketplaceProductSimulateImpactWithOptionalParams(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -47,15 +53,14 @@ func TestAccountOverdraftSettingUpdateOverdraftSettingsWithOptionalParams(t *tes
 	client := jamesburvelocallaghaniiicitibankdemobusinessinc.NewClient(
 		option.WithBaseURL(baseURL),
 	)
-	_, err := client.Accounts.OverdraftSettings.UpdateOverdraftSettings(
+	_, err := client.Marketplace.Products.SimulateImpact(
 		context.TODO(),
-		"acc_chase_checking_4567",
-		jamesburvelocallaghaniiicitibankdemobusinessinc.AccountOverdraftSettingUpdateOverdraftSettingsParams{
-			Enabled:                jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](false),
-			FeePreference:          jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceDeclineIfOverLimit),
-			LinkedSavingsAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("acc_new_savings_5678"),
-			LinkToSavings:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](false),
-			ProtectionLimit:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](750),
+		"prod_home_insurance_quantum",
+		jamesburvelocallaghaniiicitibankdemobusinessinc.MarketplaceProductSimulateImpactParams{
+			SimulationParameters: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{
+				"loanAmount":          20000,
+				"repaymentTermMonths": 48,
+			}),
 		},
 	)
 	if err != nil {

@@ -48,14 +48,14 @@ func TestLendingApplicationSubmitWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Lending.Applications.Submit(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.LendingApplicationSubmitParams{
-		LoanAmount:          jamesburvelocallaghaniiicitibankdemobusinessinc.F(10000.000000),
-		LoanPurpose:         jamesburvelocallaghaniiicitibankdemobusinessinc.F("home_improvement"),
-		RepaymentTermMonths: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(36)),
-		AdditionalNotes:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Funds needed to replace a broken HVAC system."),
+		LoanAmount:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](10000),
+		LoanPurpose:         jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.LendingApplicationSubmitParamsLoanPurposeHomeImprovement),
+		RepaymentTermMonths: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](36),
+		AdditionalNotes:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Funds needed to replace a broken HVAC system."),
 		CoApplicant: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.LendingApplicationSubmitParamsCoApplicant{
-			Email:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("dev@stainless.com"),
-			Income: jamesburvelocallaghaniiicitibankdemobusinessinc.F(0.000000),
-			Name:   jamesburvelocallaghaniiicitibankdemobusinessinc.F("name"),
+			Email:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("jane.doe@example.com"),
+			Income: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](75000),
+			Name:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Jane Doe"),
 		}),
 	})
 	if err != nil {

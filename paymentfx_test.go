@@ -26,12 +26,12 @@ func TestPaymentFxConvertWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Payments.Fx.Convert(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.PaymentFxConvertParams{
-		SourceAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F("acc_chase_checking_4567"),
-		SourceAmount:    jamesburvelocallaghaniiicitibankdemobusinessinc.F(1000.000000),
-		SourceCurrency:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("USD"),
-		TargetCurrency:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("EUR"),
-		FxRateLock:      jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
-		TargetAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F("acc_euro_savings_9876"),
+		SourceAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("acc_chase_checking_4567"),
+		SourceAmount:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](1000),
+		SourceCurrency:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("USD"),
+		TargetCurrency:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("EUR"),
+		FxRateLock:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+		TargetAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("acc_euro_savings_9876"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

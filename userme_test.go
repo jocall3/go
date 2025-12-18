@@ -49,14 +49,27 @@ func TestUserMeUpdateWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Users.Me.Update(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserMeUpdateParams{
 		Address: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AddressParam{
-			City:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("city"),
-			Country: jamesburvelocallaghaniiicitibankdemobusinessinc.F("country"),
-			State:   jamesburvelocallaghaniiicitibankdemobusinessinc.F("state"),
-			Street:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("street"),
-			Zip:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("zip"),
+			City:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Anytown"),
+			Country: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("USA"),
+			State:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("CA"),
+			Street:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("123 Main St"),
+			Zip:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("90210"),
 		}),
-		Name:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("Quantum Visionary Pro"),
-		Phone: jamesburvelocallaghaniiicitibankdemobusinessinc.F("+1-555-999-0000"),
+		Name:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Quantum Visionary Pro"),
+		Phone: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("+1-555-999-0000"),
+		Preferences: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.UserPreferencesParam{
+			AIInteractionMode:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.UserPreferencesAIInteractionModeBalanced),
+			DataSharingConsent: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+			NotificationChannels: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.UserPreferencesNotificationChannelsParam{
+				Email: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+				InApp: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+				Push:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+				SMS:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](false),
+			}),
+			PreferredLanguage:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("en-US"),
+			Theme:               jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Dark-Quantum"),
+			TransactionGrouping: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.UserPreferencesTransactionGroupingCategory),
+		}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

@@ -42,14 +42,21 @@ func (r *SustainabilityInvestmentService) AnalyzeImpact(ctx context.Context, opt
 }
 
 type SustainabilityInvestmentAnalyzeImpactResponse struct {
-	AIRecommendations     []AIInsight                                                        `json:"aiRecommendations"`
-	BenchmarkEsgScore     float64                                                            `json:"benchmarkESGScore"`
-	BreakdownByEsgFactors SustainabilityInvestmentAnalyzeImpactResponseBreakdownByEsgFactors `json:"breakdownByESGFactors"`
-	LowestEsgHoldings     []SustainabilityInvestmentAnalyzeImpactResponseLowestEsgHolding    `json:"lowestESGHoldings"`
-	OverallEsgScore       float64                                                            `json:"overallESGScore"`
-	PortfolioID           string                                                             `json:"portfolioId"`
-	TopEsgHoldings        []SustainabilityInvestmentAnalyzeImpactResponseTopEsgHolding       `json:"topESGHoldings"`
-	JSON                  sustainabilityInvestmentAnalyzeImpactResponseJSON                  `json:"-"`
+	// AI-driven recommendations to improve the portfolio's ESG impact.
+	AIRecommendations []AIInsight `json:"aiRecommendations,required"`
+	// Average ESG score of a relevant market benchmark for comparison.
+	BenchmarkEsgScore interface{} `json:"benchmarkESGScore,required"`
+	// Breakdown of the portfolio's ESG score by individual factors.
+	BreakdownByEsgFactors SustainabilityInvestmentAnalyzeImpactResponseBreakdownByEsgFactors `json:"breakdownByESGFactors,required"`
+	// Lowest holdings in the portfolio by ESG score.
+	LowestEsgHoldings []SustainabilityInvestmentAnalyzeImpactResponseLowestEsgHolding `json:"lowestESGHoldings,required"`
+	// Overall ESG score of the entire portfolio (0-10).
+	OverallEsgScore interface{} `json:"overallESGScore,required"`
+	// ID of the investment portfolio analyzed.
+	PortfolioID interface{} `json:"portfolioId,required"`
+	// Top holdings in the portfolio by ESG score.
+	TopEsgHoldings []SustainabilityInvestmentAnalyzeImpactResponseTopEsgHolding `json:"topESGHoldings,required"`
+	JSON           sustainabilityInvestmentAnalyzeImpactResponseJSON            `json:"-"`
 }
 
 // sustainabilityInvestmentAnalyzeImpactResponseJSON contains the JSON metadata for
@@ -74,10 +81,11 @@ func (r sustainabilityInvestmentAnalyzeImpactResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Breakdown of the portfolio's ESG score by individual factors.
 type SustainabilityInvestmentAnalyzeImpactResponseBreakdownByEsgFactors struct {
-	EnvironmentalScore float64                                                                `json:"environmentalScore"`
-	GovernanceScore    float64                                                                `json:"governanceScore"`
-	SocialScore        float64                                                                `json:"socialScore"`
+	EnvironmentalScore interface{}                                                            `json:"environmentalScore"`
+	GovernanceScore    interface{}                                                            `json:"governanceScore"`
+	SocialScore        interface{}                                                            `json:"socialScore"`
 	JSON               sustainabilityInvestmentAnalyzeImpactResponseBreakdownByEsgFactorsJSON `json:"-"`
 }
 
@@ -101,9 +109,9 @@ func (r sustainabilityInvestmentAnalyzeImpactResponseBreakdownByEsgFactorsJSON) 
 }
 
 type SustainabilityInvestmentAnalyzeImpactResponseLowestEsgHolding struct {
-	AssetName   string                                                            `json:"assetName"`
-	AssetSymbol string                                                            `json:"assetSymbol"`
-	EsgScore    float64                                                           `json:"esgScore"`
+	AssetName   interface{}                                                       `json:"assetName"`
+	AssetSymbol interface{}                                                       `json:"assetSymbol"`
+	EsgScore    interface{}                                                       `json:"esgScore"`
 	JSON        sustainabilityInvestmentAnalyzeImpactResponseLowestEsgHoldingJSON `json:"-"`
 }
 
@@ -127,9 +135,9 @@ func (r sustainabilityInvestmentAnalyzeImpactResponseLowestEsgHoldingJSON) RawJS
 }
 
 type SustainabilityInvestmentAnalyzeImpactResponseTopEsgHolding struct {
-	AssetName   string                                                         `json:"assetName"`
-	AssetSymbol string                                                         `json:"assetSymbol"`
-	EsgScore    float64                                                        `json:"esgScore"`
+	AssetName   interface{}                                                    `json:"assetName"`
+	AssetSymbol interface{}                                                    `json:"assetSymbol"`
+	EsgScore    interface{}                                                    `json:"esgScore"`
 	JSON        sustainabilityInvestmentAnalyzeImpactResponseTopEsgHoldingJSON `json:"-"`
 }
 

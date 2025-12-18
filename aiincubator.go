@@ -68,10 +68,10 @@ func (r aiIncubatorListPitchesResponseJSON) RawJSON() string {
 }
 
 type AIIncubatorListPitchesParams struct {
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 	// Filter pitches by their current stage.
 	Status param.Field[AIIncubatorListPitchesParamsStatus] `query:"status"`
 }

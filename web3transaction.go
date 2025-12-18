@@ -43,20 +43,26 @@ func (r *Web3TransactionService) InitiateTransfer(ctx context.Context, body Web3
 }
 
 type Web3TransactionInitiateTransferResponse struct {
-	Message    string                                        `json:"message"`
-	Status     Web3TransactionInitiateTransferResponseStatus `json:"status"`
-	TransferID string                                        `json:"transferId"`
-	JSON       web3TransactionInitiateTransferResponseJSON   `json:"-"`
+	// Current status of the transfer.
+	Status Web3TransactionInitiateTransferResponseStatus `json:"status,required"`
+	// Unique identifier for this cryptocurrency transfer operation.
+	TransferID interface{} `json:"transferId,required"`
+	// The blockchain transaction hash, if available and confirmed.
+	BlockchainTxnHash interface{} `json:"blockchainTxnHash"`
+	// A descriptive message about the transfer status.
+	Message interface{}                                 `json:"message"`
+	JSON    web3TransactionInitiateTransferResponseJSON `json:"-"`
 }
 
 // web3TransactionInitiateTransferResponseJSON contains the JSON metadata for the
 // struct [Web3TransactionInitiateTransferResponse]
 type web3TransactionInitiateTransferResponseJSON struct {
-	Message     apijson.Field
-	Status      apijson.Field
-	TransferID  apijson.Field
-	raw         string
-	ExtraFields map[string]apijson.Field
+	Status            apijson.Field
+	TransferID        apijson.Field
+	BlockchainTxnHash apijson.Field
+	Message           apijson.Field
+	raw               string
+	ExtraFields       map[string]apijson.Field
 }
 
 func (r *Web3TransactionInitiateTransferResponse) UnmarshalJSON(data []byte) (err error) {
@@ -67,31 +73,40 @@ func (r web3TransactionInitiateTransferResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Current status of the transfer.
 type Web3TransactionInitiateTransferResponseStatus string
 
 const (
-	Web3TransactionInitiateTransferResponseStatusPendingSignature Web3TransactionInitiateTransferResponseStatus = "pending_signature"
-	Web3TransactionInitiateTransferResponseStatusSubmitted        Web3TransactionInitiateTransferResponseStatus = "submitted"
-	Web3TransactionInitiateTransferResponseStatusConfirmed        Web3TransactionInitiateTransferResponseStatus = "confirmed"
-	Web3TransactionInitiateTransferResponseStatusFailed           Web3TransactionInitiateTransferResponseStatus = "failed"
+	Web3TransactionInitiateTransferResponseStatusPendingSignature              Web3TransactionInitiateTransferResponseStatus = "pending_signature"
+	Web3TransactionInitiateTransferResponseStatusPendingBlockchainConfirmation Web3TransactionInitiateTransferResponseStatus = "pending_blockchain_confirmation"
+	Web3TransactionInitiateTransferResponseStatusCompleted                     Web3TransactionInitiateTransferResponseStatus = "completed"
+	Web3TransactionInitiateTransferResponseStatusFailed                        Web3TransactionInitiateTransferResponseStatus = "failed"
+	Web3TransactionInitiateTransferResponseStatusCancelled                     Web3TransactionInitiateTransferResponseStatus = "cancelled"
 )
 
 func (r Web3TransactionInitiateTransferResponseStatus) IsKnown() bool {
 	switch r {
-	case Web3TransactionInitiateTransferResponseStatusPendingSignature, Web3TransactionInitiateTransferResponseStatusSubmitted, Web3TransactionInitiateTransferResponseStatusConfirmed, Web3TransactionInitiateTransferResponseStatusFailed:
+	case Web3TransactionInitiateTransferResponseStatusPendingSignature, Web3TransactionInitiateTransferResponseStatusPendingBlockchainConfirmation, Web3TransactionInitiateTransferResponseStatusCompleted, Web3TransactionInitiateTransferResponseStatusFailed, Web3TransactionInitiateTransferResponseStatusCancelled:
 		return true
 	}
 	return false
 }
 
 type Web3TransactionInitiateTransferParams struct {
-	Amount            param.Field[float64] `json:"amount,required"`
-	AssetSymbol       param.Field[string]  `json:"assetSymbol,required"`
-	BlockchainNetwork param.Field[string]  `json:"blockchainNetwork,required"`
-	RecipientAddress  param.Field[string]  `json:"recipientAddress,required"`
-	SourceWalletID    param.Field[string]  `json:"sourceWalletId,required"`
-	GasPriceGwei      param.Field[float64] `json:"gasPriceGwei"`
-	Memo              param.Field[string]  `json:"memo"`
+	// The amount of cryptocurrency to transfer.
+	Amount param.Field[interface{}] `json:"amount,required"`
+	// Symbol of the crypto asset to transfer (e.g., ETH, USDC).
+	AssetSymbol param.Field[interface{}] `json:"assetSymbol,required"`
+	// The blockchain network for the transfer.
+	BlockchainNetwork param.Field[interface{}] `json:"blockchainNetwork,required"`
+	// The recipient's blockchain address.
+	RecipientAddress param.Field[interface{}] `json:"recipientAddress,required"`
+	// ID of the connected wallet from which to send funds.
+	SourceWalletID param.Field[interface{}] `json:"sourceWalletId,required"`
+	// Optional: Gas price in Gwei for Ethereum-based transactions.
+	GasPriceGwei param.Field[interface{}] `json:"gasPriceGwei"`
+	// Optional: A short memo or note for the transaction.
+	Memo param.Field[interface{}] `json:"memo"`
 }
 
 func (r Web3TransactionInitiateTransferParams) MarshalJSON() (data []byte, err error) {

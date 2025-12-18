@@ -26,8 +26,8 @@ func TestLendingOfferListPreApprovedWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Lending.Offers.ListPreApproved(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.LendingOfferListPreApprovedParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(1)),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

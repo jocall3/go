@@ -57,25 +57,33 @@ func (r *AIAdService) GetStatus(ctx context.Context, operationID interface{}, op
 }
 
 type VideoOperationStatus struct {
-	ErrorMessage       string                     `json:"errorMessage"`
-	Message            string                     `json:"message"`
-	OperationID        string                     `json:"operationId"`
-	PreviewImageUri    string                     `json:"previewImageUri" format:"uri"`
-	ProgressPercentage int64                      `json:"progressPercentage"`
-	Status             VideoOperationStatusStatus `json:"status"`
-	VideoUri           string                     `json:"videoUri" format:"uri"`
-	JSON               videoOperationStatusJSON   `json:"-"`
+	// A descriptive status message.
+	Message interface{} `json:"message,required"`
+	// The unique identifier for the video generation operation.
+	OperationID interface{} `json:"operationId,required"`
+	// Estimated completion percentage (0-100).
+	ProgressPercentage interface{} `json:"progressPercentage,required"`
+	// Current status of the video generation job.
+	Status VideoOperationStatusStatus `json:"status,required"`
+	// Error message if the operation failed.
+	ErrorMessage interface{} `json:"errorMessage"`
+	// Temporary, signed URL to a preview image/thumbnail of the video.
+	PreviewImageUri interface{} `json:"previewImageUri"`
+	// Temporary, signed URL to the generated video asset (available when status is
+	// 'done').
+	VideoUri interface{}              `json:"videoUri"`
+	JSON     videoOperationStatusJSON `json:"-"`
 }
 
 // videoOperationStatusJSON contains the JSON metadata for the struct
 // [VideoOperationStatus]
 type videoOperationStatusJSON struct {
-	ErrorMessage       apijson.Field
 	Message            apijson.Field
 	OperationID        apijson.Field
-	PreviewImageUri    apijson.Field
 	ProgressPercentage apijson.Field
 	Status             apijson.Field
+	ErrorMessage       apijson.Field
+	PreviewImageUri    apijson.Field
 	VideoUri           apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
@@ -89,6 +97,7 @@ func (r videoOperationStatusJSON) RawJSON() string {
 	return r.raw
 }
 
+// Current status of the video generation job.
 type VideoOperationStatusStatus string
 
 const (
@@ -130,10 +139,10 @@ func (r aiAdListGeneratedResponseJSON) RawJSON() string {
 }
 
 type AIAdListGeneratedParams struct {
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 	// Filter ads by their generation status.
 	Status param.Field[AIAdListGeneratedParamsStatus] `query:"status"`
 }

@@ -26,8 +26,8 @@ func TestAIIncubatorListPitchesWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.AI.Incubator.ListPitches(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AIIncubatorListPitchesParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(1)),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 		Status: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIIncubatorListPitchesParamsStatusFeedbackRequired),
 	})
 	if err != nil {

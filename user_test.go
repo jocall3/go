@@ -26,9 +26,9 @@ func TestUserLoginWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Users.Login(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserLoginParams{
-		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("quantum.visionary@demobank.com"),
-		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("YourSecurePassword123"),
-		MfaCode:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("mfaCode"),
+		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("quantum.visionary@demobank.com"),
+		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("YourSecurePassword123"),
+		MfaCode:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("123456"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -52,10 +52,18 @@ func TestUserRegisterWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Users.Register(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
-		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
-		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
-		Phone:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("+1-555-987-6543"),
+		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
+		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
+		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
+		Address: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AddressParam{
+			City:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Anytown"),
+			Country: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("USA"),
+			State:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("CA"),
+			Street:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("123 Main St"),
+			Zip:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("90210"),
+		}),
+		DateOfBirth: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("1990-05-10"),
+		Phone:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("+1-555-987-6543"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

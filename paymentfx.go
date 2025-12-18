@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"net/url"
 	"slices"
-	"time"
 
 	"github.com/stainless-sdks/1231-go/internal/apijson"
 	"github.com/stainless-sdks/1231-go/internal/apiquery"
@@ -55,16 +54,27 @@ func (r *PaymentFxService) GetRates(ctx context.Context, query PaymentFxGetRates
 }
 
 type PaymentFxConvertResponse struct {
-	ConversionID        string                         `json:"conversionId"`
-	ConversionTimestamp time.Time                      `json:"conversionTimestamp" format:"date-time"`
-	FeesApplied         float64                        `json:"feesApplied"`
-	FxRateApplied       float64                        `json:"fxRateApplied"`
-	SourceAmount        float64                        `json:"sourceAmount"`
-	SourceCurrency      string                         `json:"sourceCurrency"`
-	Status              PaymentFxConvertResponseStatus `json:"status"`
-	TargetAmount        float64                        `json:"targetAmount"`
-	TransactionID       string                         `json:"transactionId"`
-	JSON                paymentFxConvertResponseJSON   `json:"-"`
+	// Unique identifier for the currency conversion.
+	ConversionID interface{} `json:"conversionId,required"`
+	// Timestamp when the conversion was completed.
+	ConversionTimestamp interface{} `json:"conversionTimestamp,required"`
+	// The foreign exchange rate applied (target per source currency).
+	FxRateApplied interface{} `json:"fxRateApplied,required"`
+	// The amount converted from the source currency.
+	SourceAmount interface{} `json:"sourceAmount,required"`
+	// The source currency code.
+	SourceCurrency interface{} `json:"sourceCurrency,required"`
+	// Status of the currency conversion.
+	Status PaymentFxConvertResponseStatus `json:"status,required"`
+	// The amount converted into the target currency.
+	TargetAmount interface{} `json:"targetAmount,required"`
+	// Any fees applied to the conversion.
+	FeesApplied interface{} `json:"feesApplied"`
+	// The target currency code.
+	TargetCurrency interface{} `json:"targetCurrency"`
+	// The ID of the internal transaction representing this conversion.
+	TransactionID interface{}                  `json:"transactionId"`
+	JSON          paymentFxConvertResponseJSON `json:"-"`
 }
 
 // paymentFxConvertResponseJSON contains the JSON metadata for the struct
@@ -72,12 +82,13 @@ type PaymentFxConvertResponse struct {
 type paymentFxConvertResponseJSON struct {
 	ConversionID        apijson.Field
 	ConversionTimestamp apijson.Field
-	FeesApplied         apijson.Field
 	FxRateApplied       apijson.Field
 	SourceAmount        apijson.Field
 	SourceCurrency      apijson.Field
 	Status              apijson.Field
 	TargetAmount        apijson.Field
+	FeesApplied         apijson.Field
+	TargetCurrency      apijson.Field
 	TransactionID       apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
@@ -91,28 +102,34 @@ func (r paymentFxConvertResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Status of the currency conversion.
 type PaymentFxConvertResponseStatus string
 
 const (
 	PaymentFxConvertResponseStatusCompleted PaymentFxConvertResponseStatus = "completed"
+	PaymentFxConvertResponseStatusPending   PaymentFxConvertResponseStatus = "pending"
 	PaymentFxConvertResponseStatusFailed    PaymentFxConvertResponseStatus = "failed"
 )
 
 func (r PaymentFxConvertResponseStatus) IsKnown() bool {
 	switch r {
-	case PaymentFxConvertResponseStatusCompleted, PaymentFxConvertResponseStatusFailed:
+	case PaymentFxConvertResponseStatusCompleted, PaymentFxConvertResponseStatusPending, PaymentFxConvertResponseStatusFailed:
 		return true
 	}
 	return false
 }
 
 type PaymentFxGetRatesResponse struct {
-	BaseCurrency         string                                        `json:"baseCurrency"`
-	CurrentRate          PaymentFxGetRatesResponseCurrentRate          `json:"currentRate"`
+	// The base currency code.
+	BaseCurrency interface{} `json:"baseCurrency,required"`
+	// Real-time foreign exchange rates.
+	CurrentRate PaymentFxGetRatesResponseCurrentRate `json:"currentRate,required"`
+	// The target currency code.
+	TargetCurrency       interface{}                                   `json:"targetCurrency,required"`
 	HistoricalVolatility PaymentFxGetRatesResponseHistoricalVolatility `json:"historicalVolatility"`
-	PredictiveRates      []PaymentFxGetRatesResponsePredictiveRate     `json:"predictiveRates"`
-	TargetCurrency       string                                        `json:"targetCurrency"`
-	JSON                 paymentFxGetRatesResponseJSON                 `json:"-"`
+	// AI-predicted foreign exchange rates for future dates.
+	PredictiveRates []PaymentFxGetRatesResponsePredictiveRate `json:"predictiveRates,nullable"`
+	JSON            paymentFxGetRatesResponseJSON             `json:"-"`
 }
 
 // paymentFxGetRatesResponseJSON contains the JSON metadata for the struct
@@ -120,9 +137,9 @@ type PaymentFxGetRatesResponse struct {
 type paymentFxGetRatesResponseJSON struct {
 	BaseCurrency         apijson.Field
 	CurrentRate          apijson.Field
+	TargetCurrency       apijson.Field
 	HistoricalVolatility apijson.Field
 	PredictiveRates      apijson.Field
-	TargetCurrency       apijson.Field
 	raw                  string
 	ExtraFields          map[string]apijson.Field
 }
@@ -135,11 +152,16 @@ func (r paymentFxGetRatesResponseJSON) RawJSON() string {
 	return r.raw
 }
 
+// Real-time foreign exchange rates.
 type PaymentFxGetRatesResponseCurrentRate struct {
-	Ask       float64                                  `json:"ask"`
-	Bid       float64                                  `json:"bid"`
-	Mid       float64                                  `json:"mid"`
-	Timestamp time.Time                                `json:"timestamp" format:"date-time"`
+	// Current ask rate (price at which a currency dealer will sell the base currency).
+	Ask interface{} `json:"ask"`
+	// Current bid rate (price at which a currency dealer will buy the base currency).
+	Bid interface{} `json:"bid"`
+	// Mid-market rate (average of bid and ask).
+	Mid interface{} `json:"mid"`
+	// Timestamp of the current rate.
+	Timestamp interface{}                              `json:"timestamp"`
 	JSON      paymentFxGetRatesResponseCurrentRateJSON `json:"-"`
 }
 
@@ -163,9 +185,11 @@ func (r paymentFxGetRatesResponseCurrentRateJSON) RawJSON() string {
 }
 
 type PaymentFxGetRatesResponseHistoricalVolatility struct {
-	Past30Days float64                                           `json:"past30Days"`
-	Past7Days  float64                                           `json:"past7Days"`
-	JSON       paymentFxGetRatesResponseHistoricalVolatilityJSON `json:"-"`
+	// Historical volatility over the past 30 days.
+	Past30Days interface{} `json:"past30Days"`
+	// Historical volatility over the past 7 days.
+	Past7Days interface{}                                       `json:"past7Days"`
+	JSON      paymentFxGetRatesResponseHistoricalVolatilityJSON `json:"-"`
 }
 
 // paymentFxGetRatesResponseHistoricalVolatilityJSON contains the JSON metadata for
@@ -186,12 +210,17 @@ func (r paymentFxGetRatesResponseHistoricalVolatilityJSON) RawJSON() string {
 }
 
 type PaymentFxGetRatesResponsePredictiveRate struct {
-	AIModelConfidence       float64                                     `json:"aiModelConfidence"`
-	ConfidenceIntervalLower float64                                     `json:"confidenceIntervalLower"`
-	ConfidenceIntervalUpper float64                                     `json:"confidenceIntervalUpper"`
-	Date                    time.Time                                   `json:"date" format:"date"`
-	PredictedMidRate        float64                                     `json:"predictedMidRate"`
-	JSON                    paymentFxGetRatesResponsePredictiveRateJSON `json:"-"`
+	// AI model's confidence in the prediction (0-1).
+	AIModelConfidence interface{} `json:"aiModelConfidence"`
+	// Lower bound of the AI's confidence interval for the predicted rate.
+	ConfidenceIntervalLower interface{} `json:"confidenceIntervalLower"`
+	// Upper bound of the AI's confidence interval for the predicted rate.
+	ConfidenceIntervalUpper interface{} `json:"confidenceIntervalUpper"`
+	// Date for the predicted rate.
+	Date interface{} `json:"date"`
+	// AI-predicted mid-market rate.
+	PredictedMidRate interface{}                                 `json:"predictedMidRate"`
+	JSON             paymentFxGetRatesResponsePredictiveRateJSON `json:"-"`
 }
 
 // paymentFxGetRatesResponsePredictiveRateJSON contains the JSON metadata for the
@@ -215,12 +244,19 @@ func (r paymentFxGetRatesResponsePredictiveRateJSON) RawJSON() string {
 }
 
 type PaymentFxConvertParams struct {
-	SourceAccountID param.Field[string]  `json:"sourceAccountId,required"`
-	SourceAmount    param.Field[float64] `json:"sourceAmount,required"`
-	SourceCurrency  param.Field[string]  `json:"sourceCurrency,required"`
-	TargetCurrency  param.Field[string]  `json:"targetCurrency,required"`
-	FxRateLock      param.Field[bool]    `json:"fxRateLock"`
-	TargetAccountID param.Field[string]  `json:"targetAccountId"`
+	// The ID of the account from which funds will be converted.
+	SourceAccountID param.Field[interface{}] `json:"sourceAccountId,required"`
+	// The amount to convert from the source currency.
+	SourceAmount param.Field[interface{}] `json:"sourceAmount,required"`
+	// The ISO 4217 currency code of the source funds.
+	SourceCurrency param.Field[interface{}] `json:"sourceCurrency,required"`
+	// The ISO 4217 currency code for the target currency.
+	TargetCurrency param.Field[interface{}] `json:"targetCurrency,required"`
+	// If true, attempts to lock the quoted FX rate for a short period.
+	FxRateLock param.Field[interface{}] `json:"fxRateLock"`
+	// Optional: The ID of the account to deposit the converted funds. If null, funds
+	// are held in a wallet/balance.
+	TargetAccountID param.Field[interface{}] `json:"targetAccountId"`
 }
 
 func (r PaymentFxConvertParams) MarshalJSON() (data []byte, err error) {
