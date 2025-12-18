@@ -39,10 +39,12 @@ Methods:
 Params Types:
 
 - <a href="https://pkg.go.dev/github.com/jocall3/go">jocall3</a>.<a href="https://pkg.go.dev/github.com/jocall3/go#UserPreferencesParam">UserPreferencesParam</a>
+- <a href="https://pkg.go.dev/github.com/jocall3/go">jocall3</a>.<a href="https://pkg.go.dev/github.com/jocall3/go#UserPreferencesNotificationChannelsParam">UserPreferencesNotificationChannelsParam</a>
 
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/jocall3/go">jocall3</a>.<a href="https://pkg.go.dev/github.com/jocall3/go#UserPreferences">UserPreferences</a>
+- <a href="https://pkg.go.dev/github.com/jocall3/go">jocall3</a>.<a href="https://pkg.go.dev/github.com/jocall3/go#UserPreferencesNotificationChannels">UserPreferencesNotificationChannels</a>
 
 Methods:
 
