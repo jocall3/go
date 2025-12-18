@@ -44,7 +44,7 @@ func DefaultClientOptions() []option.RequestOption {
 		defaults = append(defaults, option.WithBaseURL(o))
 	}
 	if o, ok := os.LookupEnv("1231_API_KEY"); ok {
-		defaults = append(defaults, option.WithAPIKey(o))
+		defaults = append(defaults, option.WithApikey(o))
 	}
 	if o, ok := os.LookupEnv("1231_BIOMETRIC_TOKEN"); ok {
 		defaults = append(defaults, option.WithBiometricToken(o))

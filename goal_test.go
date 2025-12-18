@@ -24,7 +24,6 @@ func TestGoalNewWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Goals.New(context.TODO(), jocall3.GoalNewParams{
 		Name:                 jocall3.F[any]("Dream Vacation Fund"),
@@ -56,7 +55,6 @@ func TestGoalGet(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Goals.Get(context.TODO(), "goal_retirement_2050")
 	if err != nil {
@@ -79,7 +77,6 @@ func TestGoalUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Goals.Update(
 		context.TODO(),
@@ -114,7 +111,6 @@ func TestGoalListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Goals.List(context.TODO(), jocall3.GoalListParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -140,7 +136,6 @@ func TestGoalDelete(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	err := client.Goals.Delete(context.TODO(), "goal_retirement_2050")
 	if err != nil {

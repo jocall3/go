@@ -24,7 +24,6 @@ func TestAIAdGenerateAdvancedWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Ads.Generate.Advanced(context.TODO(), jocall3.AIAdGenerateAdvancedParams{
 		LengthSeconds:        jocall3.F[any](15),
@@ -64,7 +63,6 @@ func TestAIAdGenerateStandardWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Ads.Generate.Standard(context.TODO(), jocall3.AIAdGenerateStandardParams{
 		GenerateVideo: jocall3.GenerateVideoParam{

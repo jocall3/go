@@ -24,7 +24,6 @@ func TestIdentityKYCGetStatus(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Identity.KYC.GetStatus(context.TODO())
 	if err != nil {
@@ -47,7 +46,6 @@ func TestIdentityKYCSubmitWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Identity.KYC.Submit(context.TODO(), jocall3.IdentityKYCSubmitParams{
 		CountryOfIssue:      jocall3.F[any]("US"),

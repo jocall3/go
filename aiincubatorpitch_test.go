@@ -24,7 +24,6 @@ func TestAIIncubatorPitchGetDetails(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Incubator.Pitch.GetDetails(context.TODO(), "pitch_qw_synergychain-xyz")
 	if err != nil {
@@ -47,7 +46,6 @@ func TestAIIncubatorPitchSubmitWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Incubator.Pitch.Submit(context.TODO(), jocall3.AIIncubatorPitchSubmitParams{
 		BusinessPlan: jocall3.F[any]("Quantum-AI powered financial advisor platform leveraging neural networks for predictive analytics and hyper-personalized advice..."),
@@ -89,7 +87,6 @@ func TestAIIncubatorPitchSubmitFeedbackWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Incubator.Pitch.SubmitFeedback(
 		context.TODO(),

@@ -24,7 +24,6 @@ func TestTransactionInsightGetSpendingTrends(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Transactions.Insights.GetSpendingTrends(context.TODO())
 	if err != nil {

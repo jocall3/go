@@ -24,7 +24,6 @@ func TestTransactionRecurringNew(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Transactions.Recurring.New(context.TODO(), jocall3.TransactionRecurringNewParams{
 		Amount:          jocall3.F[any](55.5),
@@ -55,7 +54,6 @@ func TestTransactionRecurringListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Transactions.Recurring.List(context.TODO(), jocall3.TransactionRecurringListParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
