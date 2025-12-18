@@ -83,8 +83,6 @@ func (r advancedSimulationResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-func (r AdvancedSimulationResponse) implementsAIOracleSimulationGetResponse() {}
-
 type AdvancedSimulationResponseScenarioResult struct {
 	// Summary of results for this specific scenario.
 	NarrativeSummary interface{} `json:"narrativeSummary,required"`
@@ -232,8 +230,6 @@ func (r *SimulationResponse) UnmarshalJSON(data []byte) (err error) {
 func (r simulationResponseJSON) RawJSON() string {
 	return r.raw
 }
-
-func (r SimulationResponse) implementsAIOracleSimulationGetResponse() {}
 
 type SimulationResponseKeyImpact struct {
 	Metric   interface{}                          `json:"metric"`
