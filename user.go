@@ -7,10 +7,10 @@ import (
 	"net/http"
 	"slices"
 
-	"github.com/jocall3/1231-go/internal/apijson"
-	"github.com/jocall3/1231-go/internal/param"
-	"github.com/jocall3/1231-go/internal/requestconfig"
-	"github.com/jocall3/1231-go/option"
+	"github.com/jocall3/go/internal/apijson"
+	"github.com/jocall3/go/internal/param"
+	"github.com/jocall3/go/internal/requestconfig"
+	"github.com/jocall3/go/option"
 )
 
 // UserService contains methods and other services that help with interacting with
