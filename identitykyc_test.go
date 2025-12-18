@@ -3,8 +3,10 @@
 package jamesburvelocallaghaniiicitibankdemobusinessinc_test
 
 import (
+	"bytes"
 	"context"
 	"errors"
+	"io"
 	"os"
 	"testing"
 
@@ -48,14 +50,10 @@ func TestIdentityKYCSubmitWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Identity.KYC.Submit(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.IdentityKYCSubmitParams{
-		CountryOfIssue:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("US"),
-		DocumentNumber:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("ABC12345"),
-		DocumentType:        jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.IdentityKYCSubmitParamsDocumentTypeDriversLicense),
-		ExpirationDate:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2030-01-01"),
-		IssueDate:           jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2020-01-01"),
-		AdditionalDocuments: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{map[string]interface{}{}}),
-		DocumentBackImage:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("base64encoded_image_of_drivers_license_back"),
-		DocumentFrontImage:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("base64encoded_image_of_drivers_license_front"),
+		DocumentFront: jamesburvelocallaghaniiicitibankdemobusinessinc.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+		DocumentType:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.IdentityKYCSubmitParamsDocumentTypePassport),
+		Selfie:        jamesburvelocallaghaniiicitibankdemobusinessinc.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+		DocumentBack:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

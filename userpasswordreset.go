@@ -51,7 +51,7 @@ func (r *UserPasswordResetService) Initiate(ctx context.Context, body UserPasswo
 }
 
 type UserPasswordResetConfirmResponse struct {
-	Message interface{}                          `json:"message"`
+	Message string                               `json:"message"`
 	JSON    userPasswordResetConfirmResponseJSON `json:"-"`
 }
 
@@ -72,7 +72,7 @@ func (r userPasswordResetConfirmResponseJSON) RawJSON() string {
 }
 
 type UserPasswordResetInitiateResponse struct {
-	Message interface{}                           `json:"message"`
+	Message string                                `json:"message"`
 	JSON    userPasswordResetInitiateResponseJSON `json:"-"`
 }
 
@@ -93,12 +93,9 @@ func (r userPasswordResetInitiateResponseJSON) RawJSON() string {
 }
 
 type UserPasswordResetConfirmParams struct {
-	// User's email or phone number used for verification.
-	Identifier param.Field[interface{}] `json:"identifier,required"`
-	// The new password for the user account.
-	NewPassword param.Field[interface{}] `json:"newPassword,required"`
-	// The verification code received via email or SMS.
-	VerificationCode param.Field[interface{}] `json:"verificationCode,required"`
+	Identifier       param.Field[string] `json:"identifier,required"`
+	NewPassword      param.Field[string] `json:"newPassword,required" format:"password"`
+	VerificationCode param.Field[string] `json:"verificationCode,required"`
 }
 
 func (r UserPasswordResetConfirmParams) MarshalJSON() (data []byte, err error) {
@@ -106,8 +103,8 @@ func (r UserPasswordResetConfirmParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UserPasswordResetInitiateParams struct {
-	// User's email or phone number for verification.
-	Identifier param.Field[interface{}] `json:"identifier,required"`
+	// User's email or phone number.
+	Identifier param.Field[string] `json:"identifier,required"`
 }
 
 func (r UserPasswordResetInitiateParams) MarshalJSON() (data []byte, err error) {

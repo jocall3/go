@@ -26,22 +26,20 @@ func TestAIAdGenerateAdvancedWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.AI.Ads.Generate.Advanced(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AIAdGenerateAdvancedParams{
-		LengthSeconds:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](15),
-		Prompt:               jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("A captivating ad featuring a young entrepreneur using 's AI tools to grow their startup. Focus on innovation and ease of use."),
-		Style:                jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIAdGenerateAdvancedParamsStyleCinematic),
-		AspectRatio:          jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIAdGenerateAdvancedParamsAspectRatio16_9),
-		AudienceTarget:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIAdGenerateAdvancedParamsAudienceTargetCorporate),
-		BackgroundMusicGenre: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIAdGenerateAdvancedParamsBackgroundMusicGenreCorporate),
-		BrandAssets:          jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{"https://demobank.com/assets/corporate_logo.png"}),
-		BrandColors:          jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{"#0000FF", "#FFD700"}),
+		Prompt:         jamesburvelocallaghaniiicitibankdemobusinessinc.F("prompt"),
+		AspectRatio:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("aspectRatio"),
+		AudienceTarget: jamesburvelocallaghaniiicitibankdemobusinessinc.F("audienceTarget"),
+		BrandAssets:    jamesburvelocallaghaniiicitibankdemobusinessinc.F([]string{"https://example.com"}),
+		BrandColors:    jamesburvelocallaghaniiicitibankdemobusinessinc.F([]string{"string"}),
 		CallToAction: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIAdGenerateAdvancedParamsCallToAction{
-			DisplayTimeSeconds: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](5),
-			Text:               jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Learn more at DemoBank.com/business"),
-			URL:                jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("https://demobank.com/business"),
+			DisplayTimeSeconds: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+			Text:               jamesburvelocallaghaniiicitibankdemobusinessinc.F("text"),
+			URL:                jamesburvelocallaghaniiicitibankdemobusinessinc.F("https://example.com"),
 		}),
-		Keywords:       jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{"innovation", "fintech", "startup"}),
-		VoiceoverStyle: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIAdGenerateAdvancedParamsVoiceoverStyleMaleProfessional),
-		VoiceoverText:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](": Your business, powered by intelligent finance."),
+		LengthSeconds:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+		Style:          jamesburvelocallaghaniiicitibankdemobusinessinc.F("style"),
+		VoiceoverStyle: jamesburvelocallaghaniiicitibankdemobusinessinc.F("voiceoverStyle"),
+		VoiceoverText:  jamesburvelocallaghaniiicitibankdemobusinessinc.F("voiceoverText"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -66,12 +64,11 @@ func TestAIAdGenerateStandardWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AI.Ads.Generate.Standard(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AIAdGenerateStandardParams{
 		GenerateVideo: jamesburvelocallaghaniiicitibankdemobusinessinc.GenerateVideoParam{
-			LengthSeconds: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](15),
-			Prompt:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("A captivating ad featuring a young entrepreneur using 's AI tools to grow their startup. Focus on innovation and ease of use."),
-			Style:         jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.GenerateVideoStyleCinematic),
-			AspectRatio:   jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.GenerateVideoAspectRatio16_9),
-			BrandColors:   jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{"#0000FF", "#FFD700"}),
-			Keywords:      jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{"innovation", "fintech", "startup"}),
+			Prompt:        jamesburvelocallaghaniiicitibankdemobusinessinc.F("A captivating ad featuring a young entrepreneur using 's AI tools to grow their startup. Focus on innovation and ease of use."),
+			AspectRatio:   jamesburvelocallaghaniiicitibankdemobusinessinc.F("16:9"),
+			BrandColors:   jamesburvelocallaghaniiicitibankdemobusinessinc.F([]string{"#0000FF", "#FFD700"}),
+			LengthSeconds: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(15)),
+			Style:         jamesburvelocallaghaniiicitibankdemobusinessinc.F("Cinematic"),
 		},
 	})
 	if err != nil {

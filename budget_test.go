@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/jocall3/1231-go"
 	"github.com/jocall3/1231-go/internal/testutil"
@@ -26,19 +27,19 @@ func TestBudgetNewWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Budgets.New(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.BudgetNewParams{
-		EndDate:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-09-30"),
-		Name:           jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("September Living Expenses"),
+		EndDate:        jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
+		Name:           jamesburvelocallaghaniiicitibankdemobusinessinc.F("September Living Expenses"),
 		Period:         jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.BudgetNewParamsPeriodMonthly),
-		StartDate:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-09-01"),
-		TotalAmount:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](2800),
-		AIAutoPopulate: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
-		AlertThreshold: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](75),
+		StartDate:      jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
+		TotalAmount:    jamesburvelocallaghaniiicitibankdemobusinessinc.F(2800.000000),
+		AIAutoPopulate: jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
+		AlertThreshold: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(75)),
 		Categories: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]jamesburvelocallaghaniiicitibankdemobusinessinc.BudgetNewParamsCategory{{
-			Allocated: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](1500),
-			Name:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Rent"),
+			Allocated: jamesburvelocallaghaniiicitibankdemobusinessinc.F(1500.000000),
+			Name:      jamesburvelocallaghaniiicitibankdemobusinessinc.F("Rent"),
 		}, {
-			Allocated: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](400),
-			Name:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Groceries"),
+			Allocated: jamesburvelocallaghaniiicitibankdemobusinessinc.F(400.000000),
+			Name:      jamesburvelocallaghaniiicitibankdemobusinessinc.F("Groceries"),
 		}}),
 	})
 	if err != nil {
@@ -88,16 +89,9 @@ func TestBudgetUpdateWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"budget_monthly_aug",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.BudgetUpdateParams{
-			AlertThreshold: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](85),
-			Categories: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]jamesburvelocallaghaniiicitibankdemobusinessinc.BudgetUpdateParamsCategory{{
-				Allocated: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](550),
-				Name:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Groceries"),
-			}}),
-			EndDate:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-08-31"),
-			Name:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("August 2024 Revised Household Budget"),
-			StartDate:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-08-01"),
-			Status:      jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.BudgetUpdateParamsStatusActive),
-			TotalAmount: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](3200),
+			AlertThreshold: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(85)),
+			Name:           jamesburvelocallaghaniiicitibankdemobusinessinc.F("name"),
+			TotalAmount:    jamesburvelocallaghaniiicitibankdemobusinessinc.F(3200.000000),
 		},
 	)
 	if err != nil {
@@ -122,8 +116,8 @@ func TestBudgetListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Budgets.List(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.BudgetListParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

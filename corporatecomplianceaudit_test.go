@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/jocall3/1231-go"
 	"github.com/jocall3/1231-go/internal/testutil"
@@ -27,10 +28,9 @@ func TestCorporateComplianceAuditRequestWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Corporate.Compliance.Audits.Request(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateComplianceAuditRequestParams{
 		AuditScope:           jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateComplianceAuditRequestParamsAuditScopeAllTransactions),
-		EndDate:              jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-06-30"),
-		RegulatoryFrameworks: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateComplianceAuditRequestParamsRegulatoryFramework{jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateComplianceAuditRequestParamsRegulatoryFrameworkAml, jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateComplianceAuditRequestParamsRegulatoryFrameworkPciDss}),
-		StartDate:            jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-01-01"),
-		AdditionalContext:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		EndDate:              jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
+		StartDate:            jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
+		RegulatoryFrameworks: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]string{"AML", "PCI-DSS"}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

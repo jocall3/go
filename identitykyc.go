@@ -3,10 +3,15 @@
 package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
+	"bytes"
 	"context"
+	"io"
+	"mime/multipart"
 	"net/http"
 	"slices"
+	"time"
 
+	"github.com/jocall3/1231-go/internal/apiform"
 	"github.com/jocall3/1231-go/internal/apijson"
 	"github.com/jocall3/1231-go/internal/param"
 	"github.com/jocall3/1231-go/internal/requestconfig"
@@ -32,137 +37,142 @@ func NewIdentityKYCService(opts ...option.RequestOption) (r *IdentityKYCService)
 	return
 }
 
-// Retrieves the current status of the user's Know Your Customer (KYC) verification
-// process.
-func (r *IdentityKYCService) GetStatus(ctx context.Context, opts ...option.RequestOption) (res *KYCStatus, err error) {
+// Retrieves the current status of the user's KYC verification.
+func (r *IdentityKYCService) GetStatus(ctx context.Context, opts ...option.RequestOption) (res *IdentityKYCGetStatusResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "identity/kyc/status"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
-// Submits Know Your Customer (KYC) documentation, such as identity proofs and
-// address verification, for AI-accelerated compliance and identity verification,
-// crucial for higher service tiers and regulatory adherence.
-func (r *IdentityKYCService) Submit(ctx context.Context, body IdentityKYCSubmitParams, opts ...option.RequestOption) (res *KYCStatus, err error) {
+// Submits Know Your Customer (KYC) documentation for identity verification.
+func (r *IdentityKYCService) Submit(ctx context.Context, body IdentityKYCSubmitParams, opts ...option.RequestOption) (res *IdentityKYCSubmitResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "identity/kyc/submit"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
-type KYCStatus struct {
-	// Timestamp of the last KYC document submission.
-	LastSubmissionDate interface{} `json:"lastSubmissionDate,required"`
-	// Overall status of the KYC verification process.
-	OverallStatus KYCStatusOverallStatus `json:"overallStatus,required"`
-	// List of actions required from the user if status is 'requires_more_info'.
-	RequiredActions []interface{} `json:"requiredActions,required"`
-	// The ID of the user whose KYC status is being retrieved.
-	UserID interface{} `json:"userId,required"`
-	// Reason for rejection if status is 'rejected'.
-	RejectionReason interface{} `json:"rejectionReason"`
-	// The KYC verification tier achieved (e.g., for different service levels).
-	VerifiedTier KYCStatusVerifiedTier `json:"verifiedTier,nullable"`
-	JSON         kycStatusJSON         `json:"-"`
+type IdentityKYCGetStatusResponse struct {
+	Details     string                             `json:"details"`
+	LastChecked time.Time                          `json:"lastChecked" format:"date-time"`
+	Status      IdentityKYCGetStatusResponseStatus `json:"status"`
+	JSON        identityKYCGetStatusResponseJSON   `json:"-"`
 }
 
-// kycStatusJSON contains the JSON metadata for the struct [KYCStatus]
-type kycStatusJSON struct {
-	LastSubmissionDate apijson.Field
-	OverallStatus      apijson.Field
-	RequiredActions    apijson.Field
-	UserID             apijson.Field
-	RejectionReason    apijson.Field
-	VerifiedTier       apijson.Field
-	raw                string
-	ExtraFields        map[string]apijson.Field
+// identityKYCGetStatusResponseJSON contains the JSON metadata for the struct
+// [IdentityKYCGetStatusResponse]
+type identityKYCGetStatusResponseJSON struct {
+	Details     apijson.Field
+	LastChecked apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
 }
 
-func (r *KYCStatus) UnmarshalJSON(data []byte) (err error) {
+func (r *IdentityKYCGetStatusResponse) UnmarshalJSON(data []byte) (err error) {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-func (r kycStatusJSON) RawJSON() string {
+func (r identityKYCGetStatusResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Overall status of the KYC verification process.
-type KYCStatusOverallStatus string
+type IdentityKYCGetStatusResponseStatus string
 
 const (
-	KYCStatusOverallStatusNotSubmitted     KYCStatusOverallStatus = "not_submitted"
-	KYCStatusOverallStatusInReview         KYCStatusOverallStatus = "in_review"
-	KYCStatusOverallStatusVerified         KYCStatusOverallStatus = "verified"
-	KYCStatusOverallStatusRejected         KYCStatusOverallStatus = "rejected"
-	KYCStatusOverallStatusRequiresMoreInfo KYCStatusOverallStatus = "requires_more_info"
+	IdentityKYCGetStatusResponseStatusNotStarted IdentityKYCGetStatusResponseStatus = "not_started"
+	IdentityKYCGetStatusResponseStatusPending    IdentityKYCGetStatusResponseStatus = "pending"
+	IdentityKYCGetStatusResponseStatusVerified   IdentityKYCGetStatusResponseStatus = "verified"
+	IdentityKYCGetStatusResponseStatusRejected   IdentityKYCGetStatusResponseStatus = "rejected"
 )
 
-func (r KYCStatusOverallStatus) IsKnown() bool {
+func (r IdentityKYCGetStatusResponseStatus) IsKnown() bool {
 	switch r {
-	case KYCStatusOverallStatusNotSubmitted, KYCStatusOverallStatusInReview, KYCStatusOverallStatusVerified, KYCStatusOverallStatusRejected, KYCStatusOverallStatusRequiresMoreInfo:
+	case IdentityKYCGetStatusResponseStatusNotStarted, IdentityKYCGetStatusResponseStatusPending, IdentityKYCGetStatusResponseStatusVerified, IdentityKYCGetStatusResponseStatusRejected:
 		return true
 	}
 	return false
 }
 
-// The KYC verification tier achieved (e.g., for different service levels).
-type KYCStatusVerifiedTier string
+type IdentityKYCSubmitResponse struct {
+	Details     string                          `json:"details"`
+	LastChecked time.Time                       `json:"lastChecked" format:"date-time"`
+	Status      IdentityKYCSubmitResponseStatus `json:"status"`
+	JSON        identityKYCSubmitResponseJSON   `json:"-"`
+}
+
+// identityKYCSubmitResponseJSON contains the JSON metadata for the struct
+// [IdentityKYCSubmitResponse]
+type identityKYCSubmitResponseJSON struct {
+	Details     apijson.Field
+	LastChecked apijson.Field
+	Status      apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *IdentityKYCSubmitResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r identityKYCSubmitResponseJSON) RawJSON() string {
+	return r.raw
+}
+
+type IdentityKYCSubmitResponseStatus string
 
 const (
-	KYCStatusVerifiedTierBronze   KYCStatusVerifiedTier = "bronze"
-	KYCStatusVerifiedTierSilver   KYCStatusVerifiedTier = "silver"
-	KYCStatusVerifiedTierGold     KYCStatusVerifiedTier = "gold"
-	KYCStatusVerifiedTierPlatinum KYCStatusVerifiedTier = "platinum"
+	IdentityKYCSubmitResponseStatusNotStarted IdentityKYCSubmitResponseStatus = "not_started"
+	IdentityKYCSubmitResponseStatusPending    IdentityKYCSubmitResponseStatus = "pending"
+	IdentityKYCSubmitResponseStatusVerified   IdentityKYCSubmitResponseStatus = "verified"
+	IdentityKYCSubmitResponseStatusRejected   IdentityKYCSubmitResponseStatus = "rejected"
 )
 
-func (r KYCStatusVerifiedTier) IsKnown() bool {
+func (r IdentityKYCSubmitResponseStatus) IsKnown() bool {
 	switch r {
-	case KYCStatusVerifiedTierBronze, KYCStatusVerifiedTierSilver, KYCStatusVerifiedTierGold, KYCStatusVerifiedTierPlatinum:
+	case IdentityKYCSubmitResponseStatusNotStarted, IdentityKYCSubmitResponseStatusPending, IdentityKYCSubmitResponseStatusVerified, IdentityKYCSubmitResponseStatusRejected:
 		return true
 	}
 	return false
 }
 
 type IdentityKYCSubmitParams struct {
-	// The two-letter ISO country code where the document was issued.
-	CountryOfIssue param.Field[interface{}] `json:"countryOfIssue,required"`
-	// The identification number on the document.
-	DocumentNumber param.Field[interface{}] `json:"documentNumber,required"`
-	// The type of KYC document being submitted.
-	DocumentType param.Field[IdentityKYCSubmitParamsDocumentType] `json:"documentType,required"`
-	// The expiration date of the document (YYYY-MM-DD).
-	ExpirationDate param.Field[interface{}] `json:"expirationDate,required"`
-	// The issue date of the document (YYYY-MM-DD).
-	IssueDate param.Field[interface{}] `json:"issueDate,required"`
-	// Array of additional documents (e.g., utility bills) as base64 encoded images.
-	AdditionalDocuments param.Field[[]interface{}] `json:"additionalDocuments"`
-	// Base64 encoded image of the back of the document (if applicable).
-	DocumentBackImage param.Field[interface{}] `json:"documentBackImage"`
-	// Base64 encoded image of the front of the document. Use 'application/json' with
-	// base64 string, or 'multipart/form-data' for direct file upload.
-	DocumentFrontImage param.Field[interface{}] `json:"documentFrontImage"`
+	// Front side of the ID document.
+	DocumentFront param.Field[io.Reader]                           `json:"documentFront,required" format:"binary"`
+	DocumentType  param.Field[IdentityKYCSubmitParamsDocumentType] `json:"documentType,required"`
+	// A selfie of the user holding the ID document.
+	Selfie param.Field[io.Reader] `json:"selfie,required" format:"binary"`
+	// Back side of the ID document (if applicable).
+	DocumentBack param.Field[io.Reader] `json:"documentBack" format:"binary"`
 }
 
-func (r IdentityKYCSubmitParams) MarshalJSON() (data []byte, err error) {
-	return apijson.MarshalRoot(r)
+func (r IdentityKYCSubmitParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
 
-// The type of KYC document being submitted.
 type IdentityKYCSubmitParamsDocumentType string
 
 const (
-	IdentityKYCSubmitParamsDocumentTypeDriversLicense IdentityKYCSubmitParamsDocumentType = "drivers_license"
 	IdentityKYCSubmitParamsDocumentTypePassport       IdentityKYCSubmitParamsDocumentType = "passport"
+	IdentityKYCSubmitParamsDocumentTypeDriversLicense IdentityKYCSubmitParamsDocumentType = "drivers_license"
 	IdentityKYCSubmitParamsDocumentTypeNationalID     IdentityKYCSubmitParamsDocumentType = "national_id"
-	IdentityKYCSubmitParamsDocumentTypeUtilityBill    IdentityKYCSubmitParamsDocumentType = "utility_bill"
-	IdentityKYCSubmitParamsDocumentTypeBankStatement  IdentityKYCSubmitParamsDocumentType = "bank_statement"
-	IdentityKYCSubmitParamsDocumentTypeOther          IdentityKYCSubmitParamsDocumentType = "other"
 )
 
 func (r IdentityKYCSubmitParamsDocumentType) IsKnown() bool {
 	switch r {
-	case IdentityKYCSubmitParamsDocumentTypeDriversLicense, IdentityKYCSubmitParamsDocumentTypePassport, IdentityKYCSubmitParamsDocumentTypeNationalID, IdentityKYCSubmitParamsDocumentTypeUtilityBill, IdentityKYCSubmitParamsDocumentTypeBankStatement, IdentityKYCSubmitParamsDocumentTypeOther:
+	case IdentityKYCSubmitParamsDocumentTypePassport, IdentityKYCSubmitParamsDocumentTypeDriversLicense, IdentityKYCSubmitParamsDocumentTypeNationalID:
 		return true
 	}
 	return false

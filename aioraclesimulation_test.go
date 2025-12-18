@@ -48,8 +48,8 @@ func TestAIOracleSimulationListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.AI.Oracle.Simulations.List(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AIOracleSimulationListParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

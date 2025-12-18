@@ -13,7 +13,7 @@ import (
 	"github.com/jocall3/1231-go/option"
 )
 
-func TestAccountLinkWithOptionalParams(t *testing.T) {
+func TestAccountLink(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -26,10 +26,8 @@ func TestAccountLinkWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Accounts.Link(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AccountLinkParams{
-		CountryCode:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("US"),
-		InstitutionName:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Bank of America"),
-		ProviderIdentifier: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-		RedirectUri:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		CountryCode:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("US"),
+		InstitutionName: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Bank of America"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -75,8 +73,8 @@ func TestAccountGetMeWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Accounts.GetMe(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AccountGetMeParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -103,8 +101,8 @@ func TestAccountGetStatementsWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"acc_chase_checking_4567",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.AccountGetStatementsParams{
-			Month:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](7),
-			Year:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](2024),
+			Month:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(7)),
+			Year:   jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(2024)),
 			Format: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AccountGetStatementsParamsFormatPdf),
 		},
 	)

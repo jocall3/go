@@ -51,11 +51,9 @@ func TestAccountOverdraftSettingUpdateOverdraftSettingsWithOptionalParams(t *tes
 		context.TODO(),
 		"acc_chase_checking_4567",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.AccountOverdraftSettingUpdateOverdraftSettingsParams{
-			Enabled:                jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](false),
-			FeePreference:          jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceDeclineIfOverLimit),
-			LinkedSavingsAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("acc_new_savings_5678"),
-			LinkToSavings:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](false),
-			ProtectionLimit:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](750),
+			Enabled:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(false),
+			FeePreference: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceDeclineIfOverLimit),
+			LinkToSavings: jamesburvelocallaghaniiicitibankdemobusinessinc.F(false),
 		},
 	)
 	if err != nil {

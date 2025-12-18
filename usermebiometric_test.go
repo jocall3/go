@@ -48,10 +48,10 @@ func TestUserMeBiometricEnrollWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Users.Me.Biometrics.Enroll(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserMeBiometricEnrollParams{
-		BiometricSignature: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("base64encoded_facial_template_for_enrollment"),
+		BiometricSignature: jamesburvelocallaghaniiicitibankdemobusinessinc.F("base64encoded_facial_template_for_enrollment"),
 		BiometricType:      jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.UserMeBiometricEnrollParamsBiometricTypeFacialRecognition),
-		DeviceID:           jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("dev_mobile_ios_aabbcc"),
-		DeviceName:         jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("My Primary iPhone"),
+		DeviceID:           jamesburvelocallaghaniiicitibankdemobusinessinc.F("dev_mobile_ios_aabbcc"),
+		DeviceName:         jamesburvelocallaghaniiicitibankdemobusinessinc.F("My Primary iPhone"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -97,9 +97,9 @@ func TestUserMeBiometricVerify(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Users.Me.Biometrics.Verify(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserMeBiometricVerifyParams{
-		BiometricSignature: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("base64encoded_one_time_fingerprint_proof"),
+		BiometricSignature: jamesburvelocallaghaniiicitibankdemobusinessinc.F("base64encoded_one_time_fingerprint_proof"),
 		BiometricType:      jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.UserMeBiometricVerifyParamsBiometricTypeFingerprint),
-		DeviceID:           jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("dev_mobile_android_ddeeff"),
+		DeviceID:           jamesburvelocallaghaniiicitibankdemobusinessinc.F("dev_mobile_android_ddeeff"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

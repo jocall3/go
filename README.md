@@ -50,9 +50,9 @@ import (
 func main() {
 	client := jamesburvelocallaghaniiicitibankdemobusinessinc.NewClient()
 	user, err := client.Users.Register(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
-		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
-		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
+		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
+		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
+		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
 	})
 	if err != nil {
 		panic(err.Error())
@@ -176,9 +176,9 @@ To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
 _, err := client.Users.Register(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-	Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
-	Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
-	Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
+	Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
+	Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
+	Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
 })
 if err != nil {
 	var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -207,9 +207,9 @@ defer cancel()
 client.Users.Register(
 	ctx,
 	jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
-		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
-		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
+		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
+		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
+		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
 	},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
@@ -229,6 +229,30 @@ file returned by `os.Open` will be sent with the file name on disk.
 We also provide a helper `jamesburvelocallaghaniiicitibankdemobusinessinc.FileParam(reader io.Reader, filename string, contentType string)`
 which can be used to wrap any `io.Reader` with the appropriate file name and content type.
 
+```go
+// A file from the file system
+file, err := os.Open("/path/to/file")
+jamesburvelocallaghaniiicitibankdemobusinessinc.IdentityKYCSubmitParams{
+	DocumentFront: jamesburvelocallaghaniiicitibankdemobusinessinc.F[io.Reader](file),
+	DocumentType:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.IdentityKYCSubmitParamsDocumentTypePassport),
+	Selfie:        jamesburvelocallaghaniiicitibankdemobusinessinc.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+}
+
+// A file from a string
+jamesburvelocallaghaniiicitibankdemobusinessinc.IdentityKYCSubmitParams{
+	DocumentFront: jamesburvelocallaghaniiicitibankdemobusinessinc.F[io.Reader](strings.NewReader("my file contents")),
+	DocumentType:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.IdentityKYCSubmitParamsDocumentTypePassport),
+	Selfie:        jamesburvelocallaghaniiicitibankdemobusinessinc.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+}
+
+// With a custom filename and contentType
+jamesburvelocallaghaniiicitibankdemobusinessinc.IdentityKYCSubmitParams{
+	DocumentFront: jamesburvelocallaghaniiicitibankdemobusinessinc.FileParam(strings.NewReader(`{"hello": "foo"}`), "file.go", "application/json"),
+	DocumentType:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.IdentityKYCSubmitParamsDocumentTypePassport),
+	Selfie:        jamesburvelocallaghaniiicitibankdemobusinessinc.F(io.Reader(bytes.NewBuffer([]byte("some file contents")))),
+}
+```
+
 ### Retries
 
 Certain errors will be automatically retried 2 times by default, with a short exponential backoff.
@@ -247,9 +271,9 @@ client := jamesburvelocallaghaniiicitibankdemobusinessinc.NewClient(
 client.Users.Register(
 	context.TODO(),
 	jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
-		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
-		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
+		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
+		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
+		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
 	},
 	option.WithMaxRetries(5),
 )
@@ -266,9 +290,9 @@ var response *http.Response
 user, err := client.Users.Register(
 	context.TODO(),
 	jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
-		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
-		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
+		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
+		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
+		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
 	},
 	option.WithResponseInto(&response),
 )

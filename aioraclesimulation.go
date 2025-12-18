@@ -4,11 +4,13 @@ package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"reflect"
 	"slices"
+	"time"
 
 	"github.com/jocall3/1231-go/internal/apijson"
 	"github.com/jocall3/1231-go/internal/apiquery"
@@ -39,9 +41,13 @@ func NewAIOracleSimulationService(opts ...option.RequestOption) (r *AIOracleSimu
 
 // Retrieves the full, detailed results of a specific financial simulation by its
 // ID.
-func (r *AIOracleSimulationService) Get(ctx context.Context, simulationID interface{}, opts ...option.RequestOption) (res *AIOracleSimulationGetResponse, err error) {
+func (r *AIOracleSimulationService) Get(ctx context.Context, simulationID string, opts ...option.RequestOption) (res *AIOracleSimulationGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	path := fmt.Sprintf("ai/oracle/simulations/%v", simulationID)
+	if simulationID == "" {
+		err = errors.New("missing required simulationId parameter")
+		return
+	}
+	path := fmt.Sprintf("ai/oracle/simulations/%s", simulationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -56,50 +62,51 @@ func (r *AIOracleSimulationService) List(ctx context.Context, query AIOracleSimu
 }
 
 // Deletes a previously run financial simulation and its results.
-func (r *AIOracleSimulationService) Delete(ctx context.Context, simulationID interface{}, opts ...option.RequestOption) (err error) {
+func (r *AIOracleSimulationService) Delete(ctx context.Context, simulationID string, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	path := fmt.Sprintf("ai/oracle/simulations/%v", simulationID)
+	if simulationID == "" {
+		err = errors.New("missing required simulationId parameter")
+		return
+	}
+	path := fmt.Sprintf("ai/oracle/simulations/%s", simulationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
 
 type AIOracleSimulationGetResponse struct {
-	// This field can have the runtime type of [interface{}].
-	SimulationID interface{} `json:"simulationId,required"`
+	// Discriminator field for oneOf.
+	SimulationType AIOracleSimulationGetResponseSimulationType `json:"simulationType,required"`
 	// This field can have the runtime type of [[]SimulationResponseKeyImpact].
-	KeyImpacts interface{} `json:"keyImpacts"`
-	// This field can have the runtime type of [interface{}].
-	NarrativeSummary interface{} `json:"narrativeSummary"`
-	// This field can have the runtime type of [interface{}].
-	OverallSummary interface{} `json:"overallSummary"`
-	// This field can have the runtime type of [[]AIInsight].
+	KeyImpacts       interface{} `json:"keyImpacts"`
+	NarrativeSummary string      `json:"narrativeSummary"`
+	OverallSummary   string      `json:"overallSummary"`
+	// This field can have the runtime type of [[]SimulationResponseRecommendation].
 	Recommendations interface{} `json:"recommendations"`
 	// This field can have the runtime type of [SimulationResponseRiskAnalysis].
 	RiskAnalysis interface{} `json:"riskAnalysis"`
 	// This field can have the runtime type of
 	// [[]AdvancedSimulationResponseScenarioResult].
 	ScenarioResults interface{} `json:"scenarioResults"`
+	SimulationID    string      `json:"simulationId"`
 	// This field can have the runtime type of [[]AIInsight].
-	StrategicRecommendations interface{} `json:"strategicRecommendations"`
-	// This field can have the runtime type of [[]SimulationResponseVisualization].
-	Visualizations interface{}                       `json:"visualizations"`
-	JSON           aiOracleSimulationGetResponseJSON `json:"-"`
-	union          AIOracleSimulationGetResponseUnion
+	StrategicRecommendations interface{}                       `json:"strategicRecommendations"`
+	JSON                     aiOracleSimulationGetResponseJSON `json:"-"`
+	union                    AIOracleSimulationGetResponseUnion
 }
 
 // aiOracleSimulationGetResponseJSON contains the JSON metadata for the struct
 // [AIOracleSimulationGetResponse]
 type aiOracleSimulationGetResponseJSON struct {
-	SimulationID             apijson.Field
+	SimulationType           apijson.Field
 	KeyImpacts               apijson.Field
 	NarrativeSummary         apijson.Field
 	OverallSummary           apijson.Field
 	Recommendations          apijson.Field
 	RiskAnalysis             apijson.Field
 	ScenarioResults          apijson.Field
+	SimulationID             apijson.Field
 	StrategicRecommendations apijson.Field
-	Visualizations           apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -134,16 +141,34 @@ type AIOracleSimulationGetResponseUnion interface {
 func init() {
 	apijson.RegisterUnion(
 		reflect.TypeOf((*AIOracleSimulationGetResponseUnion)(nil)).Elem(),
-		"",
+		"simulationType",
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(SimulationResponse{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(SimulationResponse{}),
+			DiscriminatorValue: "standard",
 		},
 		apijson.UnionVariant{
-			TypeFilter: gjson.JSON,
-			Type:       reflect.TypeOf(AdvancedSimulationResponse{}),
+			TypeFilter:         gjson.JSON,
+			Type:               reflect.TypeOf(AdvancedSimulationResponse{}),
+			DiscriminatorValue: "advanced",
 		},
 	)
+}
+
+// Discriminator field for oneOf.
+type AIOracleSimulationGetResponseSimulationType string
+
+const (
+	AIOracleSimulationGetResponseSimulationTypeStandard AIOracleSimulationGetResponseSimulationType = "standard"
+	AIOracleSimulationGetResponseSimulationTypeAdvanced AIOracleSimulationGetResponseSimulationType = "advanced"
+)
+
+func (r AIOracleSimulationGetResponseSimulationType) IsKnown() bool {
+	switch r {
+	case AIOracleSimulationGetResponseSimulationTypeStandard, AIOracleSimulationGetResponseSimulationTypeAdvanced:
+		return true
+	}
+	return false
 }
 
 type AIOracleSimulationListResponse struct {
@@ -169,19 +194,13 @@ func (r aiOracleSimulationListResponseJSON) RawJSON() string {
 }
 
 type AIOracleSimulationListResponseData struct {
-	// Timestamp when the simulation was initiated.
-	CreationDate interface{} `json:"creationDate,required"`
-	// Timestamp when the simulation status or results were last updated.
-	LastUpdated interface{} `json:"lastUpdated,required"`
-	// Unique identifier for the simulation.
-	SimulationID interface{} `json:"simulationId,required"`
-	// Current status of the simulation.
-	Status AIOracleSimulationListResponseDataStatus `json:"status,required"`
-	// A brief summary of what the simulation evaluated.
-	Summary interface{} `json:"summary,required"`
-	// A user-friendly title for the simulation.
-	Title interface{}                            `json:"title,required"`
-	JSON  aiOracleSimulationListResponseDataJSON `json:"-"`
+	CreationDate time.Time                                `json:"creationDate" format:"date-time"`
+	LastUpdated  time.Time                                `json:"lastUpdated" format:"date-time"`
+	SimulationID string                                   `json:"simulationId"`
+	Status       AIOracleSimulationListResponseDataStatus `json:"status"`
+	Summary      string                                   `json:"summary"`
+	Title        string                                   `json:"title"`
+	JSON         aiOracleSimulationListResponseDataJSON   `json:"-"`
 }
 
 // aiOracleSimulationListResponseDataJSON contains the JSON metadata for the struct
@@ -205,7 +224,6 @@ func (r aiOracleSimulationListResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
-// Current status of the simulation.
 type AIOracleSimulationListResponseDataStatus string
 
 const (
@@ -223,10 +241,10 @@ func (r AIOracleSimulationListResponseDataStatus) IsKnown() bool {
 }
 
 type AIOracleSimulationListParams struct {
-	// Maximum number of items to return in a single page.
-	Limit param.Field[interface{}] `query:"limit"`
-	// Number of items to skip before starting to collect the result set.
-	Offset param.Field[interface{}] `query:"offset"`
+	// The maximum number of items to return.
+	Limit param.Field[int64] `query:"limit"`
+	// The number of items to skip before starting to collect the result set.
+	Offset param.Field[int64] `query:"offset"`
 }
 
 // URLQuery serializes [AIOracleSimulationListParams]'s query parameters as

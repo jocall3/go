@@ -26,13 +26,13 @@ func TestInvestmentPortfolioNewWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Investments.Portfolios.New(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioNewParams{
-		Currency:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("USD"),
-		InitialInvestment: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](10000),
-		Name:              jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("My First Growth Portfolio"),
-		RiskTolerance:     jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioNewParamsRiskToleranceConservative),
+		Currency:          jamesburvelocallaghaniiicitibankdemobusinessinc.F("USD"),
+		Name:              jamesburvelocallaghaniiicitibankdemobusinessinc.F("My First Growth Portfolio"),
+		RiskTolerance:     jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioNewParamsRiskToleranceMedium),
 		Type:              jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioNewParamsTypeDiversified),
-		AIAutoAllocate:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
-		LinkedAccountID:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("acc_chase_checking_4567"),
+		AIAutoAllocate:    jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
+		InitialInvestment: jamesburvelocallaghaniiicitibankdemobusinessinc.F(10000.000000),
+		LinkedAccountID:   jamesburvelocallaghaniiicitibankdemobusinessinc.F("acc_chase_checking_4567"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -82,8 +82,7 @@ func TestInvestmentPortfolioUpdateWithOptionalParams(t *testing.T) {
 		"portfolio_equity_growth",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioUpdateParams{
 			AIRebalancingFrequency: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioUpdateParamsAIRebalancingFrequencyQuarterly),
-			Name:                   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Revised Growth Portfolio"),
-			RiskTolerance:          jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioUpdateParamsRiskToleranceConservative),
+			RiskTolerance:          jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioUpdateParamsRiskToleranceMedium),
 		},
 	)
 	if err != nil {
@@ -108,8 +107,8 @@ func TestInvestmentPortfolioListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Investments.Portfolios.List(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioListParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -136,9 +135,9 @@ func TestInvestmentPortfolioRebalanceWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"portfolio_equity_growth",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioRebalanceParams{
-			TargetRiskTolerance:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioRebalanceParamsTargetRiskToleranceConservative),
-			ConfirmationRequired: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
-			DryRun:               jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+			TargetRiskTolerance:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentPortfolioRebalanceParamsTargetRiskToleranceMedium),
+			ConfirmationRequired: jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
+			DryRun:               jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
 		},
 	)
 	if err != nil {

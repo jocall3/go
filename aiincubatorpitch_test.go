@@ -48,24 +48,24 @@ func TestAIIncubatorPitchSubmitWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.AI.Incubator.Pitch.Submit(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AIIncubatorPitchSubmitParams{
-		BusinessPlan: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Quantum-AI powered financial advisor platform leveraging neural networks for predictive analytics and hyper-personalized advice..."),
+		BusinessPlan: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Quantum-AI powered financial advisor platform leveraging neural networks for predictive analytics and hyper-personalized advice..."),
 		FinancialProjections: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIIncubatorPitchSubmitParamsFinancialProjections{
-			ProfitabilityEstimate: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Achieve profitability within 18 months."),
-			ProjectionYears:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](3),
-			RevenueForecast:       jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{500000, 2000000, 6000000}),
-			SeedRoundAmount:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](2500000),
-			ValuationPreMoney:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](10000000),
+			ProfitabilityEstimate: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Achieve profitability within 18 months."),
+			ProjectionYears:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(3)),
+			RevenueForecast:       jamesburvelocallaghaniiicitibankdemobusinessinc.F([]float64{500000.000000, 2000000.000000, 6000000.000000}),
+			SeedRoundAmount:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(2500000.000000),
+			ValuationPreMoney:     jamesburvelocallaghaniiicitibankdemobusinessinc.F(10000000.000000),
 		}),
 		FoundingTeam: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]jamesburvelocallaghaniiicitibankdemobusinessinc.AIIncubatorPitchSubmitParamsFoundingTeam{{
-			Experience: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("15+ years in AI/ML, PhD in Quantum Computing, ex-Google Brain"),
-			Name:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Dr. Eleanor Vance"),
-			Role:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("CEO & Lead AI Scientist"),
+			Experience: jamesburvelocallaghaniiicitibankdemobusinessinc.F("15+ years in AI/ML, PhD in Quantum Computing, ex-Google Brain"),
+			Name:       jamesburvelocallaghaniiicitibankdemobusinessinc.F("Dr. Eleanor Vance"),
+			Role:       jamesburvelocallaghaniiicitibankdemobusinessinc.F("CEO & Lead AI Scientist"),
 		}, {
-			Experience: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("20+ years in Fintech, ex-Goldman Sachs"),
-			Name:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Marcus Thorne"),
-			Role:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("COO & Finance Expert"),
+			Experience: jamesburvelocallaghaniiicitibankdemobusinessinc.F("20+ years in Fintech, ex-Goldman Sachs"),
+			Name:       jamesburvelocallaghaniiicitibankdemobusinessinc.F("Marcus Thorne"),
+			Role:       jamesburvelocallaghaniiicitibankdemobusinessinc.F("COO & Finance Expert"),
 		}}),
-		MarketOpportunity: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("The booming digital finance market coupled with demand for truly personalized, AI-driven financial guidance presents a multi-billion dollar opportunity. Our unique quantum-AI approach provides unparalleled accuracy and foresight."),
+		MarketOpportunity: jamesburvelocallaghaniiicitibankdemobusinessinc.F("The booming digital finance market coupled with demand for truly personalized, AI-driven financial guidance presents a multi-billion dollar opportunity. Our unique quantum-AI approach provides unparalleled accuracy and foresight."),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -93,13 +93,13 @@ func TestAIIncubatorPitchSubmitFeedbackWithOptionalParams(t *testing.T) {
 		"pitch_qw_synergychain-xyz",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.AIIncubatorPitchSubmitFeedbackParams{
 			Answers: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]jamesburvelocallaghaniiicitibankdemobusinessinc.AIIncubatorPitchSubmitFeedbackParamsAnswer{{
-				Answer:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Our mitigation strategy includes dedicated R&D and new hires with specific expertise."),
-				QuestionID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("q_qa-team-001"),
+				Answer:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Our mitigation strategy includes dedicated R&D and new hires with specific expertise."),
+				QuestionID: jamesburvelocallaghaniiicitibankdemobusinessinc.F("q_qa-team-001"),
 			}, {
-				Answer:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Our CAC projections are based on pilot program results showing $500 per enterprise client with a conversion rate of 10% from trials."),
-				QuestionID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("q_qa-market-002"),
+				Answer:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Our CAC projections are based on pilot program results showing $500 per enterprise client with a conversion rate of 10% from trials."),
+				QuestionID: jamesburvelocallaghaniiicitibankdemobusinessinc.F("q_qa-market-002"),
 			}}),
-			Feedback: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Regarding the technical challenges, our team has allocated 3 months for R&D on quantum-resistant cryptography, mitigating the risk. We've also brought in Dr. Elena Petrova, a leading expert in secure multi-party computation."),
+			Feedback: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Regarding the technical challenges, our team has allocated 3 months for R&D on quantum-resistant cryptography, mitigating the risk. We've also brought in Dr. Elena Petrova, a leading expert in secure multi-party computation."),
 		},
 	)
 	if err != nil {

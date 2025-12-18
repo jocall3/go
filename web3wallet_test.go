@@ -26,8 +26,8 @@ func TestWeb3WalletListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Web3.Wallets.List(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.Web3WalletListParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -38,7 +38,7 @@ func TestWeb3WalletListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestWeb3WalletConnectWithOptionalParams(t *testing.T) {
+func TestWeb3WalletConnect(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -51,11 +51,10 @@ func TestWeb3WalletConnectWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Web3.Wallets.Connect(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.Web3WalletConnectParams{
-		BlockchainNetwork:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Ethereum"),
-		SignedMessage:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"),
-		WalletAddress:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("0x123abc456def7890..."),
-		WalletProvider:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("MetaMask"),
-		RequestWriteAccess: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+		BlockchainNetwork: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Ethereum"),
+		SignedMessage:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"),
+		WalletAddress:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("0x123abc456def7890..."),
+		WalletProvider:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("MetaMask"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -82,8 +81,8 @@ func TestWeb3WalletGetBalancesWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"wallet_conn_eth_0xabc123",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.Web3WalletGetBalancesParams{
-			Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-			Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+			Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
+			Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
 		},
 	)
 	if err != nil {

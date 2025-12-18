@@ -7,6 +7,7 @@ import (
 	"errors"
 	"os"
 	"testing"
+	"time"
 
 	"github.com/jocall3/1231-go"
 	"github.com/jocall3/1231-go/internal/testutil"
@@ -26,8 +27,8 @@ func TestCorporateCardListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Corporate.Cards.List(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateCardListParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -52,21 +53,20 @@ func TestCorporateCardNewVirtualWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Corporate.Cards.NewVirtual(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateCardNewVirtualParams{
 		Controls: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateCardControlsParam{
-			AtmWithdrawals:               jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](false),
-			ContactlessPayments:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](false),
-			DailyLimit:                   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](500),
-			InternationalTransactions:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](false),
-			MerchantCategoryRestrictions: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{"Advertising"}),
-			MonthlyLimit:                 jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](1000),
-			OnlineTransactions:           jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
-			SingleTransactionLimit:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](200),
-			VendorRestrictions:           jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{"Facebook Ads", "Google Ads"}),
+			AtmWithdrawals:               jamesburvelocallaghaniiicitibankdemobusinessinc.F(false),
+			ContactlessPayments:          jamesburvelocallaghaniiicitibankdemobusinessinc.F(false),
+			DailyLimit:                   jamesburvelocallaghaniiicitibankdemobusinessinc.F(500.000000),
+			InternationalTransactions:    jamesburvelocallaghaniiicitibankdemobusinessinc.F(false),
+			MerchantCategoryRestrictions: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]string{"Advertising"}),
+			MonthlyLimit:                 jamesburvelocallaghaniiicitibankdemobusinessinc.F(1000.000000),
+			OnlineTransactions:           jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
+			SingleTransactionLimit:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(200.000000),
+			VendorRestrictions:           jamesburvelocallaghaniiicitibankdemobusinessinc.F([]string{"Facebook Ads", "Google Ads"}),
 		}),
-		ExpirationDate:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2025-12-31"),
-		HolderName:           jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Marketing Campaign Q4"),
-		Purpose:              jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Online advertising for Q4 campaigns"),
-		AssociatedEmployeeID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("emp_marketing_01"),
-		SpendingPolicyID:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("policy_marketing_fixed"),
+		HolderName:           jamesburvelocallaghaniiicitibankdemobusinessinc.F("Marketing Campaign Q4"),
+		AssociatedEmployeeID: jamesburvelocallaghaniiicitibankdemobusinessinc.F("emp_marketing_01"),
+		ExpirationDate:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
+		Purpose:              jamesburvelocallaghaniiicitibankdemobusinessinc.F("Online advertising for Q4 campaigns"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -93,7 +93,7 @@ func TestCorporateCardFreeze(t *testing.T) {
 		context.TODO(),
 		"corp_card_xyz987654",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateCardFreezeParams{
-			Freeze: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+			Freeze: jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
 		},
 	)
 	if err != nil {
@@ -121,10 +121,10 @@ func TestCorporateCardListTransactionsWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"corp_card_xyz987654",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateCardListTransactionsParams{
-			EndDate:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-12-31"),
-			Limit:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-			Offset:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
-			StartDate: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-01-01"),
+			EndDate:   jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
+			Limit:     jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
+			Offset:    jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+			StartDate: jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
 		},
 	)
 	if err != nil {
@@ -153,15 +153,15 @@ func TestCorporateCardUpdateControlsWithOptionalParams(t *testing.T) {
 		"corp_card_xyz987654",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateCardUpdateControlsParams{
 			CorporateCardControls: jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateCardControlsParam{
-				AtmWithdrawals:               jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
-				ContactlessPayments:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
-				DailyLimit:                   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](750),
-				InternationalTransactions:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
-				MerchantCategoryRestrictions: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{"Software Subscriptions", "Conferences"}),
-				MonthlyLimit:                 jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](3000),
-				OnlineTransactions:           jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
-				SingleTransactionLimit:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](1000),
-				VendorRestrictions:           jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{"Amazon", "Uber"}),
+				AtmWithdrawals:               jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
+				ContactlessPayments:          jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
+				DailyLimit:                   jamesburvelocallaghaniiicitibankdemobusinessinc.F(750.000000),
+				InternationalTransactions:    jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
+				MerchantCategoryRestrictions: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]string{"Software Subscriptions", "Conferences"}),
+				MonthlyLimit:                 jamesburvelocallaghaniiicitibankdemobusinessinc.F(3000.000000),
+				OnlineTransactions:           jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
+				SingleTransactionLimit:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(0.000000),
+				VendorRestrictions:           jamesburvelocallaghaniiicitibankdemobusinessinc.F([]string{"string"}),
 			},
 		},
 	)

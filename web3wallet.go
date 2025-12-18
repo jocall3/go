@@ -4,10 +4,12 @@ package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"slices"
+	"time"
 
 	"github.com/jocall3/1231-go/internal/apijson"
 	"github.com/jocall3/1231-go/internal/apiquery"
@@ -57,33 +59,27 @@ func (r *Web3WalletService) Connect(ctx context.Context, body Web3WalletConnectP
 
 // Retrieves the current balances of all recognized crypto assets within a specific
 // connected wallet.
-func (r *Web3WalletService) GetBalances(ctx context.Context, walletID interface{}, query Web3WalletGetBalancesParams, opts ...option.RequestOption) (res *Web3WalletGetBalancesResponse, err error) {
+func (r *Web3WalletService) GetBalances(ctx context.Context, walletID string, query Web3WalletGetBalancesParams, opts ...option.RequestOption) (res *Web3WalletGetBalancesResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
-	path := fmt.Sprintf("web3/wallets/%v/balances", walletID)
+	if walletID == "" {
+		err = errors.New("missing required walletId parameter")
+		return
+	}
+	path := fmt.Sprintf("web3/wallets/%s/balances", walletID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
 type CryptoWalletConnection struct {
-	// Unique identifier for this wallet connection.
-	ID interface{} `json:"id,required"`
-	// The blockchain network this wallet is primarily connected to (e.g., Ethereum,
-	// Solana, Polygon).
-	BlockchainNetwork interface{} `json:"blockchainNetwork,required"`
-	// Timestamp when the wallet's data was last synchronized.
-	LastSynced interface{} `json:"lastSynced,required"`
-	// Indicates if read access (balances, NFTs) is granted.
-	ReadAccessGranted interface{} `json:"readAccessGranted,required"`
-	// Current status of the wallet connection.
-	Status CryptoWalletConnectionStatus `json:"status,required"`
-	// Public address of the connected cryptocurrency wallet.
-	WalletAddress interface{} `json:"walletAddress,required"`
-	// Name of the wallet provider (e.g., MetaMask, Ledger, Phantom).
-	WalletProvider interface{} `json:"walletProvider,required"`
-	// Indicates if write access (transactions) is granted. Requires higher
-	// permission/security.
-	WriteAccessGranted interface{}                `json:"writeAccessGranted,required"`
-	JSON               cryptoWalletConnectionJSON `json:"-"`
+	ID                 string                       `json:"id"`
+	BlockchainNetwork  string                       `json:"blockchainNetwork"`
+	LastSynced         time.Time                    `json:"lastSynced" format:"date-time"`
+	ReadAccessGranted  bool                         `json:"readAccessGranted"`
+	Status             CryptoWalletConnectionStatus `json:"status"`
+	WalletAddress      string                       `json:"walletAddress"`
+	WalletProvider     string                       `json:"walletProvider"`
+	WriteAccessGranted bool                         `json:"writeAccessGranted"`
+	JSON               cryptoWalletConnectionJSON   `json:"-"`
 }
 
 // cryptoWalletConnectionJSON contains the JSON metadata for the struct
@@ -109,19 +105,17 @@ func (r cryptoWalletConnectionJSON) RawJSON() string {
 	return r.raw
 }
 
-// Current status of the wallet connection.
 type CryptoWalletConnectionStatus string
 
 const (
 	CryptoWalletConnectionStatusConnected           CryptoWalletConnectionStatus = "connected"
 	CryptoWalletConnectionStatusDisconnected        CryptoWalletConnectionStatus = "disconnected"
 	CryptoWalletConnectionStatusPendingVerification CryptoWalletConnectionStatus = "pending_verification"
-	CryptoWalletConnectionStatusError               CryptoWalletConnectionStatus = "error"
 )
 
 func (r CryptoWalletConnectionStatus) IsKnown() bool {
 	switch r {
-	case CryptoWalletConnectionStatusConnected, CryptoWalletConnectionStatusDisconnected, CryptoWalletConnectionStatusPendingVerification, CryptoWalletConnectionStatusError:
+	case CryptoWalletConnectionStatusConnected, CryptoWalletConnectionStatusDisconnected, CryptoWalletConnectionStatusPendingVerification:
 		return true
 	}
 	return false
@@ -172,20 +166,12 @@ func (r web3WalletGetBalancesResponseJSON) RawJSON() string {
 }
 
 type Web3WalletGetBalancesResponseData struct {
-	// Full name of the crypto asset.
-	AssetName interface{} `json:"assetName,required"`
-	// Symbol of the crypto asset (e.g., ETH, BTC, USDC).
-	AssetSymbol interface{} `json:"assetSymbol,required"`
-	// Current balance of the asset in the wallet.
-	Balance interface{} `json:"balance,required"`
-	// Current USD value of the asset balance.
-	UsdValue interface{} `json:"usdValue,required"`
-	// The contract address for ERC-20 tokens or similar.
-	ContractAddress interface{} `json:"contractAddress"`
-	// The blockchain network the asset resides on (if different from wallet's
-	// primary).
-	Network interface{}                           `json:"network"`
-	JSON    web3WalletGetBalancesResponseDataJSON `json:"-"`
+	AssetName       string                                `json:"assetName"`
+	AssetSymbol     string                                `json:"assetSymbol"`
+	Balance         float64                               `json:"balance"`
+	ContractAddress string                                `json:"contractAddress"`
+	UsdValue        float64                               `json:"usdValue"`
+	JSON            web3WalletGetBalancesResponseDataJSON `json:"-"`
 }
 
 // web3WalletGetBalancesResponseDataJSON contains the JSON metadata for the struct
@@ -194,9 +180,8 @@ type web3WalletGetBalancesResponseDataJSON struct {
 	AssetName       apijson.Field
 	AssetSymbol     apijson.Field
 	Balance         apijson.Field
-	UsdValue        apijson.Field
 	ContractAddress apijson.Field
-	Network         apijson.Field
+	UsdValue        apijson.Field
 	raw             string
 	ExtraFields     map[string]apijson.Field
 }
@@ -210,10 +195,10 @@ func (r web3WalletGetBalancesResponseDataJSON) RawJSON() string {
 }
 
 type Web3WalletListParams struct {
-	// Maximum number of items to return in a single page.
-	Limit param.Field[interface{}] `query:"limit"`
-	// Number of items to skip before starting to collect the result set.
-	Offset param.Field[interface{}] `query:"offset"`
+	// The maximum number of items to return.
+	Limit param.Field[int64] `query:"limit"`
+	// The number of items to skip before starting to collect the result set.
+	Offset param.Field[int64] `query:"offset"`
 }
 
 // URLQuery serializes [Web3WalletListParams]'s query parameters as `url.Values`.
@@ -225,17 +210,10 @@ func (r Web3WalletListParams) URLQuery() (v url.Values) {
 }
 
 type Web3WalletConnectParams struct {
-	// The blockchain network for this wallet (e.g., Ethereum, Solana).
-	BlockchainNetwork param.Field[interface{}] `json:"blockchainNetwork,required"`
-	// A message cryptographically signed by the wallet owner to prove
-	// ownership/intent.
-	SignedMessage param.Field[interface{}] `json:"signedMessage,required"`
-	// The public address of the cryptocurrency wallet.
-	WalletAddress param.Field[interface{}] `json:"walletAddress,required"`
-	// The name of the wallet provider (e.g., MetaMask, Phantom).
-	WalletProvider param.Field[interface{}] `json:"walletProvider,required"`
-	// If true, requests write access to initiate transactions from this wallet.
-	RequestWriteAccess param.Field[interface{}] `json:"requestWriteAccess"`
+	BlockchainNetwork param.Field[string] `json:"blockchainNetwork,required"`
+	SignedMessage     param.Field[string] `json:"signedMessage,required"`
+	WalletAddress     param.Field[string] `json:"walletAddress,required"`
+	WalletProvider    param.Field[string] `json:"walletProvider,required"`
 }
 
 func (r Web3WalletConnectParams) MarshalJSON() (data []byte, err error) {
@@ -243,10 +221,10 @@ func (r Web3WalletConnectParams) MarshalJSON() (data []byte, err error) {
 }
 
 type Web3WalletGetBalancesParams struct {
-	// Maximum number of items to return in a single page.
-	Limit param.Field[interface{}] `query:"limit"`
-	// Number of items to skip before starting to collect the result set.
-	Offset param.Field[interface{}] `query:"offset"`
+	// The maximum number of items to return.
+	Limit param.Field[int64] `query:"limit"`
+	// The number of items to skip before starting to collect the result set.
+	Offset param.Field[int64] `query:"offset"`
 }
 
 // URLQuery serializes [Web3WalletGetBalancesParams]'s query parameters as

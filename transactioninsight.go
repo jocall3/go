@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"slices"
+	"time"
 
 	"github.com/jocall3/1231-go/internal/apijson"
 	"github.com/jocall3/1231-go/internal/requestconfig"
@@ -40,38 +41,26 @@ func (r *TransactionInsightService) GetSpendingTrends(ctx context.Context, opts 
 	return
 }
 
-// An AI-generated insight, alert, or recommendation.
 type AIInsight struct {
-	// Unique identifier for the AI insight.
-	ID interface{} `json:"id,required"`
-	// Category of the insight (e.g., spending, saving, investing).
-	Category AIInsightCategory `json:"category,required"`
-	// Detailed explanation of the insight.
-	Description interface{} `json:"description,required"`
-	// AI-assessed severity or importance of the insight.
-	Severity AIInsightSeverity `json:"severity,required"`
-	// Timestamp when the insight was generated.
-	Timestamp interface{} `json:"timestamp,required"`
-	// A concise title for the insight.
-	Title interface{} `json:"title,required"`
-	// Optional: A concrete action the user can take based on the insight.
-	ActionableRecommendation interface{} `json:"actionableRecommendation"`
-	// Optional: A programmatic trigger or deep link to initiate the recommended
-	// action.
-	ActionTrigger interface{}   `json:"actionTrigger"`
-	JSON          aiInsightJSON `json:"-"`
+	ID                       string            `json:"id"`
+	ActionableRecommendation string            `json:"actionableRecommendation"`
+	Category                 string            `json:"category"`
+	Description              string            `json:"description"`
+	Severity                 AIInsightSeverity `json:"severity"`
+	Timestamp                time.Time         `json:"timestamp" format:"date-time"`
+	Title                    string            `json:"title"`
+	JSON                     aiInsightJSON     `json:"-"`
 }
 
 // aiInsightJSON contains the JSON metadata for the struct [AIInsight]
 type aiInsightJSON struct {
 	ID                       apijson.Field
+	ActionableRecommendation apijson.Field
 	Category                 apijson.Field
 	Description              apijson.Field
 	Severity                 apijson.Field
 	Timestamp                apijson.Field
 	Title                    apijson.Field
-	ActionableRecommendation apijson.Field
-	ActionTrigger            apijson.Field
 	raw                      string
 	ExtraFields              map[string]apijson.Field
 }
@@ -84,31 +73,6 @@ func (r aiInsightJSON) RawJSON() string {
 	return r.raw
 }
 
-// Category of the insight (e.g., spending, saving, investing).
-type AIInsightCategory string
-
-const (
-	AIInsightCategorySpending          AIInsightCategory = "spending"
-	AIInsightCategorySaving            AIInsightCategory = "saving"
-	AIInsightCategoryInvesting         AIInsightCategory = "investing"
-	AIInsightCategoryBudgeting         AIInsightCategory = "budgeting"
-	AIInsightCategorySecurity          AIInsightCategory = "security"
-	AIInsightCategoryFinancialGoals    AIInsightCategory = "financial_goals"
-	AIInsightCategorySustainability    AIInsightCategory = "sustainability"
-	AIInsightCategoryCorporateTreasury AIInsightCategory = "corporate_treasury"
-	AIInsightCategoryCompliance        AIInsightCategory = "compliance"
-	AIInsightCategoryOther             AIInsightCategory = "other"
-)
-
-func (r AIInsightCategory) IsKnown() bool {
-	switch r {
-	case AIInsightCategorySpending, AIInsightCategorySaving, AIInsightCategoryInvesting, AIInsightCategoryBudgeting, AIInsightCategorySecurity, AIInsightCategoryFinancialGoals, AIInsightCategorySustainability, AIInsightCategoryCorporateTreasury, AIInsightCategoryCompliance, AIInsightCategoryOther:
-		return true
-	}
-	return false
-}
-
-// AI-assessed severity or importance of the insight.
 type AIInsightSeverity string
 
 const (
@@ -127,18 +91,12 @@ func (r AIInsightSeverity) IsKnown() bool {
 }
 
 type TransactionInsightGetSpendingTrendsResponse struct {
-	// AI-driven insights and recommendations related to spending.
-	AIInsights []AIInsight `json:"aiInsights,required"`
-	// AI-projected total spending for the next month.
-	ForecastNextMonth interface{} `json:"forecastNextMonth,required"`
-	// Overall trend of spending (increasing, decreasing, stable).
-	OverallTrend TransactionInsightGetSpendingTrendsResponseOverallTrend `json:"overallTrend,required"`
-	// Percentage change in spending over the period.
-	PercentageChange interface{} `json:"percentageChange,required"`
-	// The period over which the spending trend is analyzed.
-	Period interface{} `json:"period,required"`
-	// Categories with the most significant changes in spending.
-	TopCategoriesByChange []TransactionInsightGetSpendingTrendsResponseTopCategoriesByChange `json:"topCategoriesByChange,required"`
+	AIInsights            []AIInsight                                                        `json:"aiInsights"`
+	ForecastNextMonth     float64                                                            `json:"forecastNextMonth"`
+	OverallTrend          TransactionInsightGetSpendingTrendsResponseOverallTrend            `json:"overallTrend"`
+	PercentageChange      float64                                                            `json:"percentageChange"`
+	Period                string                                                             `json:"period"`
+	TopCategoriesByChange []TransactionInsightGetSpendingTrendsResponseTopCategoriesByChange `json:"topCategoriesByChange"`
 	JSON                  transactionInsightGetSpendingTrendsResponseJSON                    `json:"-"`
 }
 
@@ -163,7 +121,6 @@ func (r transactionInsightGetSpendingTrendsResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Overall trend of spending (increasing, decreasing, stable).
 type TransactionInsightGetSpendingTrendsResponseOverallTrend string
 
 const (
@@ -181,9 +138,9 @@ func (r TransactionInsightGetSpendingTrendsResponseOverallTrend) IsKnown() bool 
 }
 
 type TransactionInsightGetSpendingTrendsResponseTopCategoriesByChange struct {
-	AbsoluteChange   interface{}                                                          `json:"absoluteChange"`
-	Category         interface{}                                                          `json:"category"`
-	PercentageChange interface{}                                                          `json:"percentageChange"`
+	AbsoluteChange   float64                                                              `json:"absoluteChange"`
+	Category         string                                                               `json:"category"`
+	PercentageChange float64                                                              `json:"percentageChange"`
 	JSON             transactionInsightGetSpendingTrendsResponseTopCategoriesByChangeJSON `json:"-"`
 }
 

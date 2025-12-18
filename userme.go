@@ -59,12 +59,8 @@ func (r *UserMeService) Update(ctx context.Context, body UserMeUpdateParams, opt
 
 type UserMeUpdateParams struct {
 	Address param.Field[AddressParam] `json:"address"`
-	// Updated full name of the user.
-	Name param.Field[interface{}] `json:"name"`
-	// Updated primary phone number of the user.
-	Phone param.Field[interface{}] `json:"phone"`
-	// User's personalized preferences for the platform.
-	Preferences param.Field[UserPreferencesParam] `json:"preferences"`
+	Name    param.Field[string]       `json:"name"`
+	Phone   param.Field[string]       `json:"phone"`
 }
 
 func (r UserMeUpdateParams) MarshalJSON() (data []byte, err error) {

@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"slices"
+	"time"
 
 	"github.com/jocall3/1231-go/internal/apijson"
 	"github.com/jocall3/1231-go/internal/param"
@@ -70,15 +71,11 @@ func (r *UserMeBiometricService) Verify(ctx context.Context, body UserMeBiometri
 	return
 }
 
-// Current biometric enrollment status for a user.
 type BiometricStatus struct {
-	// Overall status indicating if any biometrics are enrolled.
-	BiometricsEnrolled interface{} `json:"biometricsEnrolled,required"`
-	// List of specific biometric types and devices enrolled.
-	EnrolledBiometrics []BiometricStatusEnrolledBiometric `json:"enrolledBiometrics,required"`
-	// Timestamp of the last successful biometric authentication.
-	LastUsed interface{}         `json:"lastUsed"`
-	JSON     biometricStatusJSON `json:"-"`
+	BiometricsEnrolled bool                               `json:"biometricsEnrolled"`
+	EnrolledBiometrics []BiometricStatusEnrolledBiometric `json:"enrolledBiometrics"`
+	LastUsed           time.Time                          `json:"lastUsed" format:"date-time"`
+	JSON               biometricStatusJSON                `json:"-"`
 }
 
 // biometricStatusJSON contains the JSON metadata for the struct [BiometricStatus]
@@ -99,8 +96,8 @@ func (r biometricStatusJSON) RawJSON() string {
 }
 
 type BiometricStatusEnrolledBiometric struct {
-	DeviceID       interface{}                           `json:"deviceId"`
-	EnrollmentDate interface{}                           `json:"enrollmentDate"`
+	DeviceID       string                                `json:"deviceId"`
+	EnrollmentDate time.Time                             `json:"enrollmentDate" format:"date-time"`
 	Type           BiometricStatusEnrolledBiometricsType `json:"type"`
 	JSON           biometricStatusEnrolledBiometricJSON  `json:"-"`
 }
@@ -126,25 +123,22 @@ func (r biometricStatusEnrolledBiometricJSON) RawJSON() string {
 type BiometricStatusEnrolledBiometricsType string
 
 const (
-	BiometricStatusEnrolledBiometricsTypeFingerprint       BiometricStatusEnrolledBiometricsType = "fingerprint"
 	BiometricStatusEnrolledBiometricsTypeFacialRecognition BiometricStatusEnrolledBiometricsType = "facial_recognition"
-	BiometricStatusEnrolledBiometricsTypeVoiceRecognition  BiometricStatusEnrolledBiometricsType = "voice_recognition"
+	BiometricStatusEnrolledBiometricsTypeFingerprint       BiometricStatusEnrolledBiometricsType = "fingerprint"
 )
 
 func (r BiometricStatusEnrolledBiometricsType) IsKnown() bool {
 	switch r {
-	case BiometricStatusEnrolledBiometricsTypeFingerprint, BiometricStatusEnrolledBiometricsTypeFacialRecognition, BiometricStatusEnrolledBiometricsTypeVoiceRecognition:
+	case BiometricStatusEnrolledBiometricsTypeFacialRecognition, BiometricStatusEnrolledBiometricsTypeFingerprint:
 		return true
 	}
 	return false
 }
 
 type UserMeBiometricVerifyResponse struct {
-	// A descriptive message for the verification result.
-	Message interface{} `json:"message"`
-	// Status of the biometric verification.
-	VerificationStatus UserMeBiometricVerifyResponseVerificationStatus `json:"verificationStatus"`
-	JSON               userMeBiometricVerifyResponseJSON               `json:"-"`
+	Message            string                            `json:"message"`
+	VerificationStatus string                            `json:"verificationStatus"`
+	JSON               userMeBiometricVerifyResponseJSON `json:"-"`
 }
 
 // userMeBiometricVerifyResponseJSON contains the JSON metadata for the struct
@@ -164,79 +158,54 @@ func (r userMeBiometricVerifyResponseJSON) RawJSON() string {
 	return r.raw
 }
 
-// Status of the biometric verification.
-type UserMeBiometricVerifyResponseVerificationStatus string
-
-const (
-	UserMeBiometricVerifyResponseVerificationStatusSuccess UserMeBiometricVerifyResponseVerificationStatus = "success"
-	UserMeBiometricVerifyResponseVerificationStatusFailed  UserMeBiometricVerifyResponseVerificationStatus = "failed"
-)
-
-func (r UserMeBiometricVerifyResponseVerificationStatus) IsKnown() bool {
-	switch r {
-	case UserMeBiometricVerifyResponseVerificationStatusSuccess, UserMeBiometricVerifyResponseVerificationStatusFailed:
-		return true
-	}
-	return false
-}
-
 type UserMeBiometricEnrollParams struct {
-	// Base64 encoded representation of the biometric template or proof.
-	BiometricSignature param.Field[interface{}] `json:"biometricSignature,required"`
-	// The type of biometric data being enrolled.
-	BiometricType param.Field[UserMeBiometricEnrollParamsBiometricType] `json:"biometricType,required"`
-	// The ID of the device on which the biometric is being enrolled.
-	DeviceID param.Field[interface{}] `json:"deviceId,required"`
-	// Optional: A friendly name for the device, if not already linked.
-	DeviceName param.Field[interface{}] `json:"deviceName"`
+	// Base64 encoded biometric template for enrollment.
+	BiometricSignature param.Field[string]                                   `json:"biometricSignature,required"`
+	BiometricType      param.Field[UserMeBiometricEnrollParamsBiometricType] `json:"biometricType,required"`
+	DeviceID           param.Field[string]                                   `json:"deviceId,required"`
+	DeviceName         param.Field[string]                                   `json:"deviceName"`
 }
 
 func (r UserMeBiometricEnrollParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The type of biometric data being enrolled.
 type UserMeBiometricEnrollParamsBiometricType string
 
 const (
-	UserMeBiometricEnrollParamsBiometricTypeFingerprint       UserMeBiometricEnrollParamsBiometricType = "fingerprint"
 	UserMeBiometricEnrollParamsBiometricTypeFacialRecognition UserMeBiometricEnrollParamsBiometricType = "facial_recognition"
-	UserMeBiometricEnrollParamsBiometricTypeVoiceRecognition  UserMeBiometricEnrollParamsBiometricType = "voice_recognition"
+	UserMeBiometricEnrollParamsBiometricTypeFingerprint       UserMeBiometricEnrollParamsBiometricType = "fingerprint"
 )
 
 func (r UserMeBiometricEnrollParamsBiometricType) IsKnown() bool {
 	switch r {
-	case UserMeBiometricEnrollParamsBiometricTypeFingerprint, UserMeBiometricEnrollParamsBiometricTypeFacialRecognition, UserMeBiometricEnrollParamsBiometricTypeVoiceRecognition:
+	case UserMeBiometricEnrollParamsBiometricTypeFacialRecognition, UserMeBiometricEnrollParamsBiometricTypeFingerprint:
 		return true
 	}
 	return false
 }
 
 type UserMeBiometricVerifyParams struct {
-	// Base64 encoded representation of the one-time biometric proof for verification.
-	BiometricSignature param.Field[interface{}] `json:"biometricSignature,required"`
-	// The type of biometric data being verified.
-	BiometricType param.Field[UserMeBiometricVerifyParamsBiometricType] `json:"biometricType,required"`
-	// The ID of the device initiating the biometric verification.
-	DeviceID param.Field[interface{}] `json:"deviceId,required"`
+	// Base64 encoded one-time biometric proof.
+	BiometricSignature param.Field[string]                                   `json:"biometricSignature,required"`
+	BiometricType      param.Field[UserMeBiometricVerifyParamsBiometricType] `json:"biometricType,required"`
+	DeviceID           param.Field[string]                                   `json:"deviceId,required"`
 }
 
 func (r UserMeBiometricVerifyParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
-// The type of biometric data being verified.
 type UserMeBiometricVerifyParamsBiometricType string
 
 const (
-	UserMeBiometricVerifyParamsBiometricTypeFingerprint       UserMeBiometricVerifyParamsBiometricType = "fingerprint"
 	UserMeBiometricVerifyParamsBiometricTypeFacialRecognition UserMeBiometricVerifyParamsBiometricType = "facial_recognition"
-	UserMeBiometricVerifyParamsBiometricTypeVoiceRecognition  UserMeBiometricVerifyParamsBiometricType = "voice_recognition"
+	UserMeBiometricVerifyParamsBiometricTypeFingerprint       UserMeBiometricVerifyParamsBiometricType = "fingerprint"
 )
 
 func (r UserMeBiometricVerifyParamsBiometricType) IsKnown() bool {
 	switch r {
-	case UserMeBiometricVerifyParamsBiometricTypeFingerprint, UserMeBiometricVerifyParamsBiometricTypeFacialRecognition, UserMeBiometricVerifyParamsBiometricTypeVoiceRecognition:
+	case UserMeBiometricVerifyParamsBiometricTypeFacialRecognition, UserMeBiometricVerifyParamsBiometricTypeFingerprint:
 		return true
 	}
 	return false
