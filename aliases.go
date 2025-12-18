@@ -3,7 +3,7 @@
 package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
-	"github.com/stainless-sdks/1231-go/internal/apierror"
+	"github.com/jocall3/1231-go/internal/apierror"
 )
 
 type Error = apierror.Error

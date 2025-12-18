@@ -3,7 +3,7 @@
 package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
-	"github.com/stainless-sdks/1231-go/option"
+	"github.com/jocall3/1231-go/option"
 )
 
 // AIOracleService contains methods and other services that help with interacting

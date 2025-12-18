@@ -8,10 +8,10 @@ import (
 	"net/http"
 	"slices"
 
-	"github.com/stainless-sdks/1231-go/internal/apijson"
-	"github.com/stainless-sdks/1231-go/internal/param"
-	"github.com/stainless-sdks/1231-go/internal/requestconfig"
-	"github.com/stainless-sdks/1231-go/option"
+	"github.com/jocall3/1231-go/internal/apijson"
+	"github.com/jocall3/1231-go/internal/param"
+	"github.com/jocall3/1231-go/internal/requestconfig"
+	"github.com/jocall3/1231-go/option"
 )
 
 // AIIncubatorPitchService contains methods and other services that help with

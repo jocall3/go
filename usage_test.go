@@ -7,9 +7,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-sdks/1231-go"
-	"github.com/stainless-sdks/1231-go/internal/testutil"
-	"github.com/stainless-sdks/1231-go/option"
+	"github.com/jocall3/1231-go"
+	"github.com/jocall3/1231-go/internal/testutil"
+	"github.com/jocall3/1231-go/option"
 )
 
 func TestUsage(t *testing.T) {
