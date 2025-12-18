@@ -3,7 +3,7 @@
 package jocall3
 
 import (
-	"github.com/jocall3/1231-go/internal/apierror"
+	"github.com/jocall3/go/internal/apierror"
 )
 
 type Error = apierror.Error

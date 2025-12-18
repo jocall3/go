@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/jocall3/1231-go"
-	"github.com/jocall3/1231-go/internal/testutil"
-	"github.com/jocall3/1231-go/option"
+	"github.com/jocall3/go"
+	"github.com/jocall3/go/internal/testutil"
+	"github.com/jocall3/go/option"
 )
 
 func TestNotificationSettingGet(t *testing.T) {
