@@ -8,6 +8,7 @@ import (
 	"slices"
 
 	"github.com/jocall3/1231-go/internal/apijson"
+	"github.com/jocall3/1231-go/internal/param"
 	"github.com/jocall3/1231-go/internal/requestconfig"
 	"github.com/jocall3/1231-go/option"
 )
@@ -33,8 +34,18 @@ func NewSustainabilityService(opts ...option.RequestOption) (r *SustainabilitySe
 	return
 }
 
-// Retrieves an analysis of the user's personal carbon footprint based on their
-// transaction history.
+// Allows users to purchase carbon offsets to neutralize their estimated carbon
+// footprint, supporting environmental initiatives.
+func (r *SustainabilityService) PurchaseCarbonOffsets(ctx context.Context, body SustainabilityPurchaseCarbonOffsetsParams, opts ...option.RequestOption) (res *SustainabilityPurchaseCarbonOffsetsResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	path := "sustainability/carbon-offsets"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
+// Generates a detailed report of the user's estimated carbon footprint based on
+// transaction data, lifestyle choices, and AI-driven impact assessments, offering
+// insights and reduction strategies.
 func (r *SustainabilityService) GetCarbonFootprint(ctx context.Context, opts ...option.RequestOption) (res *SustainabilityGetCarbonFootprintResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "sustainability/carbon-footprint"
@@ -42,23 +53,73 @@ func (r *SustainabilityService) GetCarbonFootprint(ctx context.Context, opts ...
 	return
 }
 
+type SustainabilityPurchaseCarbonOffsetsResponse struct {
+	// The amount of carbon dioxide equivalent offset by this purchase.
+	AmountOffsetKgCo2e interface{} `json:"amountOffsetKgCO2e,required"`
+	// Timestamp of the purchase.
+	PurchaseDate interface{} `json:"purchaseDate,required"`
+	// Unique identifier for the carbon offset purchase.
+	PurchaseID interface{} `json:"purchaseId,required"`
+	// Total cost of the carbon offset purchase in USD.
+	TotalCostUsd interface{} `json:"totalCostUSD,required"`
+	// URL to the official carbon offset certificate.
+	CertificateURL interface{} `json:"certificateUrl"`
+	// The carbon offset project supported.
+	ProjectSupported interface{} `json:"projectSupported"`
+	// The ID of the internal financial transaction for this purchase.
+	TransactionID interface{}                                     `json:"transactionId"`
+	JSON          sustainabilityPurchaseCarbonOffsetsResponseJSON `json:"-"`
+}
+
+// sustainabilityPurchaseCarbonOffsetsResponseJSON contains the JSON metadata for
+// the struct [SustainabilityPurchaseCarbonOffsetsResponse]
+type sustainabilityPurchaseCarbonOffsetsResponseJSON struct {
+	AmountOffsetKgCo2e apijson.Field
+	PurchaseDate       apijson.Field
+	PurchaseID         apijson.Field
+	TotalCostUsd       apijson.Field
+	CertificateURL     apijson.Field
+	ProjectSupported   apijson.Field
+	TransactionID      apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *SustainabilityPurchaseCarbonOffsetsResponse) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sustainabilityPurchaseCarbonOffsetsResponseJSON) RawJSON() string {
+	return r.raw
+}
+
 type SustainabilityGetCarbonFootprintResponse struct {
-	AIRecommendations    []AIInsight                                                   `json:"aiRecommendations"`
-	BreakdownByCategory  []SustainabilityGetCarbonFootprintResponseBreakdownByCategory `json:"breakdownByCategory"`
-	Period               string                                                        `json:"period"`
-	TotalFootprintKgCo2e float64                                                       `json:"totalFootprintKgCO2e"`
-	JSON                 sustainabilityGetCarbonFootprintResponseJSON                  `json:"-"`
+	// AI-driven insights and recommendations for reducing carbon footprint.
+	AIInsights []AIInsight `json:"aiInsights,required"`
+	// Breakdown of carbon footprint by spending categories.
+	BreakdownByCategory []SustainabilityGetCarbonFootprintResponseBreakdownByCategory `json:"breakdownByCategory,required"`
+	// The period covered by the report.
+	Period interface{} `json:"period,required"`
+	// Unique identifier for the carbon footprint report.
+	ReportID interface{} `json:"reportId,required"`
+	// Total estimated carbon footprint in kilograms of CO2 equivalent.
+	TotalCarbonFootprintKgCo2e interface{} `json:"totalCarbonFootprintKgCO2e,required"`
+	// Recommendations for purchasing carbon offsets.
+	OffsetRecommendations []SustainabilityGetCarbonFootprintResponseOffsetRecommendation `json:"offsetRecommendations,nullable"`
+	JSON                  sustainabilityGetCarbonFootprintResponseJSON                   `json:"-"`
 }
 
 // sustainabilityGetCarbonFootprintResponseJSON contains the JSON metadata for the
 // struct [SustainabilityGetCarbonFootprintResponse]
 type sustainabilityGetCarbonFootprintResponseJSON struct {
-	AIRecommendations    apijson.Field
-	BreakdownByCategory  apijson.Field
-	Period               apijson.Field
-	TotalFootprintKgCo2e apijson.Field
-	raw                  string
-	ExtraFields          map[string]apijson.Field
+	AIInsights                 apijson.Field
+	BreakdownByCategory        apijson.Field
+	Period                     apijson.Field
+	ReportID                   apijson.Field
+	TotalCarbonFootprintKgCo2e apijson.Field
+	OffsetRecommendations      apijson.Field
+	raw                        string
+	ExtraFields                map[string]apijson.Field
 }
 
 func (r *SustainabilityGetCarbonFootprintResponse) UnmarshalJSON(data []byte) (err error) {
@@ -70,19 +131,21 @@ func (r sustainabilityGetCarbonFootprintResponseJSON) RawJSON() string {
 }
 
 type SustainabilityGetCarbonFootprintResponseBreakdownByCategory struct {
-	Category        string                                                          `json:"category"`
-	FootprintKgCo2e float64                                                         `json:"footprintKgCO2e"`
-	JSON            sustainabilityGetCarbonFootprintResponseBreakdownByCategoryJSON `json:"-"`
+	CarbonFootprintKgCo2e interface{}                                                     `json:"carbonFootprintKgCO2e"`
+	Category              interface{}                                                     `json:"category"`
+	Percentage            interface{}                                                     `json:"percentage"`
+	JSON                  sustainabilityGetCarbonFootprintResponseBreakdownByCategoryJSON `json:"-"`
 }
 
 // sustainabilityGetCarbonFootprintResponseBreakdownByCategoryJSON contains the
 // JSON metadata for the struct
 // [SustainabilityGetCarbonFootprintResponseBreakdownByCategory]
 type sustainabilityGetCarbonFootprintResponseBreakdownByCategoryJSON struct {
-	Category        apijson.Field
-	FootprintKgCo2e apijson.Field
-	raw             string
-	ExtraFields     map[string]apijson.Field
+	CarbonFootprintKgCo2e apijson.Field
+	Category              apijson.Field
+	Percentage            apijson.Field
+	raw                   string
+	ExtraFields           map[string]apijson.Field
 }
 
 func (r *SustainabilityGetCarbonFootprintResponseBreakdownByCategory) UnmarshalJSON(data []byte) (err error) {
@@ -91,4 +154,45 @@ func (r *SustainabilityGetCarbonFootprintResponseBreakdownByCategory) UnmarshalJ
 
 func (r sustainabilityGetCarbonFootprintResponseBreakdownByCategoryJSON) RawJSON() string {
 	return r.raw
+}
+
+type SustainabilityGetCarbonFootprintResponseOffsetRecommendation struct {
+	CostPerTonUsd      interface{}                                                      `json:"costPerTonUSD"`
+	OffsetAmountKgCo2e interface{}                                                      `json:"offsetAmountKgCO2e"`
+	Project            interface{}                                                      `json:"project"`
+	TotalCostUsd       interface{}                                                      `json:"totalCostUSD"`
+	JSON               sustainabilityGetCarbonFootprintResponseOffsetRecommendationJSON `json:"-"`
+}
+
+// sustainabilityGetCarbonFootprintResponseOffsetRecommendationJSON contains the
+// JSON metadata for the struct
+// [SustainabilityGetCarbonFootprintResponseOffsetRecommendation]
+type sustainabilityGetCarbonFootprintResponseOffsetRecommendationJSON struct {
+	CostPerTonUsd      apijson.Field
+	OffsetAmountKgCo2e apijson.Field
+	Project            apijson.Field
+	TotalCostUsd       apijson.Field
+	raw                string
+	ExtraFields        map[string]apijson.Field
+}
+
+func (r *SustainabilityGetCarbonFootprintResponseOffsetRecommendation) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r sustainabilityGetCarbonFootprintResponseOffsetRecommendationJSON) RawJSON() string {
+	return r.raw
+}
+
+type SustainabilityPurchaseCarbonOffsetsParams struct {
+	// The amount of carbon dioxide equivalent to offset in kilograms.
+	AmountKgCo2e param.Field[interface{}] `json:"amountKgCO2e,required"`
+	// Optional: The specific carbon offset project to support.
+	OffsetProject param.Field[interface{}] `json:"offsetProject,required"`
+	// The ID of the user's account to use for payment.
+	PaymentAccountID param.Field[interface{}] `json:"paymentAccountId,required"`
+}
+
+func (r SustainabilityPurchaseCarbonOffsetsParams) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
 }

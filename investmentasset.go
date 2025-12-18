@@ -66,35 +66,47 @@ func (r investmentAssetSearchResponseJSON) RawJSON() string {
 }
 
 type InvestmentAssetSearchResponseData struct {
-	AIEsgInsight       string                                     `json:"aiESGInsight"`
-	AssetName          string                                     `json:"assetName"`
-	AssetSymbol        string                                     `json:"assetSymbol"`
-	AssetType          InvestmentAssetSearchResponseDataAssetType `json:"assetType"`
-	Currency           string                                     `json:"currency"`
-	CurrentPrice       float64                                    `json:"currentPrice"`
-	EnvironmentalScore float64                                    `json:"environmentalScore"`
-	EsgControversies   []string                                   `json:"esgControversies"`
-	EsgRatingProvider  string                                     `json:"esgRatingProvider"`
-	GovernanceScore    float64                                    `json:"governanceScore"`
-	OverallEsgScore    float64                                    `json:"overallESGScore"`
-	SocialScore        float64                                    `json:"socialScore"`
-	JSON               investmentAssetSearchResponseDataJSON      `json:"-"`
+	// Full name of the investment asset.
+	AssetName interface{} `json:"assetName,required"`
+	// Symbol of the investment asset.
+	AssetSymbol interface{} `json:"assetSymbol,required"`
+	// Type of the investment asset.
+	AssetType InvestmentAssetSearchResponseDataAssetType `json:"assetType,required"`
+	// Currency of the asset's price.
+	Currency interface{} `json:"currency,required"`
+	// Current market price of the asset.
+	CurrentPrice interface{} `json:"currentPrice,required"`
+	// Overall ESG score (0-10), higher is better.
+	OverallEsgScore interface{} `json:"overallESGScore,required"`
+	// AI-generated insight summarizing the ESG profile.
+	AIEsgInsight interface{} `json:"aiESGInsight"`
+	// Environmental component of the ESG score.
+	EnvironmentalScore interface{} `json:"environmentalScore"`
+	// List of any significant ESG-related controversies associated with the asset.
+	EsgControversies []interface{} `json:"esgControversies,nullable"`
+	// Provider of the ESG rating (e.g., MSCI, Sustainalytics).
+	EsgRatingProvider interface{} `json:"esgRatingProvider"`
+	// Governance component of the ESG score.
+	GovernanceScore interface{} `json:"governanceScore"`
+	// Social component of the ESG score.
+	SocialScore interface{}                           `json:"socialScore"`
+	JSON        investmentAssetSearchResponseDataJSON `json:"-"`
 }
 
 // investmentAssetSearchResponseDataJSON contains the JSON metadata for the struct
 // [InvestmentAssetSearchResponseData]
 type investmentAssetSearchResponseDataJSON struct {
-	AIEsgInsight       apijson.Field
 	AssetName          apijson.Field
 	AssetSymbol        apijson.Field
 	AssetType          apijson.Field
 	Currency           apijson.Field
 	CurrentPrice       apijson.Field
+	OverallEsgScore    apijson.Field
+	AIEsgInsight       apijson.Field
 	EnvironmentalScore apijson.Field
 	EsgControversies   apijson.Field
 	EsgRatingProvider  apijson.Field
 	GovernanceScore    apijson.Field
-	OverallEsgScore    apijson.Field
 	SocialScore        apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
@@ -108,17 +120,19 @@ func (r investmentAssetSearchResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// Type of the investment asset.
 type InvestmentAssetSearchResponseDataAssetType string
 
 const (
 	InvestmentAssetSearchResponseDataAssetTypeStock      InvestmentAssetSearchResponseDataAssetType = "stock"
 	InvestmentAssetSearchResponseDataAssetTypeEtf        InvestmentAssetSearchResponseDataAssetType = "etf"
 	InvestmentAssetSearchResponseDataAssetTypeMutualFund InvestmentAssetSearchResponseDataAssetType = "mutual_fund"
+	InvestmentAssetSearchResponseDataAssetTypeBond       InvestmentAssetSearchResponseDataAssetType = "bond"
 )
 
 func (r InvestmentAssetSearchResponseDataAssetType) IsKnown() bool {
 	switch r {
-	case InvestmentAssetSearchResponseDataAssetTypeStock, InvestmentAssetSearchResponseDataAssetTypeEtf, InvestmentAssetSearchResponseDataAssetTypeMutualFund:
+	case InvestmentAssetSearchResponseDataAssetTypeStock, InvestmentAssetSearchResponseDataAssetTypeEtf, InvestmentAssetSearchResponseDataAssetTypeMutualFund, InvestmentAssetSearchResponseDataAssetTypeBond:
 		return true
 	}
 	return false
@@ -126,13 +140,13 @@ func (r InvestmentAssetSearchResponseDataAssetType) IsKnown() bool {
 
 type InvestmentAssetSearchParams struct {
 	// Search query for asset name or symbol.
-	Query param.Field[string] `query:"query,required"`
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
+	Query param.Field[interface{}] `query:"query,required"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
 	// Minimum desired ESG score (0-10).
-	MinEsgScore param.Field[float64] `query:"minESGScore"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	MinEsgScore param.Field[interface{}] `query:"minESGScore"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 }
 
 // URLQuery serializes [InvestmentAssetSearchParams]'s query parameters as

@@ -7,7 +7,6 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/jocall3/1231-go"
 	"github.com/jocall3/1231-go/internal/testutil"
@@ -49,14 +48,14 @@ func TestTransactionListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Transactions.List(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.TransactionListParams{
-		Category:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("Groceries"),
-		EndDate:     jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
-		Limit:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
-		MaxAmount:   jamesburvelocallaghaniiicitibankdemobusinessinc.F(100.000000),
-		MinAmount:   jamesburvelocallaghaniiicitibankdemobusinessinc.F(20.000000),
-		Offset:      jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
-		SearchQuery: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Starbucks"),
-		StartDate:   jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
+		Category:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Groceries"),
+		EndDate:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-12-31"),
+		Limit:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		MaxAmount:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](100),
+		MinAmount:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](20),
+		Offset:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		SearchQuery: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Starbucks"),
+		StartDate:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-01-01"),
 		Type:        jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.TransactionListParamsTypeExpense),
 	})
 	if err != nil {
@@ -84,9 +83,9 @@ func TestTransactionCategorizeWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"txn_quantum-2024-07-21-A7B8C9",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.TransactionCategorizeParams{
-			Category:      jamesburvelocallaghaniiicitibankdemobusinessinc.F("Home > Groceries"),
-			ApplyToFuture: jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
-			Notes:         jamesburvelocallaghaniiicitibankdemobusinessinc.F("Bulk purchase for party"),
+			Category:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Home > Groceries"),
+			ApplyToFuture: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+			Notes:         jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Bulk purchase for party"),
 		},
 	)
 	if err != nil {
@@ -114,9 +113,9 @@ func TestTransactionDisputeWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"txn_quantum-2024-07-21-A7B8C9",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.TransactionDisputeParams{
-			Details:             jamesburvelocallaghaniiicitibankdemobusinessinc.F("I did not authorize this purchase. My card may have been compromised and I was traveling internationally on this date."),
+			Details:             jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("I did not authorize this purchase. My card may have been compromised and I was traveling internationally on this date."),
 			Reason:              jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.TransactionDisputeParamsReasonUnauthorized),
-			SupportingDocuments: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]string{"https://demobank.com/uploads/flight_ticket.png"}),
+			SupportingDocuments: jamesburvelocallaghaniiicitibankdemobusinessinc.F([]interface{}{"https://demobank.com/uploads/flight_ticket.png"}),
 		},
 	)
 	if err != nil {
@@ -144,7 +143,7 @@ func TestTransactionUpdateNotes(t *testing.T) {
 		context.TODO(),
 		"txn_quantum-2024-07-21-A7B8C9",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.TransactionUpdateNotesParams{
-			Notes: jamesburvelocallaghaniiicitibankdemobusinessinc.F("This was a special coffee for a client meeting."),
+			Notes: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("This was a special coffee for a client meeting."),
 		},
 	)
 	if err != nil {

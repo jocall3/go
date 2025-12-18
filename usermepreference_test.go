@@ -50,15 +50,15 @@ func TestUserMePreferenceUpdateWithOptionalParams(t *testing.T) {
 	_, err := client.Users.Me.Preferences.Update(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserMePreferenceUpdateParams{
 		UserPreferences: jamesburvelocallaghaniiicitibankdemobusinessinc.UserPreferencesParam{
 			AIInteractionMode:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.UserPreferencesAIInteractionModeProactive),
-			DataSharingConsent: jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
+			DataSharingConsent: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
 			NotificationChannels: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.UserPreferencesNotificationChannelsParam{
-				Email: jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
-				InApp: jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
-				Push:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
-				SMS:   jamesburvelocallaghaniiicitibankdemobusinessinc.F(true),
+				Email: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+				InApp: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+				Push:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](true),
+				SMS:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](false),
 			}),
-			PreferredLanguage:   jamesburvelocallaghaniiicitibankdemobusinessinc.F("en-US"),
-			Theme:               jamesburvelocallaghaniiicitibankdemobusinessinc.F("Dark-Quantum"),
+			PreferredLanguage:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("en-US"),
+			Theme:               jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Dark-Quantum"),
 			TransactionGrouping: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.UserPreferencesTransactionGroupingCategory),
 		},
 	})

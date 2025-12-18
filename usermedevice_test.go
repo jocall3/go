@@ -26,8 +26,8 @@ func TestUserMeDeviceListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Users.Me.Devices.List(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserMeDeviceListParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -74,10 +74,11 @@ func TestUserMeDeviceRegisterWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.Users.Me.Devices.Register(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserMeDeviceRegisterParams{
 		DeviceType:         jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.UserMeDeviceRegisterParamsDeviceTypeMobile),
-		Model:              jamesburvelocallaghaniiicitibankdemobusinessinc.F("Samsung Galaxy S24 Ultra"),
-		Os:                 jamesburvelocallaghaniiicitibankdemobusinessinc.F("Android 14"),
-		BiometricSignature: jamesburvelocallaghaniiicitibankdemobusinessinc.F("base64encoded_android_biometric_proof"),
-		DeviceName:         jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alex's Work Phone"),
+		Model:              jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Samsung Galaxy S24 Ultra"),
+		Os:                 jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Android 14"),
+		BiometricSignature: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("base64encoded_android_biometric_proof"),
+		DeviceName:         jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alex's Work Phone"),
+		PushToken:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("ExponentPushToken[yzzzyzzzyzzzyzzz]"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

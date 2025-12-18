@@ -25,9 +25,9 @@ func TestUsage(t *testing.T) {
 	)
 	t.Skip("Prism tests are disabled")
 	user, err := client.Users.Register(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.UserRegisterParams{
-		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F("alice.w@example.com"),
-		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("Alice Wonderland"),
-		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F("SecureP@ssw0rd2024!"),
+		Email:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("alice.w@example.com"),
+		Name:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Alice Wonderland"),
+		Password: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("SecureP@ssw0rd2024!"),
 	})
 	if err != nil {
 		t.Error(err)

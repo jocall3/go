@@ -54,19 +54,19 @@ func (r *AIOracleSimulateService) RunStandard(ctx context.Context, body AIOracle
 }
 
 type AdvancedSimulationResponse struct {
-	// Discriminator field for oneOf.
-	SimulationType           AdvancedSimulationResponseSimulationType   `json:"simulationType,required"`
-	OverallSummary           string                                     `json:"overallSummary"`
-	ScenarioResults          []AdvancedSimulationResponseScenarioResult `json:"scenarioResults"`
-	SimulationID             string                                     `json:"simulationId"`
-	StrategicRecommendations []AIInsight                                `json:"strategicRecommendations"`
-	JSON                     advancedSimulationResponseJSON             `json:"-"`
+	// A high-level summary of findings across all scenarios.
+	OverallSummary  interface{}                                `json:"overallSummary,required"`
+	ScenarioResults []AdvancedSimulationResponseScenarioResult `json:"scenarioResults,required"`
+	// Unique identifier for the completed advanced simulation.
+	SimulationID interface{} `json:"simulationId,required"`
+	// Overarching strategic recommendations derived from the comparison of scenarios.
+	StrategicRecommendations []AIInsight                    `json:"strategicRecommendations,nullable"`
+	JSON                     advancedSimulationResponseJSON `json:"-"`
 }
 
 // advancedSimulationResponseJSON contains the JSON metadata for the struct
 // [AdvancedSimulationResponse]
 type advancedSimulationResponseJSON struct {
-	SimulationType           apijson.Field
 	OverallSummary           apijson.Field
 	ScenarioResults          apijson.Field
 	SimulationID             apijson.Field
@@ -85,37 +85,30 @@ func (r advancedSimulationResponseJSON) RawJSON() string {
 
 func (r AdvancedSimulationResponse) implementsAIOracleSimulationGetResponse() {}
 
-// Discriminator field for oneOf.
-type AdvancedSimulationResponseSimulationType string
-
-const (
-	AdvancedSimulationResponseSimulationTypeAdvanced AdvancedSimulationResponseSimulationType = "advanced"
-)
-
-func (r AdvancedSimulationResponseSimulationType) IsKnown() bool {
-	switch r {
-	case AdvancedSimulationResponseSimulationTypeAdvanced:
-		return true
-	}
-	return false
-}
-
 type AdvancedSimulationResponseScenarioResult struct {
-	FinalNetWorthProjected    float64                                                             `json:"finalNetWorthProjected"`
-	LiquidityMetrics          AdvancedSimulationResponseScenarioResultsLiquidityMetrics           `json:"liquidityMetrics"`
-	NarrativeSummary          string                                                              `json:"narrativeSummary"`
-	ScenarioName              string                                                              `json:"scenarioName"`
-	SensitivityAnalysisGraphs []AdvancedSimulationResponseScenarioResultsSensitivityAnalysisGraph `json:"sensitivityAnalysisGraphs"`
+	// Summary of results for this specific scenario.
+	NarrativeSummary interface{} `json:"narrativeSummary,required"`
+	// Name of the individual scenario.
+	ScenarioName interface{} `json:"scenarioName,required"`
+	// Specific AI insights for this scenario.
+	AIInsights []AIInsight `json:"aiInsights,nullable"`
+	// Projected net worth at the end of the simulation period for this scenario.
+	FinalNetWorthProjected interface{}                                               `json:"finalNetWorthProjected"`
+	LiquidityMetrics       AdvancedSimulationResponseScenarioResultsLiquidityMetrics `json:"liquidityMetrics,nullable"`
+	// Data for generating sensitivity analysis charts (e.g., how net worth changes as
+	// a variable is adjusted).
+	SensitivityAnalysisGraphs []AdvancedSimulationResponseScenarioResultsSensitivityAnalysisGraph `json:"sensitivityAnalysisGraphs,nullable"`
 	JSON                      advancedSimulationResponseScenarioResultJSON                        `json:"-"`
 }
 
 // advancedSimulationResponseScenarioResultJSON contains the JSON metadata for the
 // struct [AdvancedSimulationResponseScenarioResult]
 type advancedSimulationResponseScenarioResultJSON struct {
-	FinalNetWorthProjected    apijson.Field
-	LiquidityMetrics          apijson.Field
 	NarrativeSummary          apijson.Field
 	ScenarioName              apijson.Field
+	AIInsights                apijson.Field
+	FinalNetWorthProjected    apijson.Field
+	LiquidityMetrics          apijson.Field
 	SensitivityAnalysisGraphs apijson.Field
 	raw                       string
 	ExtraFields               map[string]apijson.Field
@@ -130,8 +123,10 @@ func (r advancedSimulationResponseScenarioResultJSON) RawJSON() string {
 }
 
 type AdvancedSimulationResponseScenarioResultsLiquidityMetrics struct {
-	MinCashBalance     float64                                                       `json:"minCashBalance"`
-	RecoveryTimeMonths int64                                                         `json:"recoveryTimeMonths"`
+	// Minimum cash balance reached during the scenario.
+	MinCashBalance interface{} `json:"minCashBalance"`
+	// Time in months to recover to pre-event financial state.
+	RecoveryTimeMonths interface{}                                                   `json:"recoveryTimeMonths"`
 	JSON               advancedSimulationResponseScenarioResultsLiquidityMetricsJSON `json:"-"`
 }
 
@@ -155,7 +150,7 @@ func (r advancedSimulationResponseScenarioResultsLiquidityMetricsJSON) RawJSON()
 
 type AdvancedSimulationResponseScenarioResultsSensitivityAnalysisGraph struct {
 	Data      []AdvancedSimulationResponseScenarioResultsSensitivityAnalysisGraphsData `json:"data"`
-	ParamName string                                                                   `json:"paramName"`
+	ParamName interface{}                                                              `json:"paramName"`
 	JSON      advancedSimulationResponseScenarioResultsSensitivityAnalysisGraphJSON    `json:"-"`
 }
 
@@ -178,8 +173,8 @@ func (r advancedSimulationResponseScenarioResultsSensitivityAnalysisGraphJSON) R
 }
 
 type AdvancedSimulationResponseScenarioResultsSensitivityAnalysisGraphsData struct {
-	OutcomeValue float64                                                                    `json:"outcomeValue"`
-	ParamValue   float64                                                                    `json:"paramValue"`
+	OutcomeValue interface{}                                                                `json:"outcomeValue"`
+	ParamValue   interface{}                                                                `json:"paramValue"`
 	JSON         advancedSimulationResponseScenarioResultsSensitivityAnalysisGraphsDataJSON `json:"-"`
 }
 
@@ -202,25 +197,30 @@ func (r advancedSimulationResponseScenarioResultsSensitivityAnalysisGraphsDataJS
 }
 
 type SimulationResponse struct {
-	// Discriminator field for oneOf.
-	SimulationType   SimulationResponseSimulationType   `json:"simulationType,required"`
-	KeyImpacts       []SimulationResponseKeyImpact      `json:"keyImpacts"`
-	NarrativeSummary string                             `json:"narrativeSummary"`
-	Recommendations  []SimulationResponseRecommendation `json:"recommendations"`
-	RiskAnalysis     SimulationResponseRiskAnalysis     `json:"riskAnalysis"`
-	SimulationID     string                             `json:"simulationId"`
-	JSON             simulationResponseJSON             `json:"-"`
+	// Key quantitative and qualitative impacts identified by the AI.
+	KeyImpacts []SimulationResponseKeyImpact `json:"keyImpacts,required"`
+	// A natural language summary of the simulation's results and key findings.
+	NarrativeSummary interface{} `json:"narrativeSummary,required"`
+	// Unique identifier for the completed simulation.
+	SimulationID interface{} `json:"simulationId,required"`
+	// Actionable recommendations derived from the simulation.
+	Recommendations []AIInsight `json:"recommendations,nullable"`
+	// AI-driven risk assessment of the simulated scenario.
+	RiskAnalysis SimulationResponseRiskAnalysis `json:"riskAnalysis"`
+	// Optional: URLs to generated visualization data or images.
+	Visualizations []SimulationResponseVisualization `json:"visualizations,nullable"`
+	JSON           simulationResponseJSON            `json:"-"`
 }
 
 // simulationResponseJSON contains the JSON metadata for the struct
 // [SimulationResponse]
 type simulationResponseJSON struct {
-	SimulationType   apijson.Field
 	KeyImpacts       apijson.Field
 	NarrativeSummary apijson.Field
+	SimulationID     apijson.Field
 	Recommendations  apijson.Field
 	RiskAnalysis     apijson.Field
-	SimulationID     apijson.Field
+	Visualizations   apijson.Field
 	raw              string
 	ExtraFields      map[string]apijson.Field
 }
@@ -235,25 +235,10 @@ func (r simulationResponseJSON) RawJSON() string {
 
 func (r SimulationResponse) implementsAIOracleSimulationGetResponse() {}
 
-// Discriminator field for oneOf.
-type SimulationResponseSimulationType string
-
-const (
-	SimulationResponseSimulationTypeStandard SimulationResponseSimulationType = "standard"
-)
-
-func (r SimulationResponseSimulationType) IsKnown() bool {
-	switch r {
-	case SimulationResponseSimulationTypeStandard:
-		return true
-	}
-	return false
-}
-
 type SimulationResponseKeyImpact struct {
-	Metric   string                               `json:"metric"`
+	Metric   interface{}                          `json:"metric"`
 	Severity SimulationResponseKeyImpactsSeverity `json:"severity"`
-	Value    string                               `json:"value"`
+	Value    interface{}                          `json:"value"`
 	JSON     simulationResponseKeyImpactJSON      `json:"-"`
 }
 
@@ -291,34 +276,12 @@ func (r SimulationResponseKeyImpactsSeverity) IsKnown() bool {
 	return false
 }
 
-type SimulationResponseRecommendation struct {
-	ActionTrigger string                               `json:"actionTrigger"`
-	Description   string                               `json:"description"`
-	Title         string                               `json:"title"`
-	JSON          simulationResponseRecommendationJSON `json:"-"`
-}
-
-// simulationResponseRecommendationJSON contains the JSON metadata for the struct
-// [SimulationResponseRecommendation]
-type simulationResponseRecommendationJSON struct {
-	ActionTrigger apijson.Field
-	Description   apijson.Field
-	Title         apijson.Field
-	raw           string
-	ExtraFields   map[string]apijson.Field
-}
-
-func (r *SimulationResponseRecommendation) UnmarshalJSON(data []byte) (err error) {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-func (r simulationResponseRecommendationJSON) RawJSON() string {
-	return r.raw
-}
-
+// AI-driven risk assessment of the simulated scenario.
 type SimulationResponseRiskAnalysis struct {
-	MaxDrawdown     float64                            `json:"maxDrawdown"`
-	VolatilityIndex float64                            `json:"volatilityIndex"`
+	// Maximum potential loss from peak to trough (e.g., 0.25 for 25%).
+	MaxDrawdown interface{} `json:"maxDrawdown"`
+	// Measure of market volatility associated with the scenario.
+	VolatilityIndex interface{}                        `json:"volatilityIndex"`
 	JSON            simulationResponseRiskAnalysisJSON `json:"-"`
 }
 
@@ -339,9 +302,55 @@ func (r simulationResponseRiskAnalysisJSON) RawJSON() string {
 	return r.raw
 }
 
+type SimulationResponseVisualization struct {
+	DataUri interface{}                          `json:"dataUri"`
+	Title   interface{}                          `json:"title"`
+	Type    SimulationResponseVisualizationsType `json:"type"`
+	JSON    simulationResponseVisualizationJSON  `json:"-"`
+}
+
+// simulationResponseVisualizationJSON contains the JSON metadata for the struct
+// [SimulationResponseVisualization]
+type simulationResponseVisualizationJSON struct {
+	DataUri     apijson.Field
+	Title       apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *SimulationResponseVisualization) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r simulationResponseVisualizationJSON) RawJSON() string {
+	return r.raw
+}
+
+type SimulationResponseVisualizationsType string
+
+const (
+	SimulationResponseVisualizationsTypeLineChart SimulationResponseVisualizationsType = "line_chart"
+	SimulationResponseVisualizationsTypeBarChart  SimulationResponseVisualizationsType = "bar_chart"
+	SimulationResponseVisualizationsTypeTable     SimulationResponseVisualizationsType = "table"
+)
+
+func (r SimulationResponseVisualizationsType) IsKnown() bool {
+	switch r {
+	case SimulationResponseVisualizationsTypeLineChart, SimulationResponseVisualizationsTypeBarChart, SimulationResponseVisualizationsTypeTable:
+		return true
+	}
+	return false
+}
+
 type AIOracleSimulateRunAdvancedParams struct {
-	Prompt    param.Field[string]                                      `json:"prompt,required"`
+	// A natural language prompt describing the complex, multi-variable scenario.
+	Prompt    param.Field[interface{}]                                 `json:"prompt,required"`
 	Scenarios param.Field[[]AIOracleSimulateRunAdvancedParamsScenario] `json:"scenarios,required"`
+	// Optional: Global economic conditions to apply to all scenarios.
+	GlobalEconomicFactors param.Field[AIOracleSimulateRunAdvancedParamsGlobalEconomicFactors] `json:"globalEconomicFactors"`
+	// Optional: Personal financial assumptions to override defaults.
+	PersonalAssumptions param.Field[AIOracleSimulateRunAdvancedParamsPersonalAssumptions] `json:"personalAssumptions"`
 }
 
 func (r AIOracleSimulateRunAdvancedParams) MarshalJSON() (data []byte, err error) {
@@ -349,9 +358,13 @@ func (r AIOracleSimulateRunAdvancedParams) MarshalJSON() (data []byte, err error
 }
 
 type AIOracleSimulateRunAdvancedParamsScenario struct {
-	DurationYears             param.Field[int64]                                                                `json:"durationYears"`
-	Events                    param.Field[[]AIOracleSimulateRunAdvancedParamsScenariosEvent]                    `json:"events"`
-	Name                      param.Field[string]                                                               `json:"name"`
+	// The duration in years over which this scenario is simulated.
+	DurationYears param.Field[interface{}] `json:"durationYears,required"`
+	// A list of discrete or continuous events that define this scenario.
+	Events param.Field[[]AIOracleSimulateRunAdvancedParamsScenariosEvent] `json:"events,required"`
+	// A descriptive name for this specific scenario.
+	Name param.Field[interface{}] `json:"name,required"`
+	// Parameters for multi-variable sensitivity analysis within this scenario.
 	SensitivityAnalysisParams param.Field[[]AIOracleSimulateRunAdvancedParamsScenariosSensitivityAnalysisParam] `json:"sensitivityAnalysisParams"`
 }
 
@@ -360,28 +373,91 @@ func (r AIOracleSimulateRunAdvancedParamsScenario) MarshalJSON() (data []byte, e
 }
 
 type AIOracleSimulateRunAdvancedParamsScenariosEvent struct {
-	Details param.Field[map[string]interface{}] `json:"details"`
-	Type    param.Field[string]                 `json:"type"`
+	// Specific parameters for the event (e.g., durationMonths, impactPercentage).
+	Details param.Field[interface{}]                                          `json:"details"`
+	Type    param.Field[AIOracleSimulateRunAdvancedParamsScenariosEventsType] `json:"type"`
 }
 
 func (r AIOracleSimulateRunAdvancedParamsScenariosEvent) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+type AIOracleSimulateRunAdvancedParamsScenariosEventsType string
+
+const (
+	AIOracleSimulateRunAdvancedParamsScenariosEventsTypeJobLoss          AIOracleSimulateRunAdvancedParamsScenariosEventsType = "job_loss"
+	AIOracleSimulateRunAdvancedParamsScenariosEventsTypeMarketDownturn   AIOracleSimulateRunAdvancedParamsScenariosEventsType = "market_downturn"
+	AIOracleSimulateRunAdvancedParamsScenariosEventsTypeLargePurchase    AIOracleSimulateRunAdvancedParamsScenariosEventsType = "large_purchase"
+	AIOracleSimulateRunAdvancedParamsScenariosEventsTypeIncomeIncrease   AIOracleSimulateRunAdvancedParamsScenariosEventsType = "income_increase"
+	AIOracleSimulateRunAdvancedParamsScenariosEventsTypeMedicalEmergency AIOracleSimulateRunAdvancedParamsScenariosEventsType = "medical_emergency"
+)
+
+func (r AIOracleSimulateRunAdvancedParamsScenariosEventsType) IsKnown() bool {
+	switch r {
+	case AIOracleSimulateRunAdvancedParamsScenariosEventsTypeJobLoss, AIOracleSimulateRunAdvancedParamsScenariosEventsTypeMarketDownturn, AIOracleSimulateRunAdvancedParamsScenariosEventsTypeLargePurchase, AIOracleSimulateRunAdvancedParamsScenariosEventsTypeIncomeIncrease, AIOracleSimulateRunAdvancedParamsScenariosEventsTypeMedicalEmergency:
+		return true
+	}
+	return false
+}
+
 type AIOracleSimulateRunAdvancedParamsScenariosSensitivityAnalysisParam struct {
-	Max       param.Field[float64] `json:"max"`
-	Min       param.Field[float64] `json:"min"`
-	ParamName param.Field[string]  `json:"paramName"`
-	Step      param.Field[float64] `json:"step"`
+	// Maximum value for the parameter.
+	Max param.Field[interface{}] `json:"max"`
+	// Minimum value for the parameter.
+	Min param.Field[interface{}] `json:"min"`
+	// The name of the parameter to vary for sensitivity analysis (e.g.,
+	// 'interestRate', 'inflationRate', 'marketRecoveryRate').
+	ParamName param.Field[interface{}] `json:"paramName"`
+	// Step increment for varying the parameter.
+	Step param.Field[interface{}] `json:"step"`
 }
 
 func (r AIOracleSimulateRunAdvancedParamsScenariosSensitivityAnalysisParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Optional: Global economic conditions to apply to all scenarios.
+type AIOracleSimulateRunAdvancedParamsGlobalEconomicFactors struct {
+	InflationRate        param.Field[interface{}] `json:"inflationRate"`
+	InterestRateBaseline param.Field[interface{}] `json:"interestRateBaseline"`
+}
+
+func (r AIOracleSimulateRunAdvancedParamsGlobalEconomicFactors) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+// Optional: Personal financial assumptions to override defaults.
+type AIOracleSimulateRunAdvancedParamsPersonalAssumptions struct {
+	AnnualSavingsRate param.Field[interface{}]                                                       `json:"annualSavingsRate"`
+	RiskTolerance     param.Field[AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskTolerance] `json:"riskTolerance"`
+}
+
+func (r AIOracleSimulateRunAdvancedParamsPersonalAssumptions) MarshalJSON() (data []byte, err error) {
+	return apijson.MarshalRoot(r)
+}
+
+type AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskTolerance string
+
+const (
+	AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskToleranceConservative AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskTolerance = "conservative"
+	AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskToleranceModerate     AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskTolerance = "moderate"
+	AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskToleranceAggressive   AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskTolerance = "aggressive"
+)
+
+func (r AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskTolerance) IsKnown() bool {
+	switch r {
+	case AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskToleranceConservative, AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskToleranceModerate, AIOracleSimulateRunAdvancedParamsPersonalAssumptionsRiskToleranceAggressive:
+		return true
+	}
+	return false
+}
+
 type AIOracleSimulateRunStandardParams struct {
-	Prompt     param.Field[string]                 `json:"prompt,required"`
-	Parameters param.Field[map[string]interface{}] `json:"parameters"`
+	// A natural language prompt describing the 'what-if' scenario.
+	Prompt param.Field[interface{}] `json:"prompt,required"`
+	// Optional structured parameters to guide the simulation (e.g., duration, amount,
+	// risk tolerance).
+	Parameters param.Field[interface{}] `json:"parameters"`
 }
 
 func (r AIOracleSimulateRunStandardParams) MarshalJSON() (data []byte, err error) {

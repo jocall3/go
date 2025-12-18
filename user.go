@@ -6,7 +6,6 @@ import (
 	"context"
 	"net/http"
 	"slices"
-	"time"
 
 	"github.com/jocall3/1231-go/internal/apijson"
 	"github.com/jocall3/1231-go/internal/param"
@@ -56,11 +55,11 @@ func (r *UserService) Register(ctx context.Context, body UserRegisterParams, opt
 }
 
 type Address struct {
-	City    string      `json:"city"`
-	Country string      `json:"country"`
-	State   string      `json:"state"`
-	Street  string      `json:"street"`
-	Zip     string      `json:"zip"`
+	City    interface{} `json:"city"`
+	Country interface{} `json:"country"`
+	State   interface{} `json:"state"`
+	Street  interface{} `json:"street"`
+	Zip     interface{} `json:"zip"`
 	JSON    addressJSON `json:"-"`
 }
 
@@ -84,11 +83,11 @@ func (r addressJSON) RawJSON() string {
 }
 
 type AddressParam struct {
-	City    param.Field[string] `json:"city"`
-	Country param.Field[string] `json:"country"`
-	State   param.Field[string] `json:"state"`
-	Street  param.Field[string] `json:"street"`
-	Zip     param.Field[string] `json:"zip"`
+	City    param.Field[interface{}] `json:"city"`
+	Country param.Field[interface{}] `json:"country"`
+	State   param.Field[interface{}] `json:"state"`
+	Street  param.Field[interface{}] `json:"street"`
+	Zip     param.Field[interface{}] `json:"zip"`
 }
 
 func (r AddressParam) MarshalJSON() (data []byte, err error) {
@@ -96,20 +95,32 @@ func (r AddressParam) MarshalJSON() (data []byte, err error) {
 }
 
 type User struct {
-	ID                string             `json:"id,required"`
-	Email             string             `json:"email,required" format:"email"`
-	IdentityVerified  bool               `json:"identityVerified,required"`
-	Name              string             `json:"name,required"`
-	Address           Address            `json:"address"`
-	AIPersona         string             `json:"aiPersona"`
-	DateOfBirth       time.Time          `json:"dateOfBirth" format:"date"`
-	GamificationLevel int64              `json:"gamificationLevel"`
-	LoyaltyPoints     int64              `json:"loyaltyPoints"`
-	LoyaltyTier       string             `json:"loyaltyTier"`
-	Phone             string             `json:"phone"`
-	Preferences       UserPreferences    `json:"preferences"`
-	SecurityStatus    UserSecurityStatus `json:"securityStatus"`
-	JSON              userJSON           `json:"-"`
+	// Unique identifier for the user.
+	ID interface{} `json:"id,required"`
+	// Primary email address of the user.
+	Email interface{} `json:"email,required"`
+	// Indicates if the user's identity has been verified (e.g., via KYC).
+	IdentityVerified interface{} `json:"identityVerified,required"`
+	// Full name of the user.
+	Name    interface{} `json:"name,required"`
+	Address Address     `json:"address"`
+	// AI-identified financial persona for tailored advice.
+	AIPersona interface{} `json:"aiPersona"`
+	// Date of birth of the user (YYYY-MM-DD).
+	DateOfBirth interface{} `json:"dateOfBirth"`
+	// Current gamification level.
+	GamificationLevel interface{} `json:"gamificationLevel"`
+	// Current balance of loyalty points.
+	LoyaltyPoints interface{} `json:"loyaltyPoints"`
+	// Current loyalty program tier.
+	LoyaltyTier interface{} `json:"loyaltyTier"`
+	// Primary phone number of the user.
+	Phone interface{} `json:"phone"`
+	// User's personalized preferences for the platform.
+	Preferences UserPreferences `json:"preferences"`
+	// Security-related status for the user account.
+	SecurityStatus UserSecurityStatus `json:"securityStatus"`
+	JSON           userJSON           `json:"-"`
 }
 
 // userJSON contains the JSON metadata for the struct [User]
@@ -139,12 +150,17 @@ func (r userJSON) RawJSON() string {
 	return r.raw
 }
 
+// Security-related status for the user account.
 type UserSecurityStatus struct {
-	BiometricsEnrolled bool                   `json:"biometricsEnrolled"`
-	LastLogin          time.Time              `json:"lastLogin" format:"date-time"`
-	LastLoginIP        string                 `json:"lastLoginIp"`
-	TwoFactorEnabled   bool                   `json:"twoFactorEnabled"`
-	JSON               userSecurityStatusJSON `json:"-"`
+	// Indicates if biometric authentication is enrolled.
+	BiometricsEnrolled interface{} `json:"biometricsEnrolled"`
+	// Timestamp of the last successful login.
+	LastLogin interface{} `json:"lastLogin"`
+	// IP address of the last successful login.
+	LastLoginIP interface{} `json:"lastLoginIp"`
+	// Indicates if two-factor authentication (2FA) is enabled.
+	TwoFactorEnabled interface{}            `json:"twoFactorEnabled"`
+	JSON             userSecurityStatusJSON `json:"-"`
 }
 
 // userSecurityStatusJSON contains the JSON metadata for the struct
@@ -167,11 +183,15 @@ func (r userSecurityStatusJSON) RawJSON() string {
 }
 
 type UserLoginResponse struct {
-	AccessToken  string                `json:"accessToken,required"`
-	ExpiresIn    int64                 `json:"expiresIn,required"`
-	RefreshToken string                `json:"refreshToken,required"`
-	TokenType    string                `json:"tokenType,required"`
-	JSON         userLoginResponseJSON `json:"-"`
+	// JWT access token to authenticate subsequent API requests.
+	AccessToken interface{} `json:"accessToken,required"`
+	// Lifetime of the access token in seconds.
+	ExpiresIn interface{} `json:"expiresIn,required"`
+	// Token used to obtain new access tokens without re-authenticating.
+	RefreshToken interface{} `json:"refreshToken,required"`
+	// Type of the access token.
+	TokenType interface{}           `json:"tokenType,required"`
+	JSON      userLoginResponseJSON `json:"-"`
 }
 
 // userLoginResponseJSON contains the JSON metadata for the struct
@@ -194,9 +214,12 @@ func (r userLoginResponseJSON) RawJSON() string {
 }
 
 type UserLoginParams struct {
-	Email    param.Field[string] `json:"email,required" format:"email"`
-	Password param.Field[string] `json:"password,required" format:"password"`
-	MfaCode  param.Field[string] `json:"mfaCode"`
+	// User's email address.
+	Email param.Field[interface{}] `json:"email,required"`
+	// User's password.
+	Password param.Field[interface{}] `json:"password,required"`
+	// Optional: Multi-factor authentication code, if required.
+	MfaCode param.Field[interface{}] `json:"mfaCode"`
 }
 
 func (r UserLoginParams) MarshalJSON() (data []byte, err error) {
@@ -204,10 +227,17 @@ func (r UserLoginParams) MarshalJSON() (data []byte, err error) {
 }
 
 type UserRegisterParams struct {
-	Email    param.Field[string] `json:"email,required" format:"email"`
-	Name     param.Field[string] `json:"name,required"`
-	Password param.Field[string] `json:"password,required" format:"password"`
-	Phone    param.Field[string] `json:"phone"`
+	// Email address for registration and login.
+	Email param.Field[interface{}] `json:"email,required"`
+	// Full name of the user.
+	Name param.Field[interface{}] `json:"name,required"`
+	// User's chosen password.
+	Password param.Field[interface{}]  `json:"password,required"`
+	Address  param.Field[AddressParam] `json:"address"`
+	// Optional date of birth (YYYY-MM-DD).
+	DateOfBirth param.Field[interface{}] `json:"dateOfBirth"`
+	// Optional phone number for MFA or recovery.
+	Phone param.Field[interface{}] `json:"phone"`
 }
 
 func (r UserRegisterParams) MarshalJSON() (data []byte, err error) {

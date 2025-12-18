@@ -7,7 +7,6 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/jocall3/1231-go"
 	"github.com/jocall3/1231-go/internal/testutil"
@@ -27,10 +26,18 @@ func TestCorporatePerformSanctionScreeningWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Corporate.PerformSanctionScreening(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.CorporatePerformSanctionScreeningParams{
-		Country:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("US"),
-		EntityType:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.CorporatePerformSanctionScreeningParamsEntityTypeIndividual),
-		Name:        jamesburvelocallaghaniiicitibankdemobusinessinc.F("John Doe"),
-		DateOfBirth: jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
+		Country:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("US"),
+		EntityType: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.CorporatePerformSanctionScreeningParamsEntityTypeIndividual),
+		Name:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("John Doe"),
+		Address: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AddressParam{
+			City:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Anytown"),
+			Country: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("USA"),
+			State:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("CA"),
+			Street:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("123 Main St"),
+			Zip:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("90210"),
+		}),
+		DateOfBirth:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("1970-01-01"),
+		IdentificationNumber: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

@@ -4,7 +4,6 @@ package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"slices"
@@ -35,38 +34,37 @@ func NewAccountOverdraftSettingService(opts ...option.RequestOption) (r *Account
 }
 
 // Retrieves the current overdraft protection settings for a specific account.
-func (r *AccountOverdraftSettingService) GetOverdraftSettings(ctx context.Context, accountID string, opts ...option.RequestOption) (res *OverdraftSettings, err error) {
+func (r *AccountOverdraftSettingService) GetOverdraftSettings(ctx context.Context, accountID interface{}, opts ...option.RequestOption) (res *OverdraftSettings, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if accountID == "" {
-		err = errors.New("missing required accountId parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/overdraft-settings", accountID)
+	path := fmt.Sprintf("accounts/%v/overdraft-settings", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 // Updates the overdraft protection settings for a specific account, enabling or
 // disabling protection and configuring preferences.
-func (r *AccountOverdraftSettingService) UpdateOverdraftSettings(ctx context.Context, accountID string, body AccountOverdraftSettingUpdateOverdraftSettingsParams, opts ...option.RequestOption) (res *OverdraftSettings, err error) {
+func (r *AccountOverdraftSettingService) UpdateOverdraftSettings(ctx context.Context, accountID interface{}, body AccountOverdraftSettingUpdateOverdraftSettingsParams, opts ...option.RequestOption) (res *OverdraftSettings, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if accountID == "" {
-		err = errors.New("missing required accountId parameter")
-		return
-	}
-	path := fmt.Sprintf("accounts/%s/overdraft-settings", accountID)
+	path := fmt.Sprintf("accounts/%v/overdraft-settings", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
 type OverdraftSettings struct {
-	AccountID              string                         `json:"accountId"`
-	Enabled                bool                           `json:"enabled"`
-	FeePreference          OverdraftSettingsFeePreference `json:"feePreference"`
-	LinkedSavingsAccountID string                         `json:"linkedSavingsAccountId"`
-	LinkToSavings          bool                           `json:"linkToSavings"`
-	ProtectionLimit        float64                        `json:"protectionLimit"`
-	JSON                   overdraftSettingsJSON          `json:"-"`
+	// The account ID these overdraft settings apply to.
+	AccountID interface{} `json:"accountId,required"`
+	// If true, overdraft protection is enabled.
+	Enabled interface{} `json:"enabled,required"`
+	// User's preference for how overdraft fees are handled or if transactions should
+	// be declined.
+	FeePreference OverdraftSettingsFeePreference `json:"feePreference,required"`
+	// The ID of the linked savings account, if `linkToSavings` is true.
+	LinkedSavingsAccountID interface{} `json:"linkedSavingsAccountId"`
+	// If true, attempts to draw funds from a linked savings account.
+	LinkToSavings interface{} `json:"linkToSavings"`
+	// The maximum amount that can be covered by overdraft protection.
+	ProtectionLimit interface{}           `json:"protectionLimit"`
+	JSON            overdraftSettingsJSON `json:"-"`
 }
 
 // overdraftSettingsJSON contains the JSON metadata for the struct
@@ -90,41 +88,54 @@ func (r overdraftSettingsJSON) RawJSON() string {
 	return r.raw
 }
 
+// User's preference for how overdraft fees are handled or if transactions should
+// be declined.
 type OverdraftSettingsFeePreference string
 
 const (
 	OverdraftSettingsFeePreferenceAlwaysPay          OverdraftSettingsFeePreference = "always_pay"
 	OverdraftSettingsFeePreferenceDeclineIfOverLimit OverdraftSettingsFeePreference = "decline_if_over_limit"
+	OverdraftSettingsFeePreferenceAskMeFirst         OverdraftSettingsFeePreference = "ask_me_first"
 )
 
 func (r OverdraftSettingsFeePreference) IsKnown() bool {
 	switch r {
-	case OverdraftSettingsFeePreferenceAlwaysPay, OverdraftSettingsFeePreferenceDeclineIfOverLimit:
+	case OverdraftSettingsFeePreferenceAlwaysPay, OverdraftSettingsFeePreferenceDeclineIfOverLimit, OverdraftSettingsFeePreferenceAskMeFirst:
 		return true
 	}
 	return false
 }
 
 type AccountOverdraftSettingUpdateOverdraftSettingsParams struct {
-	Enabled       param.Field[bool]                                                              `json:"enabled"`
+	// Enable or disable overdraft protection.
+	Enabled param.Field[interface{}] `json:"enabled"`
+	// New preference for how overdraft fees are handled.
 	FeePreference param.Field[AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreference] `json:"feePreference"`
-	LinkToSavings param.Field[bool]                                                              `json:"linkToSavings"`
+	// New ID of the linked savings account, if `linkToSavings` is true. Set to null to
+	// unlink.
+	LinkedSavingsAccountID param.Field[interface{}] `json:"linkedSavingsAccountId"`
+	// Enable or disable linking to a savings account for overdraft coverage.
+	LinkToSavings param.Field[interface{}] `json:"linkToSavings"`
+	// New maximum amount for overdraft protection. Set to null to remove limit.
+	ProtectionLimit param.Field[interface{}] `json:"protectionLimit"`
 }
 
 func (r AccountOverdraftSettingUpdateOverdraftSettingsParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// New preference for how overdraft fees are handled.
 type AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreference string
 
 const (
 	AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceAlwaysPay          AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreference = "always_pay"
 	AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceDeclineIfOverLimit AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreference = "decline_if_over_limit"
+	AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceAskMeFirst         AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreference = "ask_me_first"
 )
 
 func (r AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreference) IsKnown() bool {
 	switch r {
-	case AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceAlwaysPay, AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceDeclineIfOverLimit:
+	case AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceAlwaysPay, AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceDeclineIfOverLimit, AccountOverdraftSettingUpdateOverdraftSettingsParamsFeePreferenceAskMeFirst:
 		return true
 	}
 	return false

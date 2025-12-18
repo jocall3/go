@@ -26,10 +26,10 @@ func TestInvestmentAssetSearchWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Investments.Assets.Search(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.InvestmentAssetSearchParams{
-		Query:       jamesburvelocallaghaniiicitibankdemobusinessinc.F("Tesla"),
-		Limit:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
-		MinEsgScore: jamesburvelocallaghaniiicitibankdemobusinessinc.F(7.000000),
-		Offset:      jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+		Query:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Tesla"),
+		Limit:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		MinEsgScore: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](7),
+		Offset:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

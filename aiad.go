@@ -4,7 +4,6 @@ package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -50,37 +49,41 @@ func (r *AIAdService) ListGenerated(ctx context.Context, query AIAdListGenerated
 // Polls the real-time status of an asynchronous video generation operation. Once
 // complete ('done'), the response includes a temporary, signed URL to access and
 // download the generated video asset.
-func (r *AIAdService) GetStatus(ctx context.Context, operationID string, opts ...option.RequestOption) (res *VideoOperationStatus, err error) {
+func (r *AIAdService) GetStatus(ctx context.Context, operationID interface{}, opts ...option.RequestOption) (res *VideoOperationStatus, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if operationID == "" {
-		err = errors.New("missing required operationId parameter")
-		return
-	}
-	path := fmt.Sprintf("ai/ads/operations/%s", operationID)
+	path := fmt.Sprintf("ai/ads/operations/%v", operationID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
 
 type VideoOperationStatus struct {
-	ErrorMessage       string                     `json:"errorMessage"`
-	Message            string                     `json:"message"`
-	OperationID        string                     `json:"operationId"`
-	PreviewImageUri    string                     `json:"previewImageUri" format:"uri"`
-	ProgressPercentage int64                      `json:"progressPercentage"`
-	Status             VideoOperationStatusStatus `json:"status"`
-	VideoUri           string                     `json:"videoUri" format:"uri"`
-	JSON               videoOperationStatusJSON   `json:"-"`
+	// A descriptive status message.
+	Message interface{} `json:"message,required"`
+	// The unique identifier for the video generation operation.
+	OperationID interface{} `json:"operationId,required"`
+	// Estimated completion percentage (0-100).
+	ProgressPercentage interface{} `json:"progressPercentage,required"`
+	// Current status of the video generation job.
+	Status VideoOperationStatusStatus `json:"status,required"`
+	// Error message if the operation failed.
+	ErrorMessage interface{} `json:"errorMessage"`
+	// Temporary, signed URL to a preview image/thumbnail of the video.
+	PreviewImageUri interface{} `json:"previewImageUri"`
+	// Temporary, signed URL to the generated video asset (available when status is
+	// 'done').
+	VideoUri interface{}              `json:"videoUri"`
+	JSON     videoOperationStatusJSON `json:"-"`
 }
 
 // videoOperationStatusJSON contains the JSON metadata for the struct
 // [VideoOperationStatus]
 type videoOperationStatusJSON struct {
-	ErrorMessage       apijson.Field
 	Message            apijson.Field
 	OperationID        apijson.Field
-	PreviewImageUri    apijson.Field
 	ProgressPercentage apijson.Field
 	Status             apijson.Field
+	ErrorMessage       apijson.Field
+	PreviewImageUri    apijson.Field
 	VideoUri           apijson.Field
 	raw                string
 	ExtraFields        map[string]apijson.Field
@@ -94,6 +97,7 @@ func (r videoOperationStatusJSON) RawJSON() string {
 	return r.raw
 }
 
+// Current status of the video generation job.
 type VideoOperationStatusStatus string
 
 const (
@@ -135,10 +139,10 @@ func (r aiAdListGeneratedResponseJSON) RawJSON() string {
 }
 
 type AIAdListGeneratedParams struct {
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 	// Filter ads by their generation status.
 	Status param.Field[AIAdListGeneratedParamsStatus] `query:"status"`
 }

@@ -69,11 +69,15 @@ func (r aiAdvisorListToolsResponseJSON) RawJSON() string {
 }
 
 type AIAdvisorListToolsResponseData struct {
-	AccessScope string                             `json:"accessScope"`
-	Description string                             `json:"description"`
-	Name        string                             `json:"name"`
-	Parameters  map[string]interface{}             `json:"parameters"`
-	JSON        aiAdvisorListToolsResponseDataJSON `json:"-"`
+	// The OAuth2 scope required to execute this tool.
+	AccessScope interface{} `json:"accessScope,required"`
+	// A description of what the tool does.
+	Description interface{} `json:"description,required"`
+	// The unique name of the AI tool (function name).
+	Name interface{} `json:"name,required"`
+	// OpenAPI schema object defining the input parameters for the tool function.
+	Parameters AIAdvisorListToolsResponseDataParameters `json:"parameters,required"`
+	JSON       aiAdvisorListToolsResponseDataJSON       `json:"-"`
 }
 
 // aiAdvisorListToolsResponseDataJSON contains the JSON metadata for the struct
@@ -95,11 +99,51 @@ func (r aiAdvisorListToolsResponseDataJSON) RawJSON() string {
 	return r.raw
 }
 
+// OpenAPI schema object defining the input parameters for the tool function.
+type AIAdvisorListToolsResponseDataParameters struct {
+	Properties interface{}                                  `json:"properties"`
+	Required   []interface{}                                `json:"required"`
+	Type       AIAdvisorListToolsResponseDataParametersType `json:"type"`
+	JSON       aiAdvisorListToolsResponseDataParametersJSON `json:"-"`
+}
+
+// aiAdvisorListToolsResponseDataParametersJSON contains the JSON metadata for the
+// struct [AIAdvisorListToolsResponseDataParameters]
+type aiAdvisorListToolsResponseDataParametersJSON struct {
+	Properties  apijson.Field
+	Required    apijson.Field
+	Type        apijson.Field
+	raw         string
+	ExtraFields map[string]apijson.Field
+}
+
+func (r *AIAdvisorListToolsResponseDataParameters) UnmarshalJSON(data []byte) (err error) {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+func (r aiAdvisorListToolsResponseDataParametersJSON) RawJSON() string {
+	return r.raw
+}
+
+type AIAdvisorListToolsResponseDataParametersType string
+
+const (
+	AIAdvisorListToolsResponseDataParametersTypeObject AIAdvisorListToolsResponseDataParametersType = "object"
+)
+
+func (r AIAdvisorListToolsResponseDataParametersType) IsKnown() bool {
+	switch r {
+	case AIAdvisorListToolsResponseDataParametersTypeObject:
+		return true
+	}
+	return false
+}
+
 type AIAdvisorListToolsParams struct {
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 }
 
 // URLQuery serializes [AIAdvisorListToolsParams]'s query parameters as

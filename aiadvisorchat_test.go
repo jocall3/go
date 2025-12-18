@@ -26,9 +26,9 @@ func TestAIAdvisorChatGetHistoryWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.AI.Advisor.Chat.GetHistory(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AIAdvisorChatGetHistoryParams{
-		Limit:     jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
-		Offset:    jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
-		SessionID: jamesburvelocallaghaniiicitibankdemobusinessinc.F("session-quantum-xyz-789-alpha"),
+		Limit:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Offset:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		SessionID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("session-quantum-xyz-789-alpha"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -53,13 +53,16 @@ func TestAIAdvisorChatSendMessageWithOptionalParams(t *testing.T) {
 	)
 	_, err := client.AI.Advisor.Chat.SendMessage(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.AIAdvisorChatSendMessageParams{
 		FunctionResponse: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.AIAdvisorChatSendMessageParamsFunctionResponse{
-			Name: jamesburvelocallaghaniiicitibankdemobusinessinc.F("name"),
-			Response: jamesburvelocallaghaniiicitibankdemobusinessinc.F(map[string]interface{}{
-				"foo": "bar",
+			Name: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("send_money"),
+			Response: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{
+				"status":        "success",
+				"transactionId": "pmt_654321",
+				"amountSent":    55.5,
+				"recipient":     "Alex",
 			}),
 		}),
-		Message:   jamesburvelocallaghaniiicitibankdemobusinessinc.F("Can you analyze my recent spending patterns and suggest areas for saving, focusing on my dining expenses?"),
-		SessionID: jamesburvelocallaghaniiicitibankdemobusinessinc.F("session-quantum-xyz-789-alpha"),
+		Message:   jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Can you analyze my recent spending patterns and suggest areas for saving, focusing on my dining expenses?"),
+		SessionID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("session-quantum-xyz-789-alpha"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

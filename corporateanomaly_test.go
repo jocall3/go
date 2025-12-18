@@ -7,7 +7,6 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/jocall3/1231-go"
 	"github.com/jocall3/1231-go/internal/testutil"
@@ -27,12 +26,12 @@ func TestCorporateAnomalyListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Corporate.Anomalies.List(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateAnomalyListParams{
-		EndDate:    jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
+		EndDate:    jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-12-31"),
 		EntityType: jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateAnomalyListParamsEntityTypeTransaction),
-		Limit:      jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
-		Offset:     jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+		Limit:      jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Offset:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 		Severity:   jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateAnomalyListParamsSeverityCritical),
-		StartDate:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
+		StartDate:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-01-01"),
 		Status:     jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateAnomalyListParamsStatusNew),
 	})
 	if err != nil {
@@ -61,7 +60,7 @@ func TestCorporateAnomalyUpdateStatusWithOptionalParams(t *testing.T) {
 		"anom_risk-2024-07-21-D1E2F3",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateAnomalyUpdateStatusParams{
 			Status:          jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.CorporateAnomalyUpdateStatusParamsStatusResolved),
-			ResolutionNotes: jamesburvelocallaghaniiicitibankdemobusinessinc.F("Confirmed legitimate transaction after contacting vendor. Marked as resolved."),
+			ResolutionNotes: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Confirmed legitimate transaction after contacting vendor. Marked as resolved."),
 		},
 	)
 	if err != nil {

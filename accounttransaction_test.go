@@ -29,8 +29,8 @@ func TestAccountTransactionGetPendingWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"acc_chase_checking_4567",
 		jamesburvelocallaghaniiicitibankdemobusinessinc.AccountTransactionGetPendingParams{
-			Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
-			Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+			Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+			Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 		},
 	)
 	if err != nil {
