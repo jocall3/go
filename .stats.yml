@@ -1,4 +1,4 @@
 configured_endpoints: 109
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/citibank-demo-business-inc%2F1231-80c950a0a2b8ce9408b3a0867cb790953136512c31893b68675dbacb76bb6174.yml
-openapi_spec_hash: d740dd0e706028357334465be57d14fc
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/citibank-demo-business-inc%2F1231-3ea146a138dd86ed9ac66b4580f17043e285ee02729b5e38f07c68284fbda294.yml
+openapi_spec_hash: 86439514bc100ad3ffd0b8203cd00b23
 config_hash: dcb711121dd09aa98eb029319ae16fce
