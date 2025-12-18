@@ -42,7 +42,7 @@ func TestUserAgentHeader(t *testing.T) {
 		Name:     jocall3.F[any]("Alice Wonderland"),
 		Password: jocall3.F[any]("SecureP@ssw0rd2024!"),
 	})
-	if userAgent != fmt.Sprintf("1231/Go %s", internal.PackageVersion) {
+	if userAgent != fmt.Sprintf("Jocall3/Go %s", internal.PackageVersion) {
 		t.Errorf("Expected User-Agent to be correct, but got: %#v", userAgent)
 	}
 }
