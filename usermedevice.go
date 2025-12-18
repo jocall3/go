@@ -4,12 +4,10 @@ package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"slices"
-	"time"
 
 	"github.com/jocall3/1231-go/internal/apijson"
 	"github.com/jocall3/1231-go/internal/apiquery"
@@ -50,14 +48,10 @@ func (r *UserMeDeviceService) List(ctx context.Context, query UserMeDeviceListPa
 // Removes a specific device from the user's linked devices, revoking its access
 // and requiring re-registration for future use. Useful for lost or compromised
 // devices.
-func (r *UserMeDeviceService) Deregister(ctx context.Context, deviceID string, opts ...option.RequestOption) (err error) {
+func (r *UserMeDeviceService) Deregister(ctx context.Context, deviceID interface{}, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
-	if deviceID == "" {
-		err = errors.New("missing required deviceId parameter")
-		return
-	}
-	path := fmt.Sprintf("users/me/devices/%s", deviceID)
+	path := fmt.Sprintf("users/me/devices/%v", deviceID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodDelete, path, nil, nil, opts...)
 	return
 }
@@ -72,16 +66,27 @@ func (r *UserMeDeviceService) Register(ctx context.Context, body UserMeDeviceReg
 	return
 }
 
+// Information about a connected device.
 type Device struct {
-	ID         string           `json:"id"`
-	IPAddress  string           `json:"ipAddress"`
-	LastActive time.Time        `json:"lastActive" format:"date-time"`
-	Model      string           `json:"model"`
-	Os         string           `json:"os"`
-	PushToken  string           `json:"pushToken"`
-	TrustLevel DeviceTrustLevel `json:"trustLevel"`
-	Type       DeviceType       `json:"type"`
-	JSON       deviceJSON       `json:"-"`
+	// Unique identifier for the device.
+	ID interface{} `json:"id,required"`
+	// Last known IP address of the device.
+	IPAddress interface{} `json:"ipAddress,required"`
+	// Timestamp of the last activity from this device.
+	LastActive interface{} `json:"lastActive,required"`
+	// Model of the device.
+	Model interface{} `json:"model,required"`
+	// Operating system of the device.
+	Os interface{} `json:"os,required"`
+	// Security trust level of the device.
+	TrustLevel DeviceTrustLevel `json:"trustLevel,required"`
+	// Type of the device.
+	Type DeviceType `json:"type,required"`
+	// User-assigned name for the device.
+	DeviceName interface{} `json:"deviceName"`
+	// Push notification token for the device.
+	PushToken interface{} `json:"pushToken"`
+	JSON      deviceJSON  `json:"-"`
 }
 
 // deviceJSON contains the JSON metadata for the struct [Device]
@@ -91,9 +96,10 @@ type deviceJSON struct {
 	LastActive  apijson.Field
 	Model       apijson.Field
 	Os          apijson.Field
-	PushToken   apijson.Field
 	TrustLevel  apijson.Field
 	Type        apijson.Field
+	DeviceName  apijson.Field
+	PushToken   apijson.Field
 	raw         string
 	ExtraFields map[string]apijson.Field
 }
@@ -106,47 +112,51 @@ func (r deviceJSON) RawJSON() string {
 	return r.raw
 }
 
+// Security trust level of the device.
 type DeviceTrustLevel string
 
 const (
 	DeviceTrustLevelTrusted             DeviceTrustLevel = "trusted"
-	DeviceTrustLevelUntrusted           DeviceTrustLevel = "untrusted"
 	DeviceTrustLevelPendingVerification DeviceTrustLevel = "pending_verification"
+	DeviceTrustLevelUntrusted           DeviceTrustLevel = "untrusted"
+	DeviceTrustLevelBlocked             DeviceTrustLevel = "blocked"
 )
 
 func (r DeviceTrustLevel) IsKnown() bool {
 	switch r {
-	case DeviceTrustLevelTrusted, DeviceTrustLevelUntrusted, DeviceTrustLevelPendingVerification:
+	case DeviceTrustLevelTrusted, DeviceTrustLevelPendingVerification, DeviceTrustLevelUntrusted, DeviceTrustLevelBlocked:
 		return true
 	}
 	return false
 }
 
+// Type of the device.
 type DeviceType string
 
 const (
-	DeviceTypeMobile  DeviceType = "mobile"
-	DeviceTypeDesktop DeviceType = "desktop"
-	DeviceTypeTablet  DeviceType = "tablet"
+	DeviceTypeMobile     DeviceType = "mobile"
+	DeviceTypeDesktop    DeviceType = "desktop"
+	DeviceTypeTablet     DeviceType = "tablet"
+	DeviceTypeSmartWatch DeviceType = "smart_watch"
 )
 
 func (r DeviceType) IsKnown() bool {
 	switch r {
-	case DeviceTypeMobile, DeviceTypeDesktop, DeviceTypeTablet:
+	case DeviceTypeMobile, DeviceTypeDesktop, DeviceTypeTablet, DeviceTypeSmartWatch:
 		return true
 	}
 	return false
 }
 
 type PaginatedList struct {
-	// The number of items returned in this page.
-	Limit int64 `json:"limit,required"`
-	// The starting position of the returned items.
-	Offset int64 `json:"offset,required"`
-	// The total number of items available.
-	Total int64 `json:"total,required"`
-	// The offset for the next page of results, if available.
-	NextOffset int64             `json:"nextOffset"`
+	// The maximum number of items returned in the current page.
+	Limit interface{} `json:"limit,required"`
+	// The number of items skipped before the current page.
+	Offset interface{} `json:"offset,required"`
+	// The total number of items available across all pages.
+	Total interface{} `json:"total,required"`
+	// The offset for the next page of results, if available. Null if no more pages.
+	NextOffset interface{}       `json:"nextOffset"`
 	JSON       paginatedListJSON `json:"-"`
 }
 
@@ -191,10 +201,10 @@ func (r userMeDeviceListResponseJSON) RawJSON() string {
 }
 
 type UserMeDeviceListParams struct {
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 }
 
 // URLQuery serializes [UserMeDeviceListParams]'s query parameters as `url.Values`.
@@ -206,29 +216,38 @@ func (r UserMeDeviceListParams) URLQuery() (v url.Values) {
 }
 
 type UserMeDeviceRegisterParams struct {
+	// Type of the device being registered.
 	DeviceType param.Field[UserMeDeviceRegisterParamsDeviceType] `json:"deviceType,required"`
-	Model      param.Field[string]                               `json:"model,required"`
-	Os         param.Field[string]                               `json:"os,required"`
-	// Base64 encoded biometric proof for enrollment.
-	BiometricSignature param.Field[string] `json:"biometricSignature"`
-	DeviceName         param.Field[string] `json:"deviceName"`
+	// Model of the device.
+	Model param.Field[interface{}] `json:"model,required"`
+	// Operating system of the device.
+	Os param.Field[interface{}] `json:"os,required"`
+	// Optional: Base64 encoded biometric signature for initial enrollment (e.g., for
+	// Passkey registration).
+	BiometricSignature param.Field[interface{}] `json:"biometricSignature"`
+	// Optional: A friendly name for the device.
+	DeviceName param.Field[interface{}] `json:"deviceName"`
+	// Optional: Push notification token for the device.
+	PushToken param.Field[interface{}] `json:"pushToken"`
 }
 
 func (r UserMeDeviceRegisterParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Type of the device being registered.
 type UserMeDeviceRegisterParamsDeviceType string
 
 const (
-	UserMeDeviceRegisterParamsDeviceTypeMobile  UserMeDeviceRegisterParamsDeviceType = "mobile"
-	UserMeDeviceRegisterParamsDeviceTypeDesktop UserMeDeviceRegisterParamsDeviceType = "desktop"
-	UserMeDeviceRegisterParamsDeviceTypeTablet  UserMeDeviceRegisterParamsDeviceType = "tablet"
+	UserMeDeviceRegisterParamsDeviceTypeMobile     UserMeDeviceRegisterParamsDeviceType = "mobile"
+	UserMeDeviceRegisterParamsDeviceTypeDesktop    UserMeDeviceRegisterParamsDeviceType = "desktop"
+	UserMeDeviceRegisterParamsDeviceTypeTablet     UserMeDeviceRegisterParamsDeviceType = "tablet"
+	UserMeDeviceRegisterParamsDeviceTypeSmartWatch UserMeDeviceRegisterParamsDeviceType = "smart_watch"
 )
 
 func (r UserMeDeviceRegisterParamsDeviceType) IsKnown() bool {
 	switch r {
-	case UserMeDeviceRegisterParamsDeviceTypeMobile, UserMeDeviceRegisterParamsDeviceTypeDesktop, UserMeDeviceRegisterParamsDeviceTypeTablet:
+	case UserMeDeviceRegisterParamsDeviceTypeMobile, UserMeDeviceRegisterParamsDeviceTypeDesktop, UserMeDeviceRegisterParamsDeviceTypeTablet, UserMeDeviceRegisterParamsDeviceTypeSmartWatch:
 		return true
 	}
 	return false

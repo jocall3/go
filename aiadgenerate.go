@@ -54,21 +54,67 @@ func (r *AIAdGenerateService) Standard(ctx context.Context, body AIAdGenerateSta
 }
 
 type GenerateVideoParam struct {
-	Prompt        param.Field[string]   `json:"prompt,required"`
-	AspectRatio   param.Field[string]   `json:"aspectRatio"`
-	BrandColors   param.Field[[]string] `json:"brandColors"`
-	LengthSeconds param.Field[int64]    `json:"lengthSeconds"`
-	Style         param.Field[string]   `json:"style"`
+	// Desired length of the video in seconds.
+	LengthSeconds param.Field[interface{}] `json:"lengthSeconds,required"`
+	// The textual prompt to guide the AI video generation.
+	Prompt param.Field[interface{}] `json:"prompt,required"`
+	// Artistic style of the video.
+	Style param.Field[GenerateVideoStyle] `json:"style,required"`
+	// Aspect ratio of the video (e.g., 16:9 for widescreen, 9:16 for vertical shorts).
+	AspectRatio param.Field[GenerateVideoAspectRatio] `json:"aspectRatio"`
+	// Optional: Hex color codes to influence the video's aesthetic.
+	BrandColors param.Field[[]interface{}] `json:"brandColors"`
+	// Optional: Additional keywords to guide the AI's content generation.
+	Keywords param.Field[[]interface{}] `json:"keywords"`
 }
 
 func (r GenerateVideoParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Artistic style of the video.
+type GenerateVideoStyle string
+
+const (
+	GenerateVideoStyleCinematic   GenerateVideoStyle = "Cinematic"
+	GenerateVideoStyleExplainer   GenerateVideoStyle = "Explainer"
+	GenerateVideoStyleDocumentary GenerateVideoStyle = "Documentary"
+	GenerateVideoStyleAbstract    GenerateVideoStyle = "Abstract"
+	GenerateVideoStyleMinimalist  GenerateVideoStyle = "Minimalist"
+)
+
+func (r GenerateVideoStyle) IsKnown() bool {
+	switch r {
+	case GenerateVideoStyleCinematic, GenerateVideoStyleExplainer, GenerateVideoStyleDocumentary, GenerateVideoStyleAbstract, GenerateVideoStyleMinimalist:
+		return true
+	}
+	return false
+}
+
+// Aspect ratio of the video (e.g., 16:9 for widescreen, 9:16 for vertical shorts).
+type GenerateVideoAspectRatio string
+
+const (
+	GenerateVideoAspectRatio16_9 GenerateVideoAspectRatio = "16:9"
+	GenerateVideoAspectRatio9_16 GenerateVideoAspectRatio = "9:16"
+	GenerateVideoAspectRatio1_1  GenerateVideoAspectRatio = "1:1"
+)
+
+func (r GenerateVideoAspectRatio) IsKnown() bool {
+	switch r {
+	case GenerateVideoAspectRatio16_9, GenerateVideoAspectRatio9_16, GenerateVideoAspectRatio1_1:
+		return true
+	}
+	return false
+}
+
 type AIAdGenerateAdvancedResponse struct {
-	EstimatedCompletionTimeSeconds int64                            `json:"estimatedCompletionTimeSeconds"`
-	OperationID                    string                           `json:"operationId"`
-	JSON                           aiAdGenerateAdvancedResponseJSON `json:"-"`
+	// Estimated time until advanced video generation is complete. May be longer than
+	// standard generation.
+	EstimatedCompletionTimeSeconds interface{} `json:"estimatedCompletionTimeSeconds"`
+	// The unique identifier for the advanced video generation operation.
+	OperationID interface{}                      `json:"operationId"`
+	JSON        aiAdGenerateAdvancedResponseJSON `json:"-"`
 }
 
 // aiAdGenerateAdvancedResponseJSON contains the JSON metadata for the struct
@@ -89,9 +135,11 @@ func (r aiAdGenerateAdvancedResponseJSON) RawJSON() string {
 }
 
 type AIAdGenerateStandardResponse struct {
-	EstimatedCompletionTimeSeconds int64                            `json:"estimatedCompletionTimeSeconds"`
-	OperationID                    string                           `json:"operationId"`
-	JSON                           aiAdGenerateStandardResponseJSON `json:"-"`
+	// Estimated time until video generation is complete.
+	EstimatedCompletionTimeSeconds interface{} `json:"estimatedCompletionTimeSeconds"`
+	// The unique identifier for the video generation operation.
+	OperationID interface{}                      `json:"operationId"`
+	JSON        aiAdGenerateStandardResponseJSON `json:"-"`
 }
 
 // aiAdGenerateStandardResponseJSON contains the JSON metadata for the struct
@@ -112,30 +160,135 @@ func (r aiAdGenerateStandardResponseJSON) RawJSON() string {
 }
 
 type AIAdGenerateAdvancedParams struct {
-	Prompt         param.Field[string]                                 `json:"prompt,required"`
-	AspectRatio    param.Field[string]                                 `json:"aspectRatio"`
-	AudienceTarget param.Field[string]                                 `json:"audienceTarget"`
-	BrandAssets    param.Field[[]string]                               `json:"brandAssets" format:"uri"`
-	BrandColors    param.Field[[]string]                               `json:"brandColors"`
-	CallToAction   param.Field[AIAdGenerateAdvancedParamsCallToAction] `json:"callToAction"`
-	LengthSeconds  param.Field[int64]                                  `json:"lengthSeconds"`
-	Style          param.Field[string]                                 `json:"style"`
-	VoiceoverStyle param.Field[string]                                 `json:"voiceoverStyle"`
-	VoiceoverText  param.Field[string]                                 `json:"voiceoverText"`
+	// Desired length of the video in seconds.
+	LengthSeconds param.Field[interface{}] `json:"lengthSeconds,required"`
+	// The textual prompt to guide the AI video generation.
+	Prompt param.Field[interface{}] `json:"prompt,required"`
+	// Artistic style of the video.
+	Style param.Field[AIAdGenerateAdvancedParamsStyle] `json:"style,required"`
+	// Aspect ratio of the video (e.g., 16:9 for widescreen, 9:16 for vertical shorts).
+	AspectRatio param.Field[AIAdGenerateAdvancedParamsAspectRatio] `json:"aspectRatio"`
+	// Target audience for the ad, influencing tone and visuals.
+	AudienceTarget param.Field[AIAdGenerateAdvancedParamsAudienceTarget] `json:"audienceTarget"`
+	// Genre of background music.
+	BackgroundMusicGenre param.Field[AIAdGenerateAdvancedParamsBackgroundMusicGenre] `json:"backgroundMusicGenre"`
+	// URLs to brand assets (e.g., logos, specific imagery) to be incorporated.
+	BrandAssets param.Field[[]interface{}] `json:"brandAssets"`
+	// Optional: Hex color codes to influence the video's aesthetic.
+	BrandColors param.Field[[]interface{}] `json:"brandColors"`
+	// Call-to-action text and URL to be displayed.
+	CallToAction param.Field[AIAdGenerateAdvancedParamsCallToAction] `json:"callToAction"`
+	// Optional: Additional keywords to guide the AI's content generation.
+	Keywords param.Field[[]interface{}] `json:"keywords"`
+	// Style/tone for the AI voiceover.
+	VoiceoverStyle param.Field[AIAdGenerateAdvancedParamsVoiceoverStyle] `json:"voiceoverStyle"`
+	// Optional: Text for an AI-generated voiceover.
+	VoiceoverText param.Field[interface{}] `json:"voiceoverText"`
 }
 
 func (r AIAdGenerateAdvancedParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Artistic style of the video.
+type AIAdGenerateAdvancedParamsStyle string
+
+const (
+	AIAdGenerateAdvancedParamsStyleCinematic   AIAdGenerateAdvancedParamsStyle = "Cinematic"
+	AIAdGenerateAdvancedParamsStyleExplainer   AIAdGenerateAdvancedParamsStyle = "Explainer"
+	AIAdGenerateAdvancedParamsStyleDocumentary AIAdGenerateAdvancedParamsStyle = "Documentary"
+	AIAdGenerateAdvancedParamsStyleAbstract    AIAdGenerateAdvancedParamsStyle = "Abstract"
+	AIAdGenerateAdvancedParamsStyleMinimalist  AIAdGenerateAdvancedParamsStyle = "Minimalist"
+)
+
+func (r AIAdGenerateAdvancedParamsStyle) IsKnown() bool {
+	switch r {
+	case AIAdGenerateAdvancedParamsStyleCinematic, AIAdGenerateAdvancedParamsStyleExplainer, AIAdGenerateAdvancedParamsStyleDocumentary, AIAdGenerateAdvancedParamsStyleAbstract, AIAdGenerateAdvancedParamsStyleMinimalist:
+		return true
+	}
+	return false
+}
+
+// Aspect ratio of the video (e.g., 16:9 for widescreen, 9:16 for vertical shorts).
+type AIAdGenerateAdvancedParamsAspectRatio string
+
+const (
+	AIAdGenerateAdvancedParamsAspectRatio16_9 AIAdGenerateAdvancedParamsAspectRatio = "16:9"
+	AIAdGenerateAdvancedParamsAspectRatio9_16 AIAdGenerateAdvancedParamsAspectRatio = "9:16"
+	AIAdGenerateAdvancedParamsAspectRatio1_1  AIAdGenerateAdvancedParamsAspectRatio = "1:1"
+)
+
+func (r AIAdGenerateAdvancedParamsAspectRatio) IsKnown() bool {
+	switch r {
+	case AIAdGenerateAdvancedParamsAspectRatio16_9, AIAdGenerateAdvancedParamsAspectRatio9_16, AIAdGenerateAdvancedParamsAspectRatio1_1:
+		return true
+	}
+	return false
+}
+
+// Target audience for the ad, influencing tone and visuals.
+type AIAdGenerateAdvancedParamsAudienceTarget string
+
+const (
+	AIAdGenerateAdvancedParamsAudienceTargetGeneral   AIAdGenerateAdvancedParamsAudienceTarget = "general"
+	AIAdGenerateAdvancedParamsAudienceTargetCorporate AIAdGenerateAdvancedParamsAudienceTarget = "corporate"
+	AIAdGenerateAdvancedParamsAudienceTargetInvestor  AIAdGenerateAdvancedParamsAudienceTarget = "investor"
+	AIAdGenerateAdvancedParamsAudienceTargetYouth     AIAdGenerateAdvancedParamsAudienceTarget = "youth"
+)
+
+func (r AIAdGenerateAdvancedParamsAudienceTarget) IsKnown() bool {
+	switch r {
+	case AIAdGenerateAdvancedParamsAudienceTargetGeneral, AIAdGenerateAdvancedParamsAudienceTargetCorporate, AIAdGenerateAdvancedParamsAudienceTargetInvestor, AIAdGenerateAdvancedParamsAudienceTargetYouth:
+		return true
+	}
+	return false
+}
+
+// Genre of background music.
+type AIAdGenerateAdvancedParamsBackgroundMusicGenre string
+
+const (
+	AIAdGenerateAdvancedParamsBackgroundMusicGenreCorporate AIAdGenerateAdvancedParamsBackgroundMusicGenre = "corporate"
+	AIAdGenerateAdvancedParamsBackgroundMusicGenreUplifting AIAdGenerateAdvancedParamsBackgroundMusicGenre = "uplifting"
+	AIAdGenerateAdvancedParamsBackgroundMusicGenreAmbient   AIAdGenerateAdvancedParamsBackgroundMusicGenre = "ambient"
+	AIAdGenerateAdvancedParamsBackgroundMusicGenreCinematic AIAdGenerateAdvancedParamsBackgroundMusicGenre = "cinematic"
+	AIAdGenerateAdvancedParamsBackgroundMusicGenreNone      AIAdGenerateAdvancedParamsBackgroundMusicGenre = "none"
+)
+
+func (r AIAdGenerateAdvancedParamsBackgroundMusicGenre) IsKnown() bool {
+	switch r {
+	case AIAdGenerateAdvancedParamsBackgroundMusicGenreCorporate, AIAdGenerateAdvancedParamsBackgroundMusicGenreUplifting, AIAdGenerateAdvancedParamsBackgroundMusicGenreAmbient, AIAdGenerateAdvancedParamsBackgroundMusicGenreCinematic, AIAdGenerateAdvancedParamsBackgroundMusicGenreNone:
+		return true
+	}
+	return false
+}
+
+// Call-to-action text and URL to be displayed.
 type AIAdGenerateAdvancedParamsCallToAction struct {
-	DisplayTimeSeconds param.Field[int64]  `json:"displayTimeSeconds"`
-	Text               param.Field[string] `json:"text"`
-	URL                param.Field[string] `json:"url" format:"uri"`
+	DisplayTimeSeconds param.Field[interface{}] `json:"displayTimeSeconds"`
+	Text               param.Field[interface{}] `json:"text"`
+	URL                param.Field[interface{}] `json:"url"`
 }
 
 func (r AIAdGenerateAdvancedParamsCallToAction) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
+}
+
+// Style/tone for the AI voiceover.
+type AIAdGenerateAdvancedParamsVoiceoverStyle string
+
+const (
+	AIAdGenerateAdvancedParamsVoiceoverStyleMaleProfessional AIAdGenerateAdvancedParamsVoiceoverStyle = "male_professional"
+	AIAdGenerateAdvancedParamsVoiceoverStyleFemaleFriendly   AIAdGenerateAdvancedParamsVoiceoverStyle = "female_friendly"
+	AIAdGenerateAdvancedParamsVoiceoverStyleNeutralCalm      AIAdGenerateAdvancedParamsVoiceoverStyle = "neutral_calm"
+)
+
+func (r AIAdGenerateAdvancedParamsVoiceoverStyle) IsKnown() bool {
+	switch r {
+	case AIAdGenerateAdvancedParamsVoiceoverStyleMaleProfessional, AIAdGenerateAdvancedParamsVoiceoverStyleFemaleFriendly, AIAdGenerateAdvancedParamsVoiceoverStyleNeutralCalm:
+		return true
+	}
+	return false
 }
 
 type AIAdGenerateStandardParams struct {

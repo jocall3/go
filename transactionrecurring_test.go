@@ -7,14 +7,13 @@ import (
 	"errors"
 	"os"
 	"testing"
-	"time"
 
 	"github.com/jocall3/1231-go"
 	"github.com/jocall3/1231-go/internal/testutil"
 	"github.com/jocall3/1231-go/option"
 )
 
-func TestTransactionRecurringNewWithOptionalParams(t *testing.T) {
+func TestTransactionRecurringNew(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,13 +26,13 @@ func TestTransactionRecurringNewWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Transactions.Recurring.New(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.TransactionRecurringNewParams{
-		Amount:          jamesburvelocallaghaniiicitibankdemobusinessinc.F(55.500000),
-		Category:        jamesburvelocallaghaniiicitibankdemobusinessinc.F("Health & Fitness"),
-		Currency:        jamesburvelocallaghaniiicitibankdemobusinessinc.F("USD"),
-		Description:     jamesburvelocallaghaniiicitibankdemobusinessinc.F("New Gym Membership"),
+		Amount:          jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](55.5),
+		Category:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("Health & Fitness"),
+		Currency:        jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("USD"),
+		Description:     jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("New Gym Membership"),
 		Frequency:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(jamesburvelocallaghaniiicitibankdemobusinessinc.TransactionRecurringNewParamsFrequencyMonthly),
-		StartDate:       jamesburvelocallaghaniiicitibankdemobusinessinc.F(time.Now()),
-		LinkedAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F("acc_chase_checking_4567"),
+		LinkedAccountID: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("acc_chase_checking_4567"),
+		StartDate:       jamesburvelocallaghaniiicitibankdemobusinessinc.F[any]("2024-09-01"),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error
@@ -57,8 +56,8 @@ func TestTransactionRecurringListWithOptionalParams(t *testing.T) {
 		option.WithBaseURL(baseURL),
 	)
 	_, err := client.Transactions.Recurring.List(context.TODO(), jamesburvelocallaghaniiicitibankdemobusinessinc.TransactionRecurringListParams{
-		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(20)),
-		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F(int64(0)),
+		Limit:  jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
+		Offset: jamesburvelocallaghaniiicitibankdemobusinessinc.F[any](map[string]interface{}{}),
 	})
 	if err != nil {
 		var apierr *jamesburvelocallaghaniiicitibankdemobusinessinc.Error

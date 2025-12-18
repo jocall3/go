@@ -4,12 +4,10 @@ package jamesburvelocallaghaniiicitibankdemobusinessinc
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
 	"slices"
-	"time"
 
 	"github.com/jocall3/1231-go/internal/apijson"
 	"github.com/jocall3/1231-go/internal/apiquery"
@@ -50,32 +48,42 @@ func (r *CorporateAnomalyService) List(ctx context.Context, query CorporateAnoma
 // Updates the review status of a specific financial anomaly, allowing compliance
 // officers to mark it as dismissed, resolved, or escalate for further
 // investigation after thorough AI-assisted and human review.
-func (r *CorporateAnomalyService) UpdateStatus(ctx context.Context, anomalyID string, body CorporateAnomalyUpdateStatusParams, opts ...option.RequestOption) (res *FinancialAnomaly, err error) {
+func (r *CorporateAnomalyService) UpdateStatus(ctx context.Context, anomalyID interface{}, body CorporateAnomalyUpdateStatusParams, opts ...option.RequestOption) (res *FinancialAnomaly, err error) {
 	opts = slices.Concat(r.Options, opts)
-	if anomalyID == "" {
-		err = errors.New("missing required anomalyId parameter")
-		return
-	}
-	path := fmt.Sprintf("corporate/anomalies/%s/status", anomalyID)
+	path := fmt.Sprintf("corporate/anomalies/%v/status", anomalyID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPut, path, body, &res, opts...)
 	return
 }
 
 type FinancialAnomaly struct {
-	ID                  string                     `json:"id"`
-	AIConfidenceScore   float64                    `json:"aiConfidenceScore"`
-	Description         string                     `json:"description"`
-	Details             string                     `json:"details"`
-	EntityID            string                     `json:"entityId"`
-	EntityType          FinancialAnomalyEntityType `json:"entityType"`
-	RecommendedAction   string                     `json:"recommendedAction"`
-	RelatedTransactions []string                   `json:"relatedTransactions"`
-	ResolutionNotes     string                     `json:"resolutionNotes"`
-	RiskScore           int64                      `json:"riskScore"`
-	Severity            FinancialAnomalySeverity   `json:"severity"`
-	Status              FinancialAnomalyStatus     `json:"status"`
-	Timestamp           time.Time                  `json:"timestamp" format:"date-time"`
-	JSON                financialAnomalyJSON       `json:"-"`
+	// Unique identifier for the detected anomaly.
+	ID interface{} `json:"id,required"`
+	// AI's confidence in its detection of the anomaly (0-1).
+	AIConfidenceScore interface{} `json:"aiConfidenceScore,required"`
+	// A brief summary of the anomaly.
+	Description interface{} `json:"description,required"`
+	// The ID of the specific entity (e.g., transaction, user, card) the anomaly is
+	// linked to.
+	EntityID interface{} `json:"entityId,required"`
+	// The type of financial entity related to the anomaly.
+	EntityType FinancialAnomalyEntityType `json:"entityType,required"`
+	// AI-recommended immediate action to address the anomaly.
+	RecommendedAction interface{} `json:"recommendedAction,required"`
+	// AI-assigned risk score (0-100), higher is more risky.
+	RiskScore interface{} `json:"riskScore,required"`
+	// AI-assessed severity of the anomaly.
+	Severity FinancialAnomalySeverity `json:"severity,required"`
+	// Current review status of the anomaly.
+	Status FinancialAnomalyStatus `json:"status,required"`
+	// Timestamp when the anomaly was detected.
+	Timestamp interface{} `json:"timestamp,required"`
+	// Detailed context and reasoning behind the anomaly detection.
+	Details interface{} `json:"details"`
+	// List of IDs of other transactions or entities related to this anomaly.
+	RelatedTransactions []interface{} `json:"relatedTransactions,nullable"`
+	// Notes recorded during the resolution or dismissal of the anomaly.
+	ResolutionNotes interface{}          `json:"resolutionNotes"`
+	JSON            financialAnomalyJSON `json:"-"`
 }
 
 // financialAnomalyJSON contains the JSON metadata for the struct
@@ -84,16 +92,16 @@ type financialAnomalyJSON struct {
 	ID                  apijson.Field
 	AIConfidenceScore   apijson.Field
 	Description         apijson.Field
-	Details             apijson.Field
 	EntityID            apijson.Field
 	EntityType          apijson.Field
 	RecommendedAction   apijson.Field
-	RelatedTransactions apijson.Field
-	ResolutionNotes     apijson.Field
 	RiskScore           apijson.Field
 	Severity            apijson.Field
 	Status              apijson.Field
 	Timestamp           apijson.Field
+	Details             apijson.Field
+	RelatedTransactions apijson.Field
+	ResolutionNotes     apijson.Field
 	raw                 string
 	ExtraFields         map[string]apijson.Field
 }
@@ -106,6 +114,7 @@ func (r financialAnomalyJSON) RawJSON() string {
 	return r.raw
 }
 
+// The type of financial entity related to the anomaly.
 type FinancialAnomalyEntityType string
 
 const (
@@ -113,18 +122,19 @@ const (
 	FinancialAnomalyEntityTypeTransaction   FinancialAnomalyEntityType = "Transaction"
 	FinancialAnomalyEntityTypeCounterparty  FinancialAnomalyEntityType = "Counterparty"
 	FinancialAnomalyEntityTypeCorporateCard FinancialAnomalyEntityType = "CorporateCard"
-	FinancialAnomalyEntityTypeInvoice       FinancialAnomalyEntityType = "Invoice"
 	FinancialAnomalyEntityTypeUser          FinancialAnomalyEntityType = "User"
+	FinancialAnomalyEntityTypeInvoice       FinancialAnomalyEntityType = "Invoice"
 )
 
 func (r FinancialAnomalyEntityType) IsKnown() bool {
 	switch r {
-	case FinancialAnomalyEntityTypePaymentOrder, FinancialAnomalyEntityTypeTransaction, FinancialAnomalyEntityTypeCounterparty, FinancialAnomalyEntityTypeCorporateCard, FinancialAnomalyEntityTypeInvoice, FinancialAnomalyEntityTypeUser:
+	case FinancialAnomalyEntityTypePaymentOrder, FinancialAnomalyEntityTypeTransaction, FinancialAnomalyEntityTypeCounterparty, FinancialAnomalyEntityTypeCorporateCard, FinancialAnomalyEntityTypeUser, FinancialAnomalyEntityTypeInvoice:
 		return true
 	}
 	return false
 }
 
+// AI-assessed severity of the anomaly.
 type FinancialAnomalySeverity string
 
 const (
@@ -142,6 +152,7 @@ func (r FinancialAnomalySeverity) IsKnown() bool {
 	return false
 }
 
+// Current review status of the anomaly.
 type FinancialAnomalyStatus string
 
 const (
@@ -183,18 +194,18 @@ func (r corporateAnomalyListResponseJSON) RawJSON() string {
 }
 
 type CorporateAnomalyListParams struct {
-	// The end date for the date range filter (inclusive).
-	EndDate param.Field[time.Time] `query:"endDate" format:"date"`
+	// End date for filtering results (inclusive, YYYY-MM-DD).
+	EndDate param.Field[interface{}] `query:"endDate"`
 	// Filter anomalies by the type of financial entity they are related to.
 	EntityType param.Field[CorporateAnomalyListParamsEntityType] `query:"entityType"`
-	// The maximum number of items to return.
-	Limit param.Field[int64] `query:"limit"`
-	// The number of items to skip before starting to collect the result set.
-	Offset param.Field[int64] `query:"offset"`
+	// Maximum number of items to return in a single page.
+	Limit param.Field[interface{}] `query:"limit"`
+	// Number of items to skip before starting to collect the result set.
+	Offset param.Field[interface{}] `query:"offset"`
 	// Filter anomalies by their AI-assessed severity level.
 	Severity param.Field[CorporateAnomalyListParamsSeverity] `query:"severity"`
-	// The start date for the date range filter (inclusive).
-	StartDate param.Field[time.Time] `query:"startDate" format:"date"`
+	// Start date for filtering results (inclusive, YYYY-MM-DD).
+	StartDate param.Field[interface{}] `query:"startDate"`
 	// Filter anomalies by their current review status.
 	Status param.Field[CorporateAnomalyListParamsStatus] `query:"status"`
 }
@@ -265,26 +276,29 @@ func (r CorporateAnomalyListParamsStatus) IsKnown() bool {
 }
 
 type CorporateAnomalyUpdateStatusParams struct {
-	Status          param.Field[CorporateAnomalyUpdateStatusParamsStatus] `json:"status,required"`
-	ResolutionNotes param.Field[string]                                   `json:"resolutionNotes"`
+	// The new status for the financial anomaly.
+	Status param.Field[CorporateAnomalyUpdateStatusParamsStatus] `json:"status,required"`
+	// Optional notes regarding the resolution or dismissal of the anomaly.
+	ResolutionNotes param.Field[interface{}] `json:"resolutionNotes"`
 }
 
 func (r CorporateAnomalyUpdateStatusParams) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// The new status for the financial anomaly.
 type CorporateAnomalyUpdateStatusParamsStatus string
 
 const (
-	CorporateAnomalyUpdateStatusParamsStatusUnderReview CorporateAnomalyUpdateStatusParamsStatus = "Under Review"
-	CorporateAnomalyUpdateStatusParamsStatusEscalated   CorporateAnomalyUpdateStatusParamsStatus = "Escalated"
 	CorporateAnomalyUpdateStatusParamsStatusDismissed   CorporateAnomalyUpdateStatusParamsStatus = "Dismissed"
 	CorporateAnomalyUpdateStatusParamsStatusResolved    CorporateAnomalyUpdateStatusParamsStatus = "Resolved"
+	CorporateAnomalyUpdateStatusParamsStatusUnderReview CorporateAnomalyUpdateStatusParamsStatus = "Under Review"
+	CorporateAnomalyUpdateStatusParamsStatusEscalated   CorporateAnomalyUpdateStatusParamsStatus = "Escalated"
 )
 
 func (r CorporateAnomalyUpdateStatusParamsStatus) IsKnown() bool {
 	switch r {
-	case CorporateAnomalyUpdateStatusParamsStatusUnderReview, CorporateAnomalyUpdateStatusParamsStatusEscalated, CorporateAnomalyUpdateStatusParamsStatusDismissed, CorporateAnomalyUpdateStatusParamsStatusResolved:
+	case CorporateAnomalyUpdateStatusParamsStatusDismissed, CorporateAnomalyUpdateStatusParamsStatusResolved, CorporateAnomalyUpdateStatusParamsStatusUnderReview, CorporateAnomalyUpdateStatusParamsStatusEscalated:
 		return true
 	}
 	return false

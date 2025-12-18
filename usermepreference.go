@@ -52,14 +52,23 @@ func (r *UserMePreferenceService) Update(ctx context.Context, body UserMePrefere
 	return
 }
 
+// User's personalized preferences for the platform.
 type UserPreferences struct {
-	AIInteractionMode    UserPreferencesAIInteractionMode    `json:"aiInteractionMode"`
-	DataSharingConsent   bool                                `json:"dataSharingConsent"`
+	// How the user prefers to interact with AI (proactive advice, balanced, or only on
+	// demand).
+	AIInteractionMode UserPreferencesAIInteractionMode `json:"aiInteractionMode"`
+	// Consent status for sharing anonymized data for AI improvement and personalized
+	// offers.
+	DataSharingConsent interface{} `json:"dataSharingConsent"`
+	// Preferred channels for receiving notifications.
 	NotificationChannels UserPreferencesNotificationChannels `json:"notificationChannels"`
-	PreferredLanguage    string                              `json:"preferredLanguage"`
-	Theme                string                              `json:"theme"`
-	TransactionGrouping  UserPreferencesTransactionGrouping  `json:"transactionGrouping"`
-	JSON                 userPreferencesJSON                 `json:"-"`
+	// Preferred language for the user interface.
+	PreferredLanguage interface{} `json:"preferredLanguage"`
+	// Preferred UI theme (e.g., Light-Default, Dark-Quantum).
+	Theme interface{} `json:"theme"`
+	// Default grouping preference for transaction lists.
+	TransactionGrouping UserPreferencesTransactionGrouping `json:"transactionGrouping"`
+	JSON                userPreferencesJSON                `json:"-"`
 }
 
 // userPreferencesJSON contains the JSON metadata for the struct [UserPreferences]
@@ -82,27 +91,30 @@ func (r userPreferencesJSON) RawJSON() string {
 	return r.raw
 }
 
+// How the user prefers to interact with AI (proactive advice, balanced, or only on
+// demand).
 type UserPreferencesAIInteractionMode string
 
 const (
-	UserPreferencesAIInteractionModeBalanced  UserPreferencesAIInteractionMode = "balanced"
 	UserPreferencesAIInteractionModeProactive UserPreferencesAIInteractionMode = "proactive"
-	UserPreferencesAIInteractionModeReactive  UserPreferencesAIInteractionMode = "reactive"
+	UserPreferencesAIInteractionModeBalanced  UserPreferencesAIInteractionMode = "balanced"
+	UserPreferencesAIInteractionModeOnDemand  UserPreferencesAIInteractionMode = "on_demand"
 )
 
 func (r UserPreferencesAIInteractionMode) IsKnown() bool {
 	switch r {
-	case UserPreferencesAIInteractionModeBalanced, UserPreferencesAIInteractionModeProactive, UserPreferencesAIInteractionModeReactive:
+	case UserPreferencesAIInteractionModeProactive, UserPreferencesAIInteractionModeBalanced, UserPreferencesAIInteractionModeOnDemand:
 		return true
 	}
 	return false
 }
 
+// Preferred channels for receiving notifications.
 type UserPreferencesNotificationChannels struct {
-	Email bool                                    `json:"email"`
-	InApp bool                                    `json:"inApp"`
-	Push  bool                                    `json:"push"`
-	SMS   bool                                    `json:"sms"`
+	Email interface{}                             `json:"email"`
+	InApp interface{}                             `json:"inApp"`
+	Push  interface{}                             `json:"push"`
+	SMS   interface{}                             `json:"sms"`
 	JSON  userPreferencesNotificationChannelsJSON `json:"-"`
 }
 
@@ -125,39 +137,52 @@ func (r userPreferencesNotificationChannelsJSON) RawJSON() string {
 	return r.raw
 }
 
+// Default grouping preference for transaction lists.
 type UserPreferencesTransactionGrouping string
 
 const (
 	UserPreferencesTransactionGroupingCategory UserPreferencesTransactionGrouping = "category"
 	UserPreferencesTransactionGroupingMerchant UserPreferencesTransactionGrouping = "merchant"
+	UserPreferencesTransactionGroupingDate     UserPreferencesTransactionGrouping = "date"
+	UserPreferencesTransactionGroupingAccount  UserPreferencesTransactionGrouping = "account"
 )
 
 func (r UserPreferencesTransactionGrouping) IsKnown() bool {
 	switch r {
-	case UserPreferencesTransactionGroupingCategory, UserPreferencesTransactionGroupingMerchant:
+	case UserPreferencesTransactionGroupingCategory, UserPreferencesTransactionGroupingMerchant, UserPreferencesTransactionGroupingDate, UserPreferencesTransactionGroupingAccount:
 		return true
 	}
 	return false
 }
 
+// User's personalized preferences for the platform.
 type UserPreferencesParam struct {
-	AIInteractionMode    param.Field[UserPreferencesAIInteractionMode]         `json:"aiInteractionMode"`
-	DataSharingConsent   param.Field[bool]                                     `json:"dataSharingConsent"`
+	// How the user prefers to interact with AI (proactive advice, balanced, or only on
+	// demand).
+	AIInteractionMode param.Field[UserPreferencesAIInteractionMode] `json:"aiInteractionMode"`
+	// Consent status for sharing anonymized data for AI improvement and personalized
+	// offers.
+	DataSharingConsent param.Field[interface{}] `json:"dataSharingConsent"`
+	// Preferred channels for receiving notifications.
 	NotificationChannels param.Field[UserPreferencesNotificationChannelsParam] `json:"notificationChannels"`
-	PreferredLanguage    param.Field[string]                                   `json:"preferredLanguage"`
-	Theme                param.Field[string]                                   `json:"theme"`
-	TransactionGrouping  param.Field[UserPreferencesTransactionGrouping]       `json:"transactionGrouping"`
+	// Preferred language for the user interface.
+	PreferredLanguage param.Field[interface{}] `json:"preferredLanguage"`
+	// Preferred UI theme (e.g., Light-Default, Dark-Quantum).
+	Theme param.Field[interface{}] `json:"theme"`
+	// Default grouping preference for transaction lists.
+	TransactionGrouping param.Field[UserPreferencesTransactionGrouping] `json:"transactionGrouping"`
 }
 
 func (r UserPreferencesParam) MarshalJSON() (data []byte, err error) {
 	return apijson.MarshalRoot(r)
 }
 
+// Preferred channels for receiving notifications.
 type UserPreferencesNotificationChannelsParam struct {
-	Email param.Field[bool] `json:"email"`
-	InApp param.Field[bool] `json:"inApp"`
-	Push  param.Field[bool] `json:"push"`
-	SMS   param.Field[bool] `json:"sms"`
+	Email param.Field[interface{}] `json:"email"`
+	InApp param.Field[interface{}] `json:"inApp"`
+	Push  param.Field[interface{}] `json:"push"`
+	SMS   param.Field[interface{}] `json:"sms"`
 }
 
 func (r UserPreferencesNotificationChannelsParam) MarshalJSON() (data []byte, err error) {
@@ -165,6 +190,7 @@ func (r UserPreferencesNotificationChannelsParam) MarshalJSON() (data []byte, er
 }
 
 type UserMePreferenceUpdateParams struct {
+	// User's personalized preferences for the platform.
 	UserPreferences UserPreferencesParam `json:"user_preferences,required"`
 }
 
