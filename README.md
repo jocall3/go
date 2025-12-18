@@ -1,8 +1,8 @@
-# 1231 Go API Library
+# Jocall3 Go API Library
 
 <a href="https://pkg.go.dev/github.com/jocall3/go"><img src="https://pkg.go.dev/badge/github.com/jocall3/go.svg" alt="Go Reference"></a>
 
-The 1231 Go library provides convenient access to the 1231 REST API
+The Jocall3 Go library provides convenient access to the Jocall3 REST API
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
