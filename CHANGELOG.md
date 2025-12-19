@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.0 (2025-12-19)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/jocall3/go/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** manual updates ([758c883](https://github.com/jocall3/go/commit/758c8832201dfcb2e408201a4235f9af936a3c9e))
+* **api:** manual updates ([d75c704](https://github.com/jocall3/go/commit/d75c7042e9513a87a7fa093d280efcffcc81d510))
+* **api:** manual updates ([3113b1b](https://github.com/jocall3/go/commit/3113b1b55692cef948cb7aa0951459a1828be513))
+* **api:** manual updates ([b564dfd](https://github.com/jocall3/go/commit/b564dfd6d07537b00b7a3c0b2d4b991bc2ce07fc))
+
 ## 0.2.0 (2025-12-18)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/jocall3/go/compare/v0.1.0...v0.2.0)
