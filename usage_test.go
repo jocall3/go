@@ -22,7 +22,6 @@ func TestUsage(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	t.Skip("Prism tests are disabled")
 	user, err := client.Users.Register(context.TODO(), jocall3.UserRegisterParams{

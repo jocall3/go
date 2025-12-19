@@ -24,7 +24,6 @@ func TestAIOracleSimulationGet(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Oracle.Simulations.Get(context.TODO(), "sim_oracle-growth-2024-xyz")
 	if err != nil {
@@ -47,7 +46,6 @@ func TestAIOracleSimulationListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.AI.Oracle.Simulations.List(context.TODO(), jocall3.AIOracleSimulationListParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -73,7 +71,6 @@ func TestAIOracleSimulationDelete(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	err := client.AI.Oracle.Simulations.Delete(context.TODO(), "sim_oracle-growth-2024-xyz")
 	if err != nil {

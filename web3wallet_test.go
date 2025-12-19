@@ -24,7 +24,6 @@ func TestWeb3WalletListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Web3.Wallets.List(context.TODO(), jocall3.Web3WalletListParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -50,7 +49,6 @@ func TestWeb3WalletConnectWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Web3.Wallets.Connect(context.TODO(), jocall3.Web3WalletConnectParams{
 		BlockchainNetwork:  jocall3.F[any]("Ethereum"),
@@ -79,7 +77,6 @@ func TestWeb3WalletGetBalancesWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Web3.Wallets.GetBalances(
 		context.TODO(),

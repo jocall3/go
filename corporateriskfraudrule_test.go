@@ -24,7 +24,6 @@ func TestCorporateRiskFraudRuleNewWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Risk.Fraud.Rules.New(context.TODO(), jocall3.CorporateRiskFraudRuleNewParams{
 		Action: jocall3.F(jocall3.FraudRuleActionParam{
@@ -70,7 +69,6 @@ func TestCorporateRiskFraudRuleUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Risk.Fraud.Rules.Update(
 		context.TODO(),
@@ -120,7 +118,6 @@ func TestCorporateRiskFraudRuleListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Corporate.Risk.Fraud.Rules.List(context.TODO(), jocall3.CorporateRiskFraudRuleListParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -146,7 +143,6 @@ func TestCorporateRiskFraudRuleDelete(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	err := client.Corporate.Risk.Fraud.Rules.Delete(context.TODO(), "fraud_rule_high_value_inactive")
 	if err != nil {

@@ -24,7 +24,6 @@ func TestSustainabilityInvestmentAnalyzeImpact(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Sustainability.Investments.AnalyzeImpact(context.TODO())
 	if err != nil {

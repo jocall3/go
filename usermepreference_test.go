@@ -24,7 +24,6 @@ func TestUserMePreferenceGet(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Users.Me.Preferences.Get(context.TODO())
 	if err != nil {
@@ -47,7 +46,6 @@ func TestUserMePreferenceUpdateWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Users.Me.Preferences.Update(context.TODO(), jocall3.UserMePreferenceUpdateParams{
 		UserPreferences: jocall3.UserPreferencesParam{

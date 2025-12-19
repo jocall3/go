@@ -24,7 +24,6 @@ func TestUserMeDeviceListWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Users.Me.Devices.List(context.TODO(), jocall3.UserMeDeviceListParams{
 		Limit:  jocall3.F[any](map[string]interface{}{}),
@@ -50,7 +49,6 @@ func TestUserMeDeviceDeregister(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	err := client.Users.Me.Devices.Deregister(context.TODO(), "dev_mobile_ios_aabbcc")
 	if err != nil {
@@ -73,7 +71,6 @@ func TestUserMeDeviceRegisterWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Users.Me.Devices.Register(context.TODO(), jocall3.UserMeDeviceRegisterParams{
 		DeviceType:         jocall3.F(jocall3.UserMeDeviceRegisterParamsDeviceTypeMobile),
