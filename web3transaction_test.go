@@ -24,7 +24,6 @@ func TestWeb3TransactionInitiateTransferWithOptionalParams(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Web3.Transactions.InitiateTransfer(context.TODO(), jocall3.Web3TransactionInitiateTransferParams{
 		Amount:            jocall3.F[any](0.1),

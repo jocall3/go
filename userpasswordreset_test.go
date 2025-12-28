@@ -24,7 +24,6 @@ func TestUserPasswordResetConfirm(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Users.PasswordReset.Confirm(context.TODO(), jocall3.UserPasswordResetConfirmParams{
 		Identifier:       jocall3.F[any]("reset.user@example.com"),
@@ -51,7 +50,6 @@ func TestUserPasswordResetInitiate(t *testing.T) {
 	}
 	client := jocall3.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.Users.PasswordReset.Initiate(context.TODO(), jocall3.UserPasswordResetInitiateParams{
 		Identifier: jocall3.F[any]("reset.user@example.com"),
